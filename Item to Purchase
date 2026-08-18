@@ -1,0 +1,94 @@
+/*
+Pseudocode:
+
+1. **Include necessary libraries**:
+   - `<iostream>` for input/output operations.
+   - `"ItemToPurchase.h"` for class declaration.
+
+2. **Define the `main` function**:
+   - Declare two `ItemToPurchase` objects (`item1` and `item2`).
+   - Declare variables to store item name, price, and quantity.
+
+3. **Prompt user to input details for `item1`**:
+   - Ask for item name and store it using `SetName()`.
+   - Ask for item price and store it using `SetPrice()`.
+   - Ask for item quantity and store it using `SetQuantity()`.
+   - Use `cin.ignore()` to clear any leftover newline character.
+
+4. **Prompt user to input details for `item2`**:
+   - Repeat the same input process as `item1`.
+
+5. **Calculate total cost for both items**:
+   - Compute `total1` as `price * quantity` for `item1`.
+   - Compute `total2` as `price * quantity` for `item2`.
+   - Compute overall `total` as `total1 + total2`.
+
+6. **Display the total cost breakdown**:
+   - Print the item name, quantity, price per item, and total cost for `item1`.
+   - Print the item name, quantity, price per item, and total cost for `item2`.
+   - Print the overall total cost.
+
+7. **Terminate the program successfully**.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+#include "ItemToPurchase.h"
+
+int main() 
+{
+    ItemToPurchase item1, item2; // Declare two variables, item1 and item2, of type ItemToPurchase.
+
+    string name; // Declare a string variable to store the name of an item.
+
+    int price, quantity; // Declare two integer variables: price (to store the item's price) and quantity (to store the number of items).
+
+    // Item 1 input
+    
+    cout << "Item 1" << endl;
+    cout << "Enter the item name:" << endl;
+    getline(cin, name);
+    item1.SetName(name);
+
+    cout << "Enter the item price:" << endl;
+    cin >> price;
+    item1.SetPrice(price);
+
+    cout << "Enter the item quantity:" << endl;
+    cin >> quantity;
+    item1.SetQuantity(quantity);
+
+    cin.ignore(); // Clear the newline character
+
+    // Item 2 input
+    
+    cout << endl << "Item 2" << endl;
+    cout << "Enter the item name:" << endl;
+    getline(cin, name);
+    item2.SetName(name);
+
+    cout << "Enter the item price:" << endl;
+    cin >> price;
+    item2.SetPrice(price);
+
+    cout << "Enter the item quantity:" << endl;
+    cin >> quantity;
+    item2.SetQuantity(quantity);
+
+    // Calculate totals
+    
+    int total1 = item1.GetPrice() * item1.GetQuantity();
+    int total2 = item2.GetPrice() * item2.GetQuantity();
+    int total = total1 + total2;
+
+    // Output results
+    
+    cout << endl << "TOTAL COST" << endl;
+    cout << item1.GetName() << " " << item1.GetQuantity() << " @ $" << item1.GetPrice() << " = $" << total1 << endl;
+    cout << item2.GetName() << " " << item2.GetQuantity() << " @ $" << item2.GetPrice() << " = $" << total2 << endl;
+    cout << endl << "Total: $" << total << endl;
+
+    return 0;
+}
