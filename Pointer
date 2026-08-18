@@ -1,0 +1,60 @@
+/*
+Pseudocode:
+1. Declare an integer variable 'value'.
+2. Declare a pointer 'ptr' and set it to the address of 'value'.
+3. Prompt the user to enter a value.
+4. Read the value entered by the user into 'value'.
+5. Check if 'value' is less than or equal to zero.
+   - If true:
+     - Set 'ptr' to nullptr.
+     - Print a message saying the value is not positive.
+   - Else:
+     - Multiply the value pointed to by 'ptr' by 100.
+     - Print the modified value.
+6. End the program.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int main() 
+{
+    // Declare an integer variable named value
+    
+    int value;
+    
+    // Declare a pointer ptr and assign it the address of value
+    
+    int* ptr = &value;
+
+    // Prompt the user to enter a value and store it in the value variable
+    
+    cout << "Enter a value: ";
+    cin >> value;
+
+    // If the value is less than or equal to 0, this will run
+    
+    if (value <= 0) 
+    {
+        // Set the pointer ptr to nullptr if the condition is true 
+        
+        ptr = nullptr;
+        
+        // Print a message indicating the value is non-positive
+        
+        cout << value << " is not a positive number" << endl;
+    }
+    else 
+    {
+        // Multiply the value pointed to by ptr by 100
+        
+        *ptr *= 100;
+        
+        // Print the modified value
+        
+        cout << "Value: " << *ptr << endl;
+    }
+
+    return 0;
+}
