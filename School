@@ -1,0 +1,432 @@
+/*
+Pseudocode:
+
+1. Define a Student structure with the following fields:
+   - netID (integer)
+   - major (string)
+   - GPA (double)
+
+2. Declare function prototypes for:
+   - Linear search by netID
+   - Binary search by netID
+   - Selection sort by GPA 
+   - Selection sort by netID 
+
+3. Begin main function:
+   - Define constants and variables
+   - Prompt the user for a filename and open the file
+   - If the file cannot be opened, display an error message and exit
+   - Read student data from the file into an array, keeping count of students read
+   - Close the input file
+
+4. Copy original student data into separate arrays for sorting:
+   - One for sorting by GPA
+   - One for sorting by netID
+
+5. Sort:
+   - Sort the GPA array in ascending order
+   - Sort the netID array in ascending order
+
+6. Display:
+   - Print the original array
+   - Print the array sorted by GPA
+   - Print the array sorted by netID
+
+7. Implement a menu-driven loop for user interactions:
+   - Display menu options:
+     1. List top n students
+     2. Search for a student by netID
+     3. Quit
+   - Read user choice
+
+8. If the user chooses option 1 (List top n students):
+   - Prompt for n
+   - Display the top n students (highest GPAs)
+
+9. If the user chooses option 2 (Search by netID):
+   - Prompt for netID
+   - Perform linear search on the original array
+   - Display results and number of iterations
+   - Perform binary search on the ID-sorted array
+   - Display results and number of iterations
+
+10. If the user chooses option 3 (Quit), exit the loop and terminate the program
+
+11. Implement linear search function:
+    - Iterate through the array
+    - Compare netID values
+    - Return index if found, otherwise return -1
+
+12. Implement binary search function:
+    - Initialize search range (first to last index)
+    - Use a loop to repeatedly check the midpoint
+    - Adjust search range based on comparisons
+    - Return index if found, otherwise return -1
+
+13. Implement selection sort function for GPA:
+    - Iterate through the array, selecting the minimum GPA each time
+    - Swap the minimum with the current index
+
+14. Implement selection sort function for netID:
+    - Iterate through the array, selecting the minimum netID each time
+    - Swap the minimum with the current index
+
+15. End of program
+*/
+
+#include <iostream>       
+#include <fstream>        
+#include <string>         
+#include <iomanip>       
+
+using namespace std;      // Use standard namespace to avoid std:: prefixes
+
+struct Student            // Define Student structure to hold student data
+{
+   int netID;             // Student's network ID
+   string major;          // Student's major
+   double GPA;            // Student's GPA
+};
+
+// Function prototypes
+
+int linearSearchID(Student arr[], int numElems, int value, int &nIter);  // Linear search by netID
+int binarySearchID(Student arr[], int numElems, int value, int &nIter);  // Binary search by netID
+void modifiedSortGPA(Student array1[], int size);   // Sort students by GPA (ascending)
+void modifiedSortID(Student array2[], int size);    // Sort students by netID (ascending)
+
+int main()
+{
+   const int NUM_ELMTS = 18;            // Maximum number of students
+   
+   Student studArray[NUM_ELMTS];        // Original student array
+   Student studArraysortedbyGPA[NUM_ELMTS];  // Copy to sort by GPA
+   Student studArraysortedbyID[NUM_ELMTS];   // Copy to sort by netID
+   
+   int numStudents = 0;                 // Actual number of students read
+
+   string fileName;                     // Variable to store input filename
+   
+   cout << "Enter file name:";          // Prompt user for filename
+   cin >> fileName;                     // Read filename from user
+
+   ifstream inFile(fileName);           // Create input file stream object
+   
+   if (!inFile.is_open())               // Check if file opened successfully
+   {
+      // Error message
+       
+      cout << "Could not open file" << endl;  
+      cout << "Exiting" << endl;        
+      
+      return 0;                         
+   }
+
+   // Read student data until array full or end of file
+   
+   while (numStudents < NUM_ELMTS && inFile >> studArray[numStudents].netID >> studArray[numStudents].major >> studArray[numStudents].GPA)
+   {
+      numStudents++;                   // Increment student count
+   }
+   
+   inFile.close();                     // Close input file
+
+   // Copy original array into sorted arrays
+   
+   for (int i = 0; i < numStudents; i++)
+   {
+      studArraysortedbyGPA[i] = studArray[i];  // Copy to GPA sorted array
+      studArraysortedbyID[i] = studArray[i];   // Copy to ID sorted array
+   }
+
+   modifiedSortGPA(studArraysortedbyGPA, numStudents);  // Sort by GPA
+   modifiedSortID(studArraysortedbyID, numStudents);    // Sort by netID
+
+   // Display original array
+   
+   cout << "Original array:" << endl;
+   cout << "---------------" << endl;
+   cout << "index  netID  major   GPA   index  netID  major   GPA" << endl;
+   
+   // Print two students per line for compact display
+   
+   for (int i = 0; i < numStudents; i += 2)
+   {
+      if (i + 1 < numStudents)  // Check if next student exists
+      {
+         // Format first student in pair
+         
+         cout << setw(4) << right << i << "   " << setw(4) << studArray[i].netID << "     " << left << setw(4) << studArray[i].major << right << "  " << fixed << setprecision(2) << studArray[i].GPA << "       " << setw(4) << right << (i + 1) << "   " << setw(4) << studArray[i + 1].netID << "     " << left << setw(4) << studArray[i + 1].major << right << "  " << fixed << setprecision(2) << studArray[i + 1].GPA << endl;
+      }
+      else  // Handle odd number of students
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArray[i].netID << "     " << left << setw(4) << studArray[i].major << right << "  " << fixed << setprecision(2) << studArray[i].GPA << endl;
+      }
+   }
+   
+   cout << endl;
+
+   // Display array sorted by GPA
+   
+   cout << "Array sorted by GPA:" << endl;
+   cout << "--------------------" << endl;
+   cout << "index  netID  major   GPA   index  netID  major   GPA" << endl;
+  
+   // Displaying the results to the user
+   
+   for (int i = 0; i < numStudents; i += 2)
+   {
+      if (i + 1 < numStudents)
+      {
+         // Formatting similar to original array display
+         
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyGPA[i].netID << "     " 
+              << left << setw(4) << studArraysortedbyGPA[i].major << right << "  " << fixed 
+              << setprecision(2) << studArraysortedbyGPA[i].GPA 
+              << "       " << setw(4) << right << (i + 1) << "   " << setw(4) 
+              << studArraysortedbyGPA[i + 1].netID << "     " << left << setw(4) 
+              << studArraysortedbyGPA[i + 1].major << right << "  " << fixed 
+              << setprecision(2) << studArraysortedbyGPA[i + 1].GPA << endl;
+      }
+      else
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyGPA[i].netID << "     " 
+              << left << setw(4) << studArraysortedbyGPA[i].major << right << "  " << fixed 
+              << setprecision(2) << studArraysortedbyGPA[i].GPA << endl;
+      }
+   }
+   
+   cout << endl;
+
+   // Display array sorted by netID
+   
+   cout << "Array sorted by netID:" << endl;
+   cout << "----------------------" << endl;
+   cout << "index  netID  major   GPA   index  netID  major   GPA" << endl;
+   
+   // Displaying the results
+   
+   for (int i = 0; i < numStudents; i += 2)
+   {
+      if (i + 1 < numStudents)
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyID[i].netID << "     " << left << setw(4) << studArraysortedbyID[i].major << right << "  " << fixed << setprecision(2) << studArraysortedbyID[i].GPA << "       " << setw(4) << right << (i + 1) << "   " << setw(4) << studArraysortedbyID[i + 1].netID << "     " << left << setw(4) << studArraysortedbyID[i + 1].major << right << "  " << fixed << setprecision(2) << studArraysortedbyID[i + 1].GPA << endl;
+      }
+      else
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyID[i].netID << "     " << left << setw(4) << studArraysortedbyID[i].major << right << "  " << fixed  << setprecision(2) << studArraysortedbyID[i].GPA << endl;
+      }
+   }
+   
+   cout << endl;
+
+   int choice;   // Variable to store user menu choice
+   
+   do            // Start menu loop
+   {
+      // Display menu options
+      
+      cout << "***************" << endl;
+      cout << "Menu of choices" << endl;
+      cout << "***************" << endl;
+      cout << "1 - List top n students" << endl;
+      cout << "2 - Search on a netID" << endl;
+      cout << "3 - Quit" << endl;
+      cin >> choice;  // Read user choice
+
+      if (choice == 1)  // Handle top students request
+      {
+         int n;         // Number of top students to display
+         
+         cout << "Enter n:";
+         cin >> n;
+
+         // Determine how many students to actually display
+         
+         int count = (n > numStudents) ? numStudents : n;
+         
+         if (count <= 0)  // Handle invalid input
+         {
+            cout << "No students to display." << endl;
+           
+            continue;  // Skip to next loop iteration
+         }
+
+         cout << "\nTop " << count << " students are:\n" << endl;
+         
+         // Display students from highest GPA downwards
+         
+         for (int i = 0; i < count; i++)
+         {
+            int index = numStudents - 1 - i;  // Start from end of sorted array
+            Student s = studArraysortedbyGPA[index];  // Get student
+            
+            cout << "netID: " << s.netID << ", major: " << s.major << ", GPA: " << fixed << setprecision(2) << s.GPA << endl;
+         }
+         
+         cout << endl;
+      }
+      else if (choice == 2)  // Handle netID search
+      {
+         int searchID;  // netID to search for
+         
+         cout << "Enter netID:";
+         cin >> searchID;
+
+         int linearIter = 0;  // Track linear search iterations
+        
+         // Perform linear search on original array
+         
+         int linearIndex = linearSearchID(studArray, numStudents, searchID, linearIter);
+
+         cout << "\nResult of linear search:\n------------------------" << endl;
+         
+         if (linearIndex == -1)  // Check if found
+         {
+            cout << "Student not found" << endl;
+         }
+         else
+         {
+            cout << "Student found at index " << linearIndex << ", major is " 
+                 << studArray[linearIndex].major << ", GPA is " << fixed 
+                 << setprecision(2) << studArray[linearIndex].GPA << endl;
+         }
+         
+         cout << "It took " << linearIter << " iterations" << endl;
+
+         int binaryIter = 0;  // Track binary search iterations
+         
+         // Perform binary search on ID-sorted array
+         
+         int binaryIndex = binarySearchID(studArraysortedbyID, numStudents, searchID, binaryIter);
+
+         cout << "\nResult of binary search:\n------------------------" << endl;
+         
+         if (binaryIndex == -1)  // Check if found
+         {
+            cout << "Student not found" << endl;
+         }
+         else
+         {
+            cout << "Student found at index " << binaryIndex << ", major is " 
+                 << studArraysortedbyID[binaryIndex].major << ", GPA is " << fixed 
+                 << setprecision(2) << studArraysortedbyID[binaryIndex].GPA << endl;
+         }
+         
+         cout << "It took " << binaryIter << " iterations" << endl; // Print the iterations
+        
+         cout << endl;      // Add a blank line
+      }
+      else if (choice == 3)  // Handle quit command
+      {
+         cout << "Exiting\n";  // Exit message
+         
+         break;               // Exit loop
+      }
+      else  // Handle invalid menu choice
+      {
+         cout << "Invalid choice. Please try again." << endl;
+      }
+   } while (true);  // Infinite loop continues while it is true
+
+   return 0;  
+}
+
+// Linear search implementation
+
+int linearSearchID(Student arr[], int numElems, int value, int &nIter)
+{
+   nIter = 0;  // Initialize iteration counter
+   
+   for (int i = 0; i < numElems; i++)  // Check each element
+   {
+      nIter++;  // Increment counter for each check
+      
+      if (arr[i].netID == value)  // Compare netID
+      {
+         return i;  // Return index 
+      }
+   }
+   
+   return -1;  
+}
+
+// Binary search implementation
+
+int binarySearchID(Student arr[], int numElems, int value, int &nIter)
+{
+   int first = 0;               // Initial search range start
+   int last = numElems - 1;     // Initial search range end
+   int middle;                  // Midpoint index
+   nIter = 0;                   // Initialize iteration counter
+
+   while (first <= last)         // Continue while search range valid
+   {
+      nIter++;                   // Increment iteration counter
+      
+      middle = (first + last) / 2;  // Calculate midpoint
+      
+      if (arr[middle].netID == value)  // Check midpoint
+      {
+         return middle;          // Return index if found
+      }
+      else if (arr[middle].netID < value)  // Adjust search range
+      {
+         first = middle + 1;     // Discard left half
+      }
+      else
+      {
+         last = middle - 1;      // Discard right half
+      }
+   }
+   
+   return -1;  
+}
+
+// Selection sort by GPA
+
+void modifiedSortGPA(Student array1[], int size)
+{
+   for (int i = 0; i < size - 1; i++)  // Outer loop for each position
+   {
+      int minIndex = i;                // Assume current index is minimum
+      
+      for (int j = i + 1; j < size; j++)  // Inner loop to find actual min
+      {
+         if (array1[j].GPA < array1[minIndex].GPA)  // Compare GPAs
+         {
+            minIndex = j;             // Update minimum index
+         }
+      }
+      
+      // Swap current element with minimum found
+      
+      Student temp = array1[i];
+      array1[i] = array1[minIndex];
+      array1[minIndex] = temp;
+   }
+}
+
+// Selection sort by netID 
+
+void modifiedSortID(Student array2[], int size)
+{
+   for (int i = 0; i < size - 1; i++)  // Outer loop for each position
+   {
+      int minIndex = i;                // Assume current index is minimum
+      
+      for (int j = i + 1; j < size; j++)  // Inner loop to find actual min
+      {
+         if (array2[j].netID < array2[minIndex].netID)  // Compare netIDs
+         {
+            minIndex = j;             // Update minimum index
+         }
+      }
+      
+      // Swap current element with minimum found
+      
+      Student temp = array2[i];
+      array2[i] = array2[minIndex];
+      array2[minIndex] = temp;
+   }
+}
