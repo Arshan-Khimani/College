@@ -1,0 +1,335 @@
+/*
+Pseudocode:
+
+1. **Headers and Setup**
+   - Include `iostream` for input/output.
+   - Include `RectangleFromGO.h` and `CircleFromGO.h` for shape classes.
+   - Use the standard namespace.
+
+2. **Main Function**
+
+   ***Circle Demonstrations***
+
+   - Create `circle` with radius 5.3, color "Blue", and filled `true`.
+     - Call `print()`, display color, fill status, radius, area, diameter.
+     - Use overloaded `<<` to print circle.
+
+   - Create `circle2` with radius 15.3 using an alternate constructor.
+     - Call `print()`, display default color and fill.
+     - Change color to "Green" and display again.
+     - Show radius, area, diameter.
+     - Use `<<` to print `circle2`.
+
+   - Create default `circle3`.
+     - Call `print()`, show properties.
+     - Set new radius `26.7`, color "Yellow".
+     - Use `<<` to print updated `circle3`.
+
+   ***Rectangle Demonstrations***
+
+   - Create `rect1` with width 27.9, height 15.6, color "Red", filled `false`.
+     - Call `print()`, display color, fill, width, height, area, perimeter.
+     - Use `<<` to print `rect1`.
+
+   - Create `rect2` with width 13.2, height 15.6.
+     - Call `print()`, show default color and fill.
+     - Change color to "Cyan".
+     - Show updated width, height, area, perimeter.
+     - Use `<<` to print `rect2`.
+
+   - Create default `rect3`.
+     - Call `print()`, show properties.
+     - Set height to `26.7`, width to `14.98`, color to "Indigo".
+     - Show updated width, height, area, perimeter.
+     - Use `<<` to print `rect3`.
+
+3. **End Program**
+   - Return `0` to indicate successful execution.
+*/
+
+#include <iostream>
+#include "RectangleFromGO.h"
+#include "CircleFromGO.h"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Create a CircleFromGO object with radius 5.3, color "Blue", and filled true
+    CircleFromGO circle(5.3, "Blue", true);
+    
+    // Print circle information
+    circle.print();
+    
+    // Output the color of the circle
+    cout << "The color is " <<  circle.getColor() << endl;
+
+    // Output whether the circle is filled
+    cout << "The color filled is " <<  circle.getFilled() << endl;
+
+    // Output the radius of the circle
+    cout << "The radius is " <<  circle.getRadius() << endl;
+
+    // Output the area of the circle
+    cout << "The area is " <<  circle.getArea() << endl;
+
+    // Output the diameter of the circle
+    cout << "The diameter is " <<  circle.getDiameter() << endl;
+
+    // Output the formatted circle object using overloaded << operator
+    cout <<  circle << endl << endl;
+
+    // Create another CircleFromGO object with radius 15.3 using a different constructor
+    CircleFromGO circle2(15.3);
+    
+    // Print circle2 information
+    circle2.print();
+    
+    // Output the color of circle2
+    cout << "The color is " <<  circle2.getColor() << endl;
+
+    // Output whether circle2 is filled
+    cout << "The color filled is " <<  circle2.getFilled() << endl;
+    
+    // Set the color of circle2 to "Green"
+    circle2.setColor("Green");
+    
+    // Output the updated color of circle2
+    cout << "After setting, the color is " <<  circle2.getColor() << endl;
+
+    // Output the radius of circle2
+    cout << "The radius is " <<  circle2.getRadius() << endl;
+
+    // Output the area of circle2
+    cout << "The area is " <<  circle2.getArea() << endl;
+
+    // Output the diameter of circle2
+    cout << "The diameter is " <<  circle2.getDiameter() << endl;
+
+    // Output the formatted circle2 object
+    cout <<  circle2 << endl << endl;
+
+    // Create a CircleFromGO object using the default constructor
+    CircleFromGO circle3;
+    
+    // Print circle3 information
+    circle3.print() ;
+    
+    // Output the color of circle3
+    cout << "The color is " <<  circle3.getColor() << endl;
+
+    // Output whether circle3 is filled
+    cout << "The color filled is " <<  circle3.getFilled() << endl;
+
+    // Output the radius of circle3
+    cout << "The radius is " <<  circle3.getRadius() << endl;
+
+    // Output the area of circle3
+    cout << "The area is " <<  circle3.getArea() << endl;
+
+    // Output the diameter of circle3
+    cout << "The diameter is " <<  circle3.getDiameter() << endl;
+    
+    // Set a new radius for circle3
+    circle3.setRadius(26.7);
+    
+    // Set a new color for circle3
+    circle3.setColor("Yellow");
+    
+    // Output the updated formatted circle3 object
+    cout << circle3 << endl << endl;
+
+    // Create a RectangleFromGO object with width 27.9, height 15.6, color "Red", not filled
+    RectangleFromGO rect1(27.9, 15.6, "Red", false);
+    
+    // Print rect1 information
+    rect1.print();
+    
+    // Output the color of rect1
+    cout << "The color is " <<  rect1.getColor() << endl;
+
+    // Output whether rect1 is filled
+    cout << "The color filled is " <<  rect1.getFilled() << endl;
+
+    // Output the width of rect1
+    cout << "The width is " <<  rect1.getWidth() << endl;
+
+    // Output the height of rect1
+    cout << "The height is " <<  rect1.getHeight() << endl;
+
+    // Output the area of rect1
+    cout << "The area is " <<  rect1.getArea() << endl;
+
+    // Output the perimeter of rect1
+    cout << "The Perimeter is " <<  rect1.getPerimeter()  << endl;
+
+    // Output the formatted rect1 object
+    cout << rect1 << endl << endl;
+
+    // Create another RectangleFromGO object with width 13.2 and height 15.6
+    RectangleFromGO rect2(13.2, 15.6);
+    
+    // Print rect2 information
+    rect2.print();
+    
+    // Output the color of rect2
+    cout << "The color is " <<  rect2.getColor() << endl;
+
+    // Output whether rect2 is filled
+    cout << "The color filled is " <<  rect2.getFilled() << endl;
+   
+    // Change the color of rect2 to "Cyan"
+    rect2.setColor("Cyan");
+   
+    // Output the updated color of rect2
+    cout << "After setting, the color is " <<  rect2.getColor() << endl;
+
+    // Output the width of rect2
+    cout << "The width is " <<  rect2.getWidth() << endl;
+
+    // Output the height of rect2
+    cout << "The height is " <<  rect2.getHeight() << endl;
+
+    // Output the area of rect2
+    cout << "The area is " <<  rect2.getArea() << endl;
+
+    // Output the perimeter of rect2
+    cout << "The Perimeter is " <<  rect2.getPerimeter() << endl;
+
+    // Output the formatted rect2 object
+    cout << rect2 << endl << endl;
+
+    // Create a RectangleFromGO object using the default constructor
+    RectangleFromGO rect3;
+   
+    // Print rect3 information
+    rect3.print();
+ 
+    // Output the color of rect3
+    cout << "The color is " <<  rect3.getColor() << endl;
+
+    // Output whether rect3 is filled
+    cout << "The color filled is " <<  rect3.getFilled() << endl;
+
+    // Output the width of rect3
+    cout << "The width is " <<  rect3.getWidth() << endl;
+
+    // Output the height of rect3
+    cout << "The height is " <<  rect3.getHeight() << endl;
+
+    // Output the area of rect3
+    cout << "The area is " <<  rect3.getArea() << endl;
+
+    // Output the perimeter of rect3
+    cout << "The Perimeter is " <<  rect3.getPerimeter() << endl;
+  
+    // Set a new height for rect3
+    rect3.setHeight(26.7);
+  
+    // Set a new width for rect3
+    rect3.setWidth(14.98);
+  
+    // Set a new color for rect3
+    rect3.setColor("Indigo");
+  
+    // Output the updated width of rect3
+    cout << "The width is " <<  rect3.getWidth() << endl;
+
+    // Output the updated height of rect3
+    cout << "The height is " <<  rect3.getHeight() << endl;
+
+    // Output the updated area of rect3
+    cout << "The area is " <<  rect3.getArea() << endl;
+
+    // Output the updated perimeter of rect3
+    cout << "The Perimeter is " <<  rect3.getPerimeter() << endl;
+
+    // Output the updated formatted rect3 object
+    cout << rect3 << endl << endl;
+
+    return 0;
+}
+
+/*
+The circle is created and the radius is 5.3
+Color: Blue and filled: 1
+The color is Blue
+The color filled is 1
+The radius is 5.3
+The area is 88.2473
+The diameter is 10.6
+The circle printed with ostream!
+The radius is 5.3
+Color: Blue and Area: 88.2473
+
+
+The circle is created and the radius is 15.3
+Color: white and filled: 1
+The color is white
+The color filled is 1
+After setting, the color is Green
+The radius is 15.3
+The area is 735.415
+The diameter is 30.6
+The circle printed with ostream!
+The radius is 15.3
+Color: Green and Area: 735.415
+
+
+The circle is created and the radius is 0
+Color: white and filled: 1
+The color is white
+The color filled is 1
+The radius is 0
+The area is 0
+The diameter is 0
+The circle printed with ostream!
+The radius is 26.7
+Color: Yellow and Area: 2239.61
+
+
+The rectangle  width is 27.9 and the height is 15.6
+Color: Red and filled: 0
+The color is Red
+The color filled is 0
+The width is 27.9
+The height is 15.6
+The area is 435.24
+The Perimeter is 87
+The Rectangle printed with ostream!
+The width and height is 27.9, 15.6
+Color: Red and Area: 435.24
+
+
+The rectangle  width is 13.2 and the height is 15.6
+Color: white and filled: 1
+The color is white
+The color filled is 1
+After setting, the color is Cyan
+The width is 13.2
+The height is 15.6
+The area is 205.92
+The Perimeter is 57.6
+The Rectangle printed with ostream!
+The width and height is 13.2, 15.6
+Color: Cyan and Area: 205.92
+
+
+The rectangle  width is 0 and the height is 0
+Color: white and filled: 1
+The color is white
+The color filled is 1
+The width is 0
+The height is 0
+The area is 0
+The Perimeter is 0
+The width is 14.98
+The height is 26.7
+The area is 399.966
+The Perimeter is 83.36
+The Rectangle printed with ostream!
+The width and height is 14.98, 26.7
+Color: Indigo and Area: 399.966
+
+*/
