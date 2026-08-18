@@ -1,0 +1,43 @@
+import java.util.*;
+
+class Routes {
+  public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+
+    System.out.print("# of routes: ");
+    int n = input.nextInt();
+
+    System.out.print("Dollar value for one minute of your time: ");
+    double valuePerMinute = input.nextDouble();
+
+    int[] time = new int[n];
+    double[] toll = new double[n];
+
+    for (int i = 0; i < n; i++) 
+    {
+      System.out.print("Travel time for route #" + (i + 1) + ": ");
+    
+      time[i] = input.nextInt();
+    
+      System.out.print("Toll for route #" + (i + 1) + ": ");
+    
+      toll[i] = input.nextDouble();
+    }
+
+    double bestCost = Double.MAX_VALUE;
+    int bestRoute = -1;
+
+    for (int i = 0; i < n; i++) 
+    {
+      double cost = time[i] * valuePerMinute + toll[i];
+      
+      if (cost < bestCost) 
+      {
+        bestCost = cost;
+        bestRoute = i + 1; 
+      }
+    }
+
+    System.out.println("Best route is #" + bestRoute);
+  }
+}
