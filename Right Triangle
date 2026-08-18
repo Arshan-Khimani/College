@@ -1,0 +1,42 @@
+/*This program will ask the user for 2 sides of a right triangle (doubles) and using the user input
+will calculate the hypotenuse of the triangle.
+*/
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    // Declaring variables: firstSide, secondSide, hypotenuse as doubles
+    
+    double firstSide;
+    double secondSide;
+    double hypotenuse;
+    
+    // Making sure the hypotenuse is 2 decimal places
+    
+    cout << fixed << setprecision(2);
+    
+    // Asking the user for the first triangle side and storing it in variable firstSide
+    
+    cout << "Enter first triangle side: ";
+    cin >> firstSide;
+    
+    // Asking the user for the second triangle side and storing it in variable secondSide
+    
+    cout << "Enter second triangle side: ";
+    cin >> secondSide;
+    
+    // Calculating the hypotenuse using the user input and using the formula a^2 + b^2 = c^2
+    
+    hypotenuse = pow(firstSide, 2) + pow(secondSide, 2);
+    hypotenuse = sqrt(hypotenuse);
+    
+    // Displaying the results of the calcuation to the user
+    
+    cout << "Hypotenuse: " << hypotenuse << "\n";
+
+    return 0;
+}
