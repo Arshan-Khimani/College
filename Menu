@@ -1,0 +1,437 @@
+#include <iostream>  
+#include <fstream>   
+#include <iomanip> 
+#include <string>    
+
+using namespace std; 
+
+// Function prototypes
+
+// Function to read inventory data from a file
+
+bool readInventory(string fname, int numRecords, string* pluPtr, double* pricePtr, string* namePtr, int* typePtr, int* inventoryPtr); 
+
+// Function to determine the number of records in a file
+
+int determineNumRecords(string fname); 
+
+// Function to process customer checkout
+
+double checkout(int numRecords, string* pluPtr, double* pricePtr, int* inventoryPtr); 
+
+// Function to get user's menu choice
+
+int getUserChoice(); 
+
+// Function to search for a product by PLU
+
+int searchProduct(string plu, string* pluPtr, int numRecords); 
+
+// Function to print inventory data
+ 
+void printInventory(int numRecords, string* pluPtr, string* namePtr, int* typePtr, double* pricePtr, int* inventoryPtr, string header);
+
+int main() 
+{
+    // Stores the filename entered by the user
+    
+    string fileName; 
+    
+    // Stores the number of records in the inventory file
+    
+    int numRecords;  
+    
+    // Pointers to dynamically allocated arrays for storing inventory data
+    
+    string* pluPtr = nullptr;
+    string* namePtr = nullptr;
+    double* pricePtr = nullptr;
+    int* typePtr = nullptr;
+    int* inventoryPtr = nullptr;
+    
+    // Prompts user to enter the filename and reads filename from user input
+    
+    cout << "Enter the file name: "; 
+    cin >> fileName; 
+    
+    // Calls function to determine number of records in file
+    
+    numRecords = determineNumRecords(fileName); 
+    
+    // Displays the number of records
+    
+    cout << "There are " << numRecords << " records in the file\n\n"; 
+    
+    // Dynamically allocates memory for inventory arrays
+    
+    pluPtr = new string[numRecords];
+    namePtr = new string[numRecords];
+    pricePtr = new double[numRecords];
+    typePtr = new int[numRecords];
+    inventoryPtr = new int[numRecords];
+    
+    // Reads inventory from file, exits if file reading fails
+    
+    if (!readInventory(fileName, numRecords, pluPtr, pricePtr, namePtr, typePtr, inventoryPtr)) 
+    {
+        // Displays error message
+        
+        cout << "Error reading file\n"; 
+        
+        return 1;
+    }
+    
+    // Prints the inventory after reading from file
+    
+    printInventory(numRecords, pluPtr, namePtr, typePtr, pricePtr, inventoryPtr, "Inventory read from file");
+    
+    // Stores user's menu choice
+    
+    int choice; 
+    
+    do 
+    {
+        // Gets user's choice from menu
+        
+        choice = getUserChoice(); 
+        
+        // Switch statement for menu options
+        
+        switch (choice) 
+        {
+            // Option 1: Checkout
+            
+            case 1: 
+            {
+                // Calls checkout function
+                
+                double total = checkout(numRecords, pluPtr, pricePtr, inventoryPtr); 
+                
+                // Displays total cost
+                
+                cout << "Total is: $" << fixed << setprecision(2) << total << "\n\n"; 
+                
+                // Exits switch case
+                
+                break; 
+            }
+            
+            // Option 2: Print current inventory
+            
+            case 2: 
+                // Calls function to print inventory
+                
+                printInventory(numRecords, pluPtr, namePtr, typePtr, pricePtr, inventoryPtr, "Current inventory"); 
+                
+                // Exits switch case
+                
+                break; 
+                
+            // Option 3: Quit
+            
+            case 3: 
+                // Prints updated inventory before exiting
+                
+                printInventory(numRecords, pluPtr, namePtr, typePtr, pricePtr, inventoryPtr, "Updated inventory"); 
+                
+                // Displays exit message
+                
+                cout << "\nExiting\n"; 
+                
+                // Exits switch case
+                
+                break; 
+        }
+    } while (choice != 3);  // Loops until user chooses to exit
+    
+    // Deallocates dynamically allocated memory
+    
+    delete[] pluPtr;
+    delete[] namePtr;
+    delete[] pricePtr;
+    delete[] typePtr;
+    delete[] inventoryPtr;
+    
+    return 0; 
+}
+
+// Function to read inventory data from file
+
+bool readInventory(string fname, int numRecords, string* pluPtr, double* pricePtr, string* namePtr, int* typePtr, int* inventoryPtr) 
+{
+    // Opens file for reading
+    
+    ifstream inFile(fname); 
+    
+    // Checks if file failed to open
+    
+    if (!inFile) 
+    {
+        // Returns false if file cannot be opened
+        
+        return false; 
+    }
+    
+    // Loops through each record
+    
+    for (int i = 0; i < numRecords; i++) 
+    {
+        // Reads data from file into arrays
+        
+        inFile >> pluPtr[i] >> namePtr[i] >> typePtr[i] >> pricePtr[i] >> inventoryPtr[i]; 
+    }
+    
+    // Closes file
+    
+    inFile.close(); 
+    
+    // Returns true 
+    
+    return true; 
+}
+
+// Function to determine the number of records in the file
+
+int determineNumRecords(string fname)
+{
+    // Opens file for reading
+    
+    ifstream inFile(fname); 
+    
+    // Initializes record counter
+    
+    int count = 0; 
+    
+    // Temporary variable to store PLU
+    
+    string plu; 
+    
+    // Reads PLU codes until end of file
+    
+    while (inFile >> plu) 
+    {
+        // Temporary variable to store product name
+        
+        string name; 
+        
+        // Temporary variable to store product type
+        
+        int type; 
+        
+        // Temporary variable to store price
+        
+        double price; 
+        
+        // Temporary variable to store inventory count
+        
+        int inventory; 
+        
+        // Reads remaining product details
+        
+        if (inFile >> name >> type >> price >> inventory) 
+        {
+            // Increments record count
+            
+            count++; 
+        }
+    }
+    
+    // Closes file
+    
+    inFile.close(); 
+    
+    // Returns count
+    
+    return count; 
+}
+
+// Function to process checkout transactions
+
+double checkout(int numRecords, string* pluPtr, double* pricePtr, int* inventoryPtr) 
+{
+    // Stores PLU entered by user
+    
+    string plu; 
+    
+    // Stores quantity entered by user
+    
+    int quantity; 
+    
+    // Stores total cost
+    
+    double total = 0.0; 
+
+    // Infinite loop until user exits checkout
+    
+    while (true) 
+    {
+        // Prompt for PLU and read PLU from user
+        
+        cout << "Enter PLU, 0 if done: "; 
+        cin >> plu; 
+        
+        // If user enters 0, exit loop
+        
+        if (plu == "0") 
+        {
+            break; 
+        }
+
+        // Search for product index
+        
+        int index = searchProduct(plu, pluPtr, numRecords); 
+        
+        // If product is not found
+        
+        if (index == -1) 
+        {
+            // Display error
+            
+            cout << "PLU not found\n"; 
+            
+            // Continue to next iteration
+            
+            continue; 
+        }
+
+        do 
+        {
+            // Prompt for quantity and read quantity from user
+            
+            cout << "Enter quantity: "; 
+            cin >> quantity; 
+
+            // If quantity is invalid
+            
+            if (quantity <= 0) 
+            {
+                // Prompt again
+                
+                cout << "Quantity must be positive, reenter: "; 
+            }
+        } while (quantity <= 0);    // Repeat if invalid input
+
+        // If requested quantity exceeds available inventory
+        
+        if (quantity > inventoryPtr[index]) 
+        {
+            // Reduce quantity to available stock
+            
+            quantity = inventoryPtr[index]; 
+        }
+        
+        // Calculate total cost
+
+        total += quantity * pricePtr[index]; 
+        
+        // Deduct quantity from inventory
+        
+        inventoryPtr[index] -= quantity; 
+    }
+
+    // Return total 
+    
+    return total; 
+}
+
+// Function to get user's menu choice
+
+int getUserChoice() 
+{
+    // Variable to store user's choice
+    
+    int choice; 
+    
+    // Display menu options to user and read user input
+    
+    cout << "1 - Checkout\n" << "2 - Print current inventory\n" << "3 - Quit\n";
+    cin >> choice; 
+    
+    // Validate user input, ensuring it's within the valid range
+    
+    while (choice < 1 || choice > 3) 
+    {
+        // Prompt for re-entry if invalid and read new choice
+        
+        cout << "Invalid choice, reenter: "; 
+        cin >> choice;  
+    }
+    
+    // Return choice
+    
+    return choice; 
+}
+
+// Function to search for a product by PLU
+
+int searchProduct(string plu, string* pluPtr, int numRecords) 
+{
+    // Iterate through inventory
+    
+    for (int i = 0; i < numRecords; i++) 
+    {
+        // Check if PLU matches
+        
+        if (pluPtr[i] == plu) 
+        {
+            // Return index if found
+            
+            return i; 
+        }
+    }
+    
+    return -1; 
+}
+
+// Function to print inventory details
+
+void printInventory(int numRecords, string* pluPtr, string* namePtr, int* typePtr, double* pricePtr, int* inventoryPtr, string header) 
+{
+    // Print header
+    
+    cout << header << "\n"; 
+    
+    // Print a separator line
+    
+    cout << string(header.length(), '-') << "\n"; 
+
+    // Iterate through inventory
+    
+    for (int i = 0; i < numRecords; i++) 
+    {
+        // Scale price for formatting
+        
+        double scaledValue = pricePtr[i] * 10; 
+        
+        // Convert to integer for comparison
+        
+        int intScaledValue = static_cast<int>(scaledValue); 
+
+        // Variable to determine decimal precision
+        
+        int precision; 
+        
+        // If no decimal places are needed
+        
+        if (scaledValue == intScaledValue) 
+        {
+            // Set precision to 1 decimal place
+            
+            precision = 1;  
+        } 
+        else 
+        {
+            // Set precision to 2 decimal places
+            
+            precision = 2;  
+        }
+
+        // Print formatted inventory details
+        
+        cout << "PLU: " << setw(4) << left << pluPtr[i] << ", " << setw(18) << left << namePtr[i] << ", type: " << typePtr[i] << ", unit price: " << setw(5) << right << fixed << setprecision(precision) << pricePtr[i] << ", inventory: " << inventoryPtr[i] << "\n";
+    }
+    
+    // Print newline 
+    
+    cout << "\n"; 
+}
