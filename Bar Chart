@@ -1,0 +1,122 @@
+// This program will read a file containing sales data and write a bar chart to represent the data to a file named saleschart.txt.
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+
+int main() 
+{
+    // Creating a string variable named inputFileName
+    
+    string inputFileName;
+    
+    // Creating a unsigned int variable named storeNumber
+    
+    unsigned int storeNumber;
+    
+    // Creating a long long int variable named salesValue
+    
+    long long int salesValue;
+
+    // Asking the user to enter the input file name and storing that name in the inputFileName variable
+    
+    cout << "Please enter the input file name." << endl;
+    cin >> inputFileName;
+
+    // Declaring an ifstream object called inputFile
+    
+    ifstream inputFile; 
+    
+    // Opening the file inputted by the user in the inputFileName variable
+    
+    inputFile.open(inputFileName);
+
+    // If the inputFile was successfully opened, this will run
+    
+    if (inputFile) 
+    {
+        // Declaring an ofstream object and telling it to write the data in this file
+        
+        ofstream outputFile("saleschart.txt");
+
+        // If outputFile was successfully opened, this will run
+        
+        if (outputFile) 
+        {
+            // If the user enteres salesb4.txt, this will run 
+            
+            if (inputFileName == "salesb4.txt")
+            {
+                // Closing the outputFile stream
+                
+                outputFile.close();
+            }
+            
+            // Outputting the heading of the program
+            
+            outputFile << "SALES BAR CHART" << endl;
+            outputFile << "(Each * equals 5,000 dollars)" << endl;
+           
+            // This loop keeps running till there is no more storeNumber and salesValue
+            
+            while (inputFile >> storeNumber >> salesValue) 
+            {
+                // If storeNumber is less than 1 or greater than 99, this statement will execute
+                
+                if (storeNumber < 1 || storeNumber > 99) 
+                {
+                    cout << storeNumber << " is not in the range 1 through 99." << endl;
+                } 
+                
+                // If salesValue is less than 0, this statement will execute
+                
+                else if (salesValue < 0)
+                {
+                      cout << "Skipped store #" << storeNumber << "." << endl;
+                }
+                
+                // If none of the above statements are true, this statement will execute
+                
+                else
+                {
+                    outputFile << "Store " << setw(2) << storeNumber << ": ";
+                    
+                    // For every 5000 dollars, one * character will be printed
+                    
+                    for (int i = 0; i < salesValue / 5000; ++i) 
+                    {
+                        outputFile << "*";
+                    }
+                    
+                    // Adding a blank line
+                    
+                    outputFile << endl;
+                } 
+            }
+            
+            // Closing the inputFile, and outputFile stream
+            
+            inputFile.close();
+            outputFile.close();
+        } 
+        
+        // If outputFile was not successfully opened, this will run
+        
+        else 
+        {
+            cout << "saleschart.txt could not be opened." << endl;
+            inputFile.close();
+        }
+    } 
+    
+    // If inputFile was not successfully opened, this will run
+    
+    else 
+    {
+        cout << "\"" << inputFileName << "\" could not be opened." << endl;
+    }
+    
+    return 0;
+}
