@@ -1,0 +1,97 @@
+/* This program gets up to one hundred and twenty grades from the user, calculates and displays the average of the grades 
+followed by a list of the grades that are below the average.
+*/
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main() 
+{
+    // Creating an array to store 120 grades
+    
+    int grades[120];
+    
+    // Creating an int variable called numGrades and setting it equal to 0
+    
+    int numGrades = 0;
+    
+    // Creating an int variable called sum and setting it equal to 0
+    
+    int sum = 0;
+    
+    // Creating a double variable called average
+    
+    double average;
+
+    // Asking the user to enter the first score or to enter -999 to end the input. Also storing the user input into the array.
+    
+    cout << "Enter the first score or -999 to end input: ";
+    cin >> grades[numGrades];
+
+    // As long as the array isnt equal to -999, and the array isnt full (< 120), this while loop will run.
+    
+    while (grades[numGrades] != -999 && numGrades < 120) 
+    {
+        // Adding 1 to numGrades
+        
+        numGrades++;
+        
+        // Adding the last entered grade to the sum
+        
+        sum += grades[numGrades - 1];
+        
+        // Asking the user to enter the next score or type -999 to end the input. Storing this user response in the array.
+        
+        cout << "Enter the next score or -999 to end input: ";
+        cin >> grades[numGrades];
+    }
+
+    // If numGrades is equal to 0, this message will be displayed
+    
+    if (numGrades == 0) 
+    {
+        cout << "No scores were entered." << endl;
+    } 
+    
+    // If numGrades is not equal to 0, this block of code will be executed
+    
+    else 
+    {
+        // Dividing sum by numGrades, setting it equal to average, and casting it as a double
+        
+        average = static_cast <double> (sum) / numGrades;
+        
+        // Outputting the average of the scores to the user
+        
+        cout << "The average of the scores is: " << fixed << setprecision(1) << average << "." << endl;
+
+        // If numGrades is greater than 1, this will execute
+        
+        if (numGrades > 1) 
+        {
+            // Printing out the scores bellow the average
+            
+            cout << "The scores below the average were: ";
+            
+            // Looping through all the entered grades
+            
+            for (int i = 0; i < numGrades; i++) 
+            {
+                // If a grade is below the average, it is displayed
+                
+                if (grades[i] < average) 
+                {
+                    cout << grades[i] << " ";
+                }
+            }
+            
+            // Adding a blank line
+            
+            cout << endl;
+        }
+    }
+
+    return 0;
+}
