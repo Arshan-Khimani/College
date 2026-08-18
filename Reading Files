@@ -1,0 +1,107 @@
+/* This program will be reading numbers from a file. The program will validate the numbers and calculate the average of the 
+valid numbers if a valid file name is inputed.
+*/
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+
+int main() 
+{
+    // Declaring an ifstream object called inputFile
+    
+    ifstream inputFile;
+    
+    // Declaring an ofstream object called outputFile
+    
+    ofstream outputFile;
+    
+    // Creating a string variable called fileName
+    
+    string fileName;
+    
+    // Creating double variables called number, average, sum, and setting sum equal to 0
+    
+    double number, sum = 0, average;
+    
+    // Creating integer variables called totalValues, validValues, invalidValues, and setting them all equal to 0
+    
+    int totalValues = 0, validValues = 0, invalidValues = 0;
+    
+    // Asking the user to input a file name and storing the input in the fileName variable
+    
+    cout << "Enter the input file name: " << endl;
+    cin >> fileName;
+
+    // Opening the file inputted by the user in the fileName variable
+    
+    inputFile.open(fileName);
+    
+    // Opening a badvalues.txt file to store invalid values
+    
+    outputFile.open("badvalues.txt");
+    
+    // If the inputFile was not successfully opened, this will run and an error message will be displayed
+    
+    if (!inputFile) 
+    {
+        cout << "The file \"" << fileName << "\" could not be opened." << endl;
+        return 0;
+    }
+
+    // This statement extracts the numbers from inputFile and store it in number and continue as long as there are numbers remaining
+    
+    while (inputFile >> number) 
+    {
+        // Adding 1 to totalValues
+        
+        totalValues++;
+        
+        // If the number entered is >= 1 and <= 150 this block will run and the number will be considered a validValue
+        
+        if (number >= 1 && number <= 150) 
+        {
+            sum += number;
+            validValues++;
+        } 
+        
+        /* If the number entered does not satisfy the if statement conditions, this block will run and the number will be 
+        considered an invalidValue */
+        
+        else 
+        {
+            outputFile << fixed << setprecision(3) << number << endl;
+            invalidValues++;
+        }
+    }
+
+    // Closing the inputFile, and outputFile stream
+    
+    inputFile.close();
+    outputFile.close();
+
+    // Displaying the totalValues, validValues, and invalidValues to the user
+    
+    cout << "Total number of values read: " << totalValues << endl;
+    cout << "Valid values read: " << validValues << endl;
+    cout << "Invalid values read: " << invalidValues << endl;
+
+    // If validValues is greater than 0, this will run and calculate the average
+    
+    if (validValues > 0) 
+    {
+        average = sum / validValues;
+        cout << "The average of the valid numbers read = " << fixed << setprecision(2) << average << endl;
+    } 
+    
+    // If the above if statement is false, this message will be displayed
+    
+    else 
+    {
+        cout << "The file did not contain any valid values." << endl;
+    }
+
+    return 0;
+}
