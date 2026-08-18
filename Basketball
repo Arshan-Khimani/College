@@ -1,0 +1,381 @@
+/*
+Pseudocode:
+
+1. Include necessary libraries: iostream, fstream, iomanip, string.
+
+2. Define a structure "Nbastats" to store player statistics: 
+   - pname (player's name)
+   - age (player's age)
+   - pscores (player's scores)
+   - rebounds (player's rebounds)
+   - steals (player's steals)
+   - blocks (player's blocks)
+   - fouls (player's fouls)
+
+3. Define helper functions:
+   - getAvg: Calculates the average of a specified field (age, scores, rebounds, steals, blocks, fouls).
+   - getMax: Finds the index of the player with the maximum value for a given field.
+   - getMin: Finds the index of the player with the minimum value for a given field.
+
+4. In the main function:
+   - Declare input file stream "infile" and string "filename".
+   - Prompt the user to enter the filename and read it into "filename".
+   - Open the input file with the given filename.
+   - If the file cannot be opened, display an error and exit.
+   - Read the file to count the number of players and store it in "count".
+   - Create an array of "Nbastats" to hold player data.
+   - Read player data (name, age, scores, rebounds, steals, blocks, fouls) from the file and store it in the array.
+   - Close the file after reading.
+
+5. Display a formatted table of player statistics (name, age, scores, rebounds, steals, blocks, fouls).
+
+6. Enter a loop to allow the user to calculate average, minimum, and maximum values for a given field (age, scores, rebounds, steals, blocks, fouls).
+   - Prompt the user to enter a field for which to calculate the average, minimum, and maximum (or type 'quit' to exit).
+   - If the user enters 'quit', display a quitting message and exit the loop.
+
+7. For the selected field:
+   - Call getAvg, getMin, and getMax to calculate the required values.
+   - If any of the values returned are invalid, display an error message and prompt for a valid field.
+   - If valid:
+     - Display the average value of the chosen field.
+     - Display the player with the minimum value in that field.
+     - Display the player with the maximum value in that field.
+
+8. End the program.
+*/
+
+#include <iostream>  
+#include <fstream>  
+#include <iomanip> 
+#include <string>    
+
+using namespace std; 
+
+// Define a structure to store NBA player statistics
+
+struct Nbastats 
+{
+    // Player's name
+    
+    string pname;    
+    
+    // Player's age
+    
+    int age;         
+    
+    // Player's scores
+    
+    int pscores;     
+    
+    // Player's rebounds
+    
+    int rebounds;    
+    
+    // Player's steals
+    
+    int steals;      
+    
+    // Player's blocks
+    
+    int blocks;      
+    
+    // Player's fouls
+    
+    int fouls;       
+};
+
+// Function to calculate the average of a given field for all players
+
+double getAvg(Nbastats plr[], int asize, string field);
+
+// Function to get the index of the player with the maximum value in a given field
+
+int getMax(Nbastats plr[], int asize, string field);
+
+// Function to get the index of the player with the minimum value in a given field
+
+int getMin(Nbastats plr[], int asize, string field);
+
+int main() 
+{
+    // Input file stream for reading the data
+    
+    ifstream infile;   
+    
+    // Variable to store the filename
+    
+    string filename;   
+
+    // Prompt the user to enter a filename and read the filename from user input
+    
+    cout << "Enter filename: ";  
+    cin >> filename;          
+    
+    // Open the input file
+    
+    infile.open(filename);      
+    
+    // Check if the file is successfully opened
+    
+    if (!infile) 
+    {
+        // Display an error message if the file is not found
+        
+        cout << "Invalid file name \n";  
+        
+        return -1; 
+    }
+
+    // Temporary string to read each line of the file
+    
+    string temp;  
+    
+    // Read the first line but don't use it
+    
+    getline(infile, temp);  
+
+    // Variable to count the number of players
+    
+    int count = 0;  
+    
+    // Loop through the file to count the total number of players
+    
+    while (getline(infile, temp)) 
+    {
+        // Increment the count 
+        
+        count++;  
+    }
+        
+    // Clear the input file stream
+    
+    infile.clear();   
+    
+    // Move the file pointer to the beginning of the file
+    
+    infile.seekg(0); 
+    
+    // Read the first line again
+    
+    getline(infile, temp);  
+    
+    // Create an array of player statistics
+    
+    Nbastats players[count];  
+    
+    // Loop to read each player's data from the file and store it in the array
+    
+    for (int i = 0; i < count; i++) 
+    {
+        infile >> players[i].pname >> players[i].age >> players[i].pscores >> players[i].rebounds >> players[i].steals >> players[i].blocks >> players[i].fouls;
+    }
+    
+    // Close the input file after reading all data
+    
+    infile.close();  
+
+    // Display the header for the table of player statistics
+    
+    cout << left << setw(16) << "Name" << setw(8) << "Age" << setw(8) << "Scores" << setw(8) << "Rebound" << setw(8) << "Steals" << setw(8) << "Blocks" << setw(8) << "PF" << endl;
+    
+    // Loop to display each player's statistics in a formatted table
+    
+    for (int i = 0; i < count; i++) 
+    {
+        cout << left << setw(16) << players[i].pname << setw(8) << players[i].age << setw(8) << players[i].pscores << setw(8) << players[i].rebounds << setw(8) << players[i].steals << setw(8) << players[i].blocks << setw(8) << players[i].fouls << endl;
+    }
+
+    // Variable to store the field entered by the user 
+    
+    string field;  
+
+    // Loop for user input to get average, minimum, and maximum values for a given field
+    
+    while (true) 
+    {
+        // Prompt the user for a field and read the field from user input
+        
+        cout << "\nEnter the field for getting average, min and max (or type 'quit' to exit): "; 
+        cin >> field;  
+
+        // If the user enters quit, exit the loop and end the program
+        
+        if (field == "quit") 
+        {
+            // Add a blank line
+            
+            cout << endl;
+            
+            // Display quitting message
+            
+            cout << "Quitting!!" << endl;  
+            
+            break;  
+        }
+
+        // Call the getAvg, getMin, and getMax functions to calculate the desired values
+        
+        double avg = getAvg(players, count, field);  
+        int minIdx = getMin(players, count, field);  
+        int maxIdx = getMax(players, count, field);  
+
+        // If any of the values returned by the functions are invalid, display an error
+        
+        if (avg == -1 || minIdx == -1 || maxIdx == -1) 
+        {
+            // Display error message for invalid field
+            
+            cout << "Invalid field entered!" << endl;  
+            
+            // Continue to the next iteration of the loop
+            
+            continue;  
+        }
+
+        // Print a blank line 
+        
+        cout << endl;  
+        
+        // If the field is age, display age statistics
+        
+        if(field == "age")
+        {
+            // Displaying average in the field
+            
+            cout << "The average " << (field == "scores" ? "score" : field) << " of team is " << avg << endl;
+            
+            // Display the player with the minimum value in the given field
+            
+            cout << "The player with minimum " << (field == "scores" ? "score" : field) << " is " << players[minIdx].pname << " = " << ((field == "age") ? players[minIdx].age : (field == "scores") ? players[minIdx].pscores : (field == "rebounds") ? players[minIdx].rebounds : (field == "steals") ? players[minIdx].steals : (field == "blocks") ? players[minIdx].blocks : players[minIdx].fouls) << endl;
+            
+            // Display the player with the maximum value in the given field
+            
+            cout << "The player with maximum " << (field == "scores" ? "score" : field) << " is " << players[maxIdx].pname << " = " << ((field == "age") ? players[maxIdx].age : (field == "scores") ? players[maxIdx].pscores : (field == "rebounds") ? players[maxIdx].rebounds : (field == "steals") ? players[maxIdx].steals : (field == "blocks") ? players[maxIdx].blocks : players[maxIdx].fouls) << endl;
+        }
+        else
+        {
+            // For fields other than age, display the average
+            
+            cout << "The average " << (field == "scores" ? "score" : field) << " is " << avg << endl;
+            
+            // Display the player with the minimum value in the given field
+            
+            cout << "Minimum " << (field == "scores" ? "score" : field) << " by " << players[minIdx].pname << " = " << ((field == "age") ? players[minIdx].age : (field == "scores") ? players[minIdx].pscores : (field == "rebounds") ? players[minIdx].rebounds : (field == "steals") ? players[minIdx].steals : (field == "blocks") ? players[minIdx].blocks : players[minIdx].fouls) << endl;
+            
+            // Display the player with the maximum value in the given field
+            
+            cout << "Maximum " << (field == "scores" ? "score" : field) << " by " << players[maxIdx].pname << " = " << ((field == "age") ? players[maxIdx].age : (field == "scores") ? players[maxIdx].pscores : (field == "rebounds") ? players[maxIdx].rebounds : (field == "steals") ? players[maxIdx].steals : (field == "blocks") ? players[maxIdx].blocks : players[maxIdx].fouls) << endl;
+        }
+    }
+
+    return 0;  
+}
+
+// Function to calculate the average value for a given field in the array of players
+
+double getAvg(Nbastats plr[], int asize, string field) 
+{
+    // Variable to accumulate the sum of values for the field
+     
+    double sum = 0; 
+    
+    // Loop through each player to calculate the sum of the given field
+    
+    for (int i = 0; i < asize; i++) 
+    {
+        if (field == "age") 
+        {
+            // Add player's age to sum
+            
+            sum += plr[i].age;  
+        }
+        else if (field == "scores") 
+        {
+            // Add player's scores to sum
+            
+            sum += plr[i].pscores;  
+        }
+        else if (field == "rebounds") 
+        {
+            // Add player's rebounds to sum
+            
+            sum += plr[i].rebounds;  
+        }
+        else if (field == "steals") 
+        {
+            // Add player's steals to sum
+            
+            sum += plr[i].steals;  
+        }
+        else if (field == "blocks") 
+        {
+            // Add player's blocks to sum
+            
+            sum += plr[i].blocks;  
+        }
+        else if (field == "fouls") 
+        {
+            // Add player's fouls to sum
+            
+            sum += plr[i].fouls;  
+        }
+        else 
+        {
+            return -1; 
+        }
+    }
+    
+    // Return the average value
+    
+    return sum / asize;  
+}
+
+// Function to find the player with the maximum value for a given field
+
+int getMax(Nbastats plr[], int asize, string field) 
+{
+    // Initialize the index of the player with the maximum value
+    
+    int maxIdx = 0;  
+    
+    // Loop through the players to find the maximum value for the given field
+    
+    for (int i = 1; i < asize; i++) 
+    {
+        // Update the index if a larger value is found
+        
+        if ((field == "age" && plr[i].age > plr[maxIdx].age) || (field == "scores" && plr[i].pscores > plr[maxIdx].pscores) || (field == "rebounds" && plr[i].rebounds > plr[maxIdx].rebounds) || (field == "steals" && plr[i].steals > plr[maxIdx].steals) || (field == "blocks" && plr[i].blocks > plr[maxIdx].blocks) || (field == "fouls" && plr[i].fouls > plr[maxIdx].fouls)) 
+        { 
+            maxIdx = i;  
+        }
+    }
+    
+    // Return the index of the player with the maximum value
+     
+    return maxIdx; 
+}
+
+// Function to find the player with the minimum value for a given field
+
+int getMin(Nbastats plr[], int asize, string field) 
+{
+    // Initialize the index of the player with the minimum value
+    
+    int minIdx = 0;  
+    
+    // Loop through the players to find the minimum value for the given field
+    
+    for (int i = 1; i < asize; i++) 
+    {
+        // Update the index if a smaller value is found
+        
+        if ((field == "age" && plr[i].age < plr[minIdx].age) || (field == "scores" && plr[i].pscores < plr[minIdx].pscores) || (field == "rebounds" && plr[i].rebounds < plr[minIdx].rebounds) || (field == "steals" && plr[i].steals < plr[minIdx].steals) || (field == "blocks" && plr[i].blocks < plr[minIdx].blocks) || (field == "fouls" && plr[i].fouls < plr[minIdx].fouls)) 
+        {
+            minIdx = i;  
+        }
+    }
+    
+    // Return the index of the player with the minimum value
+    
+    return minIdx;  
+}
