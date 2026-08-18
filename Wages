@@ -1,0 +1,101 @@
+/*  This program calculates the weekly wages of an employee based on their hourly pay rate 
+    and the number of hours worked in a week.
+    
+    Steps:
+    1. Prompt the user for their hourly pay rate and the number of hours worked.
+    2. Validate the input for hours is positive.
+    3. Calculate regular and overtime hours based on the number of hours worked:
+        - If hours <= 40, all hours are regular.
+        - If hours > 40 and <= 50, 40 hours are regular and the rest are overtime.
+        - If hours > 50, 40 hours are regular, 10 hours are overtime, and the rest are ignored.
+    4. Calculate weekly wages: regular hours * pay rate + overtime hours * pay rate * 1.5.
+    5. Display the number of regular hours, overtime hours, and the total weekly pay.
+    6. Program ends.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Creating double variables called payRate, hours, weeklyWages, regularHours, overtimeHours
+    
+    double payRate;
+    double hours;
+    double weeklyWages;
+    double regularHours;
+    double overtimeHours;
+
+    // Asking the user to enter the hourly pay rate and storing the response in the payRate variable
+    
+    cout << "Input hourly pay rate: ";
+    cin >> payRate;
+
+    // Asking the user to enter the number of hours and storing the response in the hours variable
+    
+    cout << "Input # of hours: ";
+    cin >> hours;
+
+    // Loop runs while hours is less than 0
+    
+    while (hours < 0) 
+    {
+        // Displaying an error message to the user
+        
+        cout << "\nInvalid input. Hours cannot be negative" << endl;
+        cout << "Enter a valid value: ";
+        cin >> hours;
+    }
+
+    // If hours is less than or equal to 40 this will execute
+    
+    if (hours <= 40) 
+    {
+        // Setting regularHours equal to hours
+        
+        regularHours = hours;
+        
+        // Assigning the value 0 to overtimeHours
+        
+        overtimeHours = 0;
+    } 
+    
+    // If hours is greater than 40 and less than or equal to 50, this will execute
+    
+    else if (hours > 40 && hours <= 50) 
+    {
+        // Assigning the value of 40 to regularHours
+        
+        regularHours = 40;
+        
+        // overtimeHours are equal to the hours variable minus 40
+        
+        overtimeHours = hours - 40;
+    } 
+    
+    // If none of the above statements are true, this will execute
+    
+    else 
+    {
+        // Setting regularHours equal to 40
+        
+        regularHours = 40;
+        
+        // Setting overtimeHours equal to 40
+        
+        overtimeHours = 10;
+    }
+
+    // Adding the regularHours payRate with the overtimeHours payRate
+    
+    weeklyWages = (regularHours * payRate) + (overtimeHours * payRate * 1.5);
+
+    // Displaying the regular, overtime hours as well as the weekly pay
+    
+    cout << "\nRegular hours: " << regularHours;
+    cout << " Overtime hours: " << overtimeHours << endl;
+    cout << "Your weekly pay: " << weeklyWages << endl;
+    
+    return 0;
+}
