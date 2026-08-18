@@ -1,0 +1,135 @@
+/*
+Pseudocode:
+1. Define constants MAXROWS and MAXCOLS to represent matrix dimensions.
+2. Declare function prototypes for sumMajorDiagonal and sumOtherDiagonal.
+3. In the main function:
+   a. Declare an integer variable 'seed' for randomization.
+   b. Declare a 2D array A[MAXROWS][MAXCOLS].
+   c. Prompt the user for a seed value and store it in 'seed'.
+   d. Use srand() to set the random seed.
+   e. Generate a 4x4 matrix with random values (0-49) and display it.
+   f. Compute and display the sum of the major diagonal elements.
+   g. Compute and display the sum of the other diagonal elements.
+4. Implement sumMajorDiagonal function:
+   a. Initialize sum to 0.
+   b. Iterate through the matrix and sum elements where row index equals column index.
+   c. Return the sum.
+5. Implement sumOtherDiagonal function:
+   a. Initialize sum to 0.
+   b. Iterate through the matrix and sum elements where column index is MAXCOLS - row index - 1.
+   c. Return the sum.
+*/
+
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+
+using namespace std;
+
+// Creating constant integers called MAXROWS, MAXCOLS that are both equal to 4
+const int MAXROWS = 4;
+const int MAXCOLS = 4;
+
+// write the prototypes for the two functions
+
+int sumMajorDiagonal(int m[MAXROWS][MAXCOLS]);
+int sumOtherDiagonal(int m[MAXROWS][MAXCOLS]);
+
+int main()
+{
+    // Creating an integer variable called seed
+    
+    int seed;
+    
+    // Creating a 2d array for the randomly generated numbers
+    
+    int A[MAXROWS][MAXCOLS];
+
+    // Asking the user to enter a seed value and storing it in the seed variable
+    cout << "Enter a seed value: ";
+    cin >> seed;
+    
+    // Initializing the random number generator with the given seed
+    
+    srand(seed);
+
+    // Nested loops to populate the 2D array with random numbers and display them.
+    
+    for (int i = 0; i < MAXROWS; i++) 
+    {
+        for (int j = 0; j < MAXCOLS; j++) 
+        {
+            // Assigns a random number between 0 and 49.
+            
+            A[i][j] = rand() % 50;
+            
+            // Prints the number with 4-character spacing.
+            
+            cout << setw(4) << A[i][j];
+        }
+        
+        // Adding a blank line
+        
+        cout << endl;
+    }
+    
+    // Adding a blank line
+    
+    cout << endl;
+    
+    // Displaying the sum of the elements in the major diagonal
+    
+    cout << "Sum of the elements in the major diagonal is "
+        << sumMajorDiagonal(A) << endl;
+
+    // Displaying the sum of the elements in the other diagonal
+    
+    cout << "Sum of the elements in the other diagonal is "
+        << sumOtherDiagonal(A) << endl;
+}
+
+// Function to compute the sum of the major diagonal elements.
+
+int sumMajorDiagonal(int m[MAXROWS][MAXCOLS]) 
+{
+    // Creating local int variable called sum and setting it equal to 0
+    
+    int sum = 0;
+    
+    // Loops through rows
+    
+    for (int i = 0; i < MAXROWS; i++) 
+    {
+        // Adds elements where row index equals column index.
+        
+        sum += m[i][i];
+    }
+    
+    // Returns the computed sum.
+    
+    return sum;
+}
+
+// Function to compute the sum of the other diagonal elements.
+
+int sumOtherDiagonal(int m[MAXROWS][MAXCOLS]) 
+{
+    // Creating local int variable called sum and setting it equal to 0
+    
+    int sum = 0;
+
+    // Loops through rows
+    
+    for (int i = 0; i < MAXROWS; i++) 
+    {
+        // Adds elements where column index is MAXCOLS - row index - 1.
+        
+        sum += m[i][MAXCOLS - i - 1];
+    }
+    
+    // Returns the computed sum.
+    
+    return sum;
+}
