@@ -1,0 +1,86 @@
+/* This program will ask the user to enter the mass of an object in kilograms and then 
+displays the weight of the object on the Earth, on the Moon, on Mercury, and on Venus in 
+Newtons. The program will also display a message indicating that the object is heavy if 
+weighs over 1250 Newtons and the program will display that the object is light if it weighs 
+less than 20 Newtons on Earth.
+*/
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+    // Creating variables mass, earthWeight, moonWeight, mercuryWeight, venusWeight as doubles
+    
+    double mass;
+    double earthWeight;
+    double moonWeight;
+    double mercuryWeight;
+    double venusWeight;
+    
+    // Creating constants earth, moon, mercury and venus as doubles
+    
+    const double EARTH = 9.807;
+    const double MOON = 1.62;
+    const double MERCURY = 3.7;
+    const double VENUS = 8.87;
+    
+    // Asking the user to enter the mass of an object in kilograms
+    
+    cout << "Please enter the mass of an object in kilograms: " << endl << endl;
+    cin >> mass;
+    
+    // Calculating the weight of each object by multiplying mass times accelaration
+    
+    earthWeight = mass * EARTH;
+    moonWeight = mass * MOON;
+    mercuryWeight = mass * MERCURY;
+    venusWeight = mass * VENUS;
+    
+    // Making sure the weights are 3 decimal places
+    
+    cout << fixed << setprecision(3);
+
+    /* Printing the headings to the user using proper formatting
+    Displaying the weight of moon, mercury, and venus with proper formatting
+    Displaying earths weight with proper formatting, and whether the weight is heavy, 
+    light or neither depending on whether the weight is greater than 1250 or less than 20 
+    through if statements */
+    
+    if(mass <= 0)
+    {
+        cout << "Error, invalid mass entered." << endl;
+        cout << "The entered mass must be greater than 0.";
+    }
+    
+    else if(earthWeight > 1250)
+    {
+        cout << left << setw(16) << "Planet/Satellite" << right << "\t" << setw(14) << "Weight (N)" << endl << endl;
+        cout << left << setw(16) << "Earth" << right << "\t" << setw(14) << earthWeight << "\tThe object is heavy" << endl;
+        cout << left << setw(16) << "Moon" << right << "\t" << setw(14) << moonWeight << endl;
+        cout << left << setw(16) << "Mercury" << right << "\t" << setw(14) << mercuryWeight << endl;
+        cout << left << setw(16) << "Venus" << right << "\t" << setw(14) << venusWeight << endl;
+    }
+    
+    else if(earthWeight < 20)
+    {
+        cout << left << setw(16) << "Planet/Satellite" << right << "\t" << setw(14) << "Weight (N)" << endl << endl;
+        cout << left << setw(16) << "Earth" << right << "\t" << setw(14) << earthWeight << "\tThe object is light" << endl;
+        cout << left << setw(16) << "Moon" << right << "\t" << setw(14) << moonWeight << endl;
+        cout << left << setw(16) << "Mercury" << right << "\t" << setw(14) << mercuryWeight << endl;
+        cout << left << setw(16) << "Venus" << right << "\t" << setw(14) << venusWeight << endl;
+    }
+    
+    else
+    {
+        cout << left << setw(16) << "Planet/Satellite" << right << "\t" << setw(14) << "Weight (N)" << endl << endl;
+        cout << left << setw(16) << "Earth" << right << "\t" << setw(14) << earthWeight << endl;
+        cout << left << setw(16) << "Moon" << right << "\t" << setw(14) << moonWeight << endl;
+        cout << left << setw(16) << "Mercury" << right << "\t" << setw(14) << mercuryWeight << endl;
+        cout << left << setw(16) << "Venus" << right << "\t" << setw(14) << venusWeight << endl;
+    }
+ 
+    return 0;
+}
