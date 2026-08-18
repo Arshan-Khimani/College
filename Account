@@ -1,0 +1,324 @@
+/*
+Pseudocode:
+
+1. Include necessary headers:
+   - `<iostream>` and `<iomanip>` for input/output.
+   - `"Account.h"` to use the `Account` class.
+
+2. Declare constants and global variables:
+   - `MAX_NUM_ACCOUNTS` is set to 4, limiting the number of accounts.
+   - `accountArray` is an array of 4 pointers to `Account`, initialized to `nullptr`.
+
+3. Function `findAccountIndex(int accountNumber)`:
+   - Loops through `accountArray`.
+   - Returns index if account number matches.
+   - Returns `-1` if no match is found.
+
+4. Function `displayMenu()`:
+   - Displays the menu options for the user.
+
+5. Main function:
+   - Initializes all `accountArray` elements to `nullptr`.
+   - Enters a loop to repeatedly display the menu and execute user-selected operations.
+
+6. Case 1 – Create Account:
+   - Searches for an empty slot in `accountArray`.
+   - Prompts user for number of owners and initial deposit.
+   - Creates a new `Account` object with that info.
+   - For each owner, reads name, DOB, and address.
+   - Stores account in array and displays account number.
+
+7. Case 2 – Deposit:
+   - Prompts for account number and deposit amount.
+   - Finds account and performs deposit.
+   - Displays new balance or error message.
+
+8. Case 3 – Withdraw:
+   - Prompts for account number and withdrawal amount.
+   - Finds account and attempts withdrawal.
+   - Displays result or error.
+
+9. Case 4 – Display All Accounts:
+   - Loops through all accounts.
+   - Displays account number, owners' details, and balance for each.
+
+10. Case 5, 6, 7 – Delete Account:
+    - Prompts for account number.
+    - If found, deletes the account.
+    - Shifts remaining accounts left to fill gap.
+    - Confirms deletion.
+
+11. Case 8 – Quit:
+    - Deletes all accounts.
+    - Exits the program.
+
+12. Default – Invalid input:
+    - Prints an error message.
+
+13. Loop continues until user selects Quit (case 8).
+*/
+
+#include <iostream> 
+#include <iomanip> 
+#include "Account.h"  
+
+using namespace std;  
+
+const int MAX_NUM_ACCOUNTS = 4;  // Constant defining the maximum number of accounts
+
+Account* accountArray[MAX_NUM_ACCOUNTS] = {nullptr};  // Declares an array of Account pointers initialized to nullptr
+
+// Function to find the index of an account given its account number
+
+int findAccountIndex(int accountNumber)
+{
+    for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i)  // Loops through each account slot
+    {
+        if (accountArray[i] != nullptr && accountArray[i]->getAccountNumber() == accountNumber)  // Checks if the account exists and matches the number
+        {
+            return i;  // Returns the index of the matching account
+        }
+    }
+    
+    return -1;  // Returns -1 if no matching account is found
+}
+
+// Function to display the menu options
+
+void displayMenu() 
+{
+    cout << "Menu\n----\n";  // Outputs menu header
+    cout << "1->Create account 2->Deposit   3->Withdraw     4->Display \n";  // Outputs options 1-4
+    cout << "5->Delete owner   6->Add owner 7->Delete accnt 8->Quit    \n";  // Outputs options 5-8
+}
+
+int main() 
+{
+    for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i)  // Initializes all elements in accountArray to nullptr
+    {
+        accountArray[i] = nullptr;  // Explicit initialization to nullptr
+    }
+
+    int choice;  // Variable to store user menu choice
+    
+    do  // Start of the main program loop
+    {
+        displayMenu();  // Display the menu
+       
+        cin >> choice;  // Read user input for menu choice
+
+        switch (choice)  // Switch based on user's menu choice
+        {
+            case 1:  // Create account
+            {
+                int availableIndex = -1;  // Variable to store available index for a new account
+                
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i)  // Find a free slot in accountArray
+                {
+                    if (accountArray[i] == nullptr)  // If the current slot is free
+                    {
+                        availableIndex = i;  // Store the index
+                        
+                        break;  // Exit the loop
+                    }
+                }
+                
+                if (availableIndex == -1)  // No free slots found
+                {
+                    cout << "Max number of accounts reached, cannot add a new account\n";  // Notify user
+                  
+                    break;  // Exit case 1
+                }
+
+                int numOwners;  // Number of account owners
+                
+                double amount;  // Initial deposit amount
+                
+                cout << "Enter number of owners: ";  // Prompt for number of owners
+                cin >> numOwners;  // Read number of owners
+                
+                cout << "Enter amount: ";  // Prompt for initial deposit
+                cin >> amount;  // Read deposit amount
+                
+                cin.ignore();  // Clear newline from input buffer
+
+                Account* newAccount = new Account(numOwners, amount);  // Create a new Account object with given owners and amount
+                
+                accountArray[availableIndex] = newAccount;  // Store the new account in the array
+
+                for (int i = 0; i < numOwners; ++i)  // Loop to input data for each owner
+                {
+                    Person p;  // Create a Person object
+                    
+                    cout << "Enter owner's name: ";  // Prompt for owner's name
+                    getline(cin, p.name);  // Read owner's name
+                    
+                    cout << "Enter owner's DOB, month, day then year: ";  // Prompt for DOB
+                    cin >> p.DOB.month >> p.DOB.day >> p.DOB.year;  // Read DOB components
+                   
+                    cin.ignore();  // Clear newline from input buffer
+                   
+                    cout << "Enter owner's address: ";  // Prompt for address
+                    getline(cin, p.address);  // Read address
+                   
+                    newAccount->setOwner(i, p);  // Set the owner at index i in the account
+                }
+
+                cout << "Account #" << newAccount->getAccountNumber() << " created\n";  // Confirm account creation
+              
+                break;  // Exit case 1
+            }
+
+            case 2:  // Deposit to account
+            {
+                int accountNumber;  // Account number for deposit
+               
+                double amount;  // Amount to deposit
+              
+                cout << "Enter account number: ";  // Prompt for account number
+                cin >> accountNumber;  // Read account number
+              
+                int index = findAccountIndex(accountNumber);  // Find account index by number
+               
+                if (index == -1)
+                {
+                    cout << "No such account\n";  // Notify if account not found
+                   
+                    break;  // Exit case 2
+                }
+                
+                cout << "Enter amount: ";  // Prompt for deposit amount
+                cin >> amount;  // Read deposit amount
+               
+                int result = accountArray[index]->deposit(amount);  // Attempt to deposit
+                
+                if (result == 0)  // Successful deposit
+                {
+                    cout << "New balance is $" << fixed << setprecision(2) << accountArray[index]->getBalance() << "\n";  // Show updated balance
+                } 
+                else
+                {
+                    cout << "Amount cannot be negative, deposit not executed\n";  // Negative amount error
+                }
+                
+                break;  // Exit case 2
+            }
+
+            case 3:  // Withdraw from account
+            {
+                int accountNumber;  // Account number for withdrawal
+               
+                double amount;  // Amount to withdraw
+               
+                cout << "Enter account number: ";  // Prompt for account number
+                cin >> accountNumber;  // Read account number
+               
+                int index = findAccountIndex(accountNumber);  // Find account index
+               
+                if (index == -1) 
+                {
+                    cout << "No such account\n";  // Account not found
+                   
+                    break;  // Exit case 3
+                }
+                
+                cout << "Enter amount: ";  // Prompt for withdrawal amount
+                cin >> amount;  // Read amount
+                
+                int result = accountArray[index]->withdraw(amount);  // Attempt withdrawal
+                
+                if (result == 0)  // Success
+                {
+                    cout << "New balance is $" << fixed << setprecision(2) << accountArray[index]->getBalance() << "\n";  // Display new balance
+                } 
+                else if (result == 1)
+                {
+                    cout << "Insufficient balance, withdrawal not executed\n";  // Not enough funds
+                }
+                else 
+                {
+                    cout << "Amount cannot be negative, withdrawal not executed\n";  // Negative amount
+                }
+                
+                break;  // Exit case 3
+            }
+
+            case 4:  // Display all accounts
+            {
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i)  // Loop through account array
+                {
+                    if (accountArray[i] != nullptr)  // Check if account exists
+                    {
+                        Account* acc = accountArray[i];  // Get account pointer
+                        
+                        cout << "Account Number: " << acc->getAccountNumber() << "\n--------------\n";  // Print account number
+                       
+                        for (int j = 0; j < acc->getNumOwners(); ++j)  // Loop through owners
+                        {
+                            Person p = acc->getOwner(j);  // Get owner info
+                           
+                            cout << "*Name: " << p.name << ", DOB: " << p.DOB.month << "/" << p.DOB.day << "/" << p.DOB.year << "\nAddress: " << p.address << "\n";  // Display owner info
+                        }
+                        
+                        cout << "*Balance: $" << fixed << setprecision(2) << acc->getBalance() << "\n\n";  // Display balance
+                    }
+                }
+                
+                break;  // Exit case 4
+            }
+
+            case 5:
+            case 6:
+            case 7:  // Delete account (placeholder for other ops)
+            {   
+                int accountNumber;  // Account number to delete
+               
+                cout << "Enter account number: ";  // Prompt for account number
+                cin >> accountNumber;  // Read account number
+               
+                int index = findAccountIndex(accountNumber);  // Find account index
+               
+                if (index == -1) 
+                {
+                    cout << "No such account\n";  // Not found
+                    
+                    break;  // Exit
+                }
+
+                delete accountArray[index];  // Delete account object
+                accountArray[index] = nullptr;  // Clear pointer
+            
+                for (int i = index; i < MAX_NUM_ACCOUNTS - 1; ++i)  // Shift remaining accounts left
+                {
+                    accountArray[i] = accountArray[i + 1];
+                }
+                
+                accountArray[MAX_NUM_ACCOUNTS - 1] = nullptr;  // Clear last slot
+            
+                cout << "Account deleted\n";  // Confirmation
+              
+                break;  // Exit
+            }
+
+            case 8:  // Quit
+            {
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i)  // Loop through accounts
+                {
+                    if (accountArray[i] != nullptr)  // If account exists
+                    {
+                        delete accountArray[i];  // Delete account
+                       
+                        accountArray[i] = nullptr;  // Clear pointer
+                    }
+                }
+                
+                return 0;  // Exit program
+            }
+
+            default:  // Invalid menu option
+                cout << "Invalid choice\n";
+        }
+    } while (true);  // Infinite loop until break or return
+
+    return 0;  
+}
