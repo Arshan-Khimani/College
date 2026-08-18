@@ -1,0 +1,111 @@
+/*
+Pseudocode:
+1. Declare two integer variables `mrow` and `mcol` for matrix dimensions.
+2. Prompt the user to enter the number of rows and columns.
+3. Read the values of `mrow` and `mcol` from user input.
+4. While `mrow` is not equal to `mcol`:
+   - Display an error message.
+   - Prompt the user again for valid dimensions.
+5. Declare a 2D array `A` with dimensions `mrow x mcol`.
+6. Prompt the user to enter the values for the matrix.
+7. Read the matrix elements from user input.
+8. Declare a boolean variable `isSymmetric` and initialize it to `true`.
+9. Loop through the matrix:
+   - Compare each element `A[i][j]` with its transpose element `A[j][i]`.
+   - If a mismatch is found, set `isSymmetric` to `false` and break out of the loop.
+10. Check the value of `isSymmetric`:
+    - If `true`, print "The matrix is symmetrical."
+    - Otherwise, print "The matrix is not symmetrical."
+11. End the program.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Declaring the mrow, mcol variables as integers
+    
+    int mrow, mcol;
+    
+    // Asking the user to enter the number of rows and columns
+    
+    cout << "Enter the number of rows and columns: ";
+    cin >> mrow >> mcol;
+    
+    // Ensuring that the matrix is a square
+    
+    while (mrow != mcol) 
+    {
+        cout << "The number of rows and columns must be same." << endl;
+        cout << "Enter the number of rows and columns: ";
+        cin >> mrow >> mcol;
+    }
+    
+    // Asking to enter the values for the matrix
+    
+    cout << "Enter the values for the matrix: \n";
+    
+    // Declaring a square matrix with user-defined size
+    
+    int A[mrow][mcol];
+    
+    // Looping to input matrix elements
+    
+    for(int i = 0; i < mrow; i++) 
+    {
+        for(int j = 0; j < mcol; j++) 
+        {
+            // Reading each matrix element from user input
+            
+            cin >> A[i][j];
+        }
+    }
+    
+    // Setting the isSymmetric variable equal to true
+    
+    bool isSymmetric = true;
+    
+    // Looping through the matrix to check for symmetry
+    
+    for(int i = 0; i < mrow; i++) 
+    {
+        for(int j = 0; j < mcol; j++) 
+        {
+            // Comparing the matrix element with its transpose
+            
+            if(A[i][j] != A[j][i]) 
+            {
+                // If a mismatch found, set isSymmetric to false and this if statement exits
+                
+                isSymmetric = false;
+                
+                break;
+            }
+        }
+        
+        // If asymmetry was found, break the outer loop
+        
+        if(!isSymmetric) 
+        {
+            break;
+        }
+    }
+    
+    // If symmetry was found, print this:
+    
+    if(isSymmetric) 
+    {
+        cout << "The matrix is symmetrical." << endl;
+    } 
+    
+    // If symmetry was not found, print this:
+    
+    else 
+    {
+        cout << "The matrix is not symmetrical." << endl;
+    }
+    
+    return 0;
+}
