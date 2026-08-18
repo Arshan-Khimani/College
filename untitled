@@ -1,0 +1,30 @@
+package myds;
+
+public class QueueUsingDoublyLinkedList<E> implements MyQueue<E> {
+    private final DoublyLinkedList<E> list = new DoublyLinkedList<>();
+
+    @Override
+    public void enqueue(E x) {
+        list.addLast(x);
+    }
+
+    @Override
+    public E dequeue() {
+        return list.removeFirst();
+    }
+
+    @Override
+    public E front() {
+        return list.first();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    @Override
+    public int size() {
+        return list.size();
+    }
+}
