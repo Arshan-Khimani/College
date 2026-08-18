@@ -1,0 +1,203 @@
+/*
+Pseudocode:
+1. Define constants `ROW` and `COL` to represent the dimensions of a 3x3 matrix.
+2. Declare function prototypes:
+   - `addMatrix` to add two matrices.
+   - `printResult` to display the matrices and their sum in a formatted way.
+3. In the `main` function:
+   - Prompt the user for a seed value and initialize the random number generator (`srand`).
+   - Declare a 3x3 matrix `matrix1` and fill it with random values between 0 and 49.
+   - Printing `matrix1`.
+   - Declare a 3x3 matrix `matrix2` and fill it with random values between 0 and 49.
+   - Printing `matrix2`.
+   - Declare a 3x3 matrix `resultMatrix` initialized to zeros.
+   - Call `addMatrix` to compute the sum of `matrix1` and `matrix2`, storing the result in `resultMatrix`.
+   - Printing the sum using `printResult`.
+4. Define `addMatrix` function:
+   - Iterate through each element of the matrices and add corresponding elements.
+   - Store the result in `resultMatrix`.
+5. Define `printResult` function:
+   - Print `matrix1`, `matrix2`, and `resultMatrix` in a structured format with the `+` and `=` operators.
+6. End the program.
+*/
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+
+using namespace std;
+
+// Creating constants for ROW and COL and setting it equal to 3
+
+const int ROW = 3;          
+const int COL = 3;
+
+// Calling the function prototypes
+
+void addMatrix(int [][COL], int [][COL], int [][COL]);
+void printResult(int [][COL],int [][COL], int [][COL], char);
+
+int main()
+{
+    // Creating an integer called seed
+    
+    int seed;
+    
+    // Prompting the user to enter a seed value and initializing the random number generator with the seed
+    
+    cout << "Enter a seed value: ";
+    cin >> seed;
+    srand(seed);
+    
+    // Printing message before displaying matrix1
+    
+    cout << "Matrix1 is : ";
+    
+    // Declaring a 3 by 3 matrix called matrix1
+    
+    int matrix1[ROW][COL];
+    
+    // Looping to generate and print matrix1 with random values
+    
+    for (int i = 0; i < ROW; i++) 
+    {
+        for (int j = 0; j < COL; j++) 
+        {
+            // Generating random numbers between 0 and 49 and printing it out with proper formatting
+            
+            matrix1[i][j] = rand() % 50;
+            cout << setw(4) << matrix1[i][j];
+        }
+        
+        // Creating a new line
+        
+        cout << endl;
+    }
+    
+    // Printing message before displaying matrix2
+    
+    cout << "Matrix2 is : ";
+    
+    // Declaring a 3 by 3 matrix called matrix2
+    
+    int matrix2[ROW][COL];
+    
+    // Looping to generate and print matrix2 with random values
+    
+    for (int i = 0; i < ROW; i++) 
+    {
+        for (int j = 0; j < COL; j++) 
+        {
+            // Generating random numbers between 0 and 49 and printing it out with proper formatting
+            
+            matrix2[i][j] = rand() % 50;
+            cout << setw(4) << matrix2[i][j];
+        }
+        
+        // Creating a new line
+        
+        cout << endl;
+    }
+    
+    // Declaring a 3x3 matrix initialized to zero
+    
+    int resultMatrix[ROW][COL] = {0};
+    
+    // Calling a function to compute matrix addition
+    
+    addMatrix(matrix1, matrix2, resultMatrix);
+    
+    // Displaying the matrix addition to the user
+    
+    cout << "The addition of the matrices is " << endl;
+    
+    // Calling the function to print the formatted result
+    
+    printResult(matrix1, matrix2, resultMatrix, '+');
+}
+
+// Creating a function to add two matrices
+
+void addMatrix(int m1[ROW][COL], int m2[ROW][COL],int m3[ROW][COL] )
+{    
+    // Looping through each row
+     
+    for (int i = 0; i < ROW; i++) 
+    {   
+        // Looping through each column
+        
+        for (int j = 0; j < COL; j++) 
+        {
+            // Adding corresponding elements and storing it in the result matrix
+            
+            m3[i][j] = m1[i][j] + m2[i][j];
+        }
+    }
+}
+
+// This function prints the matrices and their sum
+
+void printResult(int m1[ROW][COL], int m2[ROW][COL], int m3[ROW][COL], char op)
+{
+    // Looping through each row to print the matrices
+    
+    for (int i = 0; i < ROW; i++) 
+    {
+        // Looping through each column to print the matrices
+        
+        for (int j = 0; j < COL; j++) 
+        {
+            // Printing each element with width formatting
+            
+            cout << setw(4) << m1[i][j];
+        }
+        
+        // Printing the operator in the middle row
+        
+        if (i == ROW / 2)
+        {
+            cout <<  "  " << op <<  "  "  ;
+        }
+        else
+        {
+            cout <<  "     " ;
+        }
+            
+        // Printing the second matrix elements
+        
+        for (int j = 0; j < COL; j++) 
+        {
+            // Printing each element with width formatting
+            
+            cout << setw(4) << m2[i][j];
+        }
+        
+        // Printing '=' in the middle row
+        
+        if (i == ROW / 2)
+        {
+            cout <<  "  =  " ;
+        }
+        
+        // Printing space
+        
+        else
+        {
+            cout <<  "     " ;
+        }
+            
+        // Printing the result matrix elements
+        
+        for (int j = 0; j < COL; j++) 
+        {
+            // Printing each element with width formatting
+            
+            cout << setw(4) << m3[i][j];
+        }
+        
+        // Creating a blank line
+        
+        cout << endl;
+    }
+}
