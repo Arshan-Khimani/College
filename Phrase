@@ -1,0 +1,38 @@
+/* This program gets a text phrase from the user and prints the phrase entered, the number of characters in the 
+entered phrase, the first character of the entered phrase, and the last character of the entered phrase.
+*/
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    // Declaring variables phrase (string), length (integer), firstChar (char), lastChar (char)
+    
+    string phrase;
+    int length;
+    char firstChar;
+    char lastChar;
+    
+    // Asking the user to enter a phrase and storing the phrase in the variable phrase
+    
+    cout << "Enter a phrase\n";
+    getline(cin, phrase);
+    
+    // Calculating the length, first character, and last character of the phrase
+    
+    length = phrase.length();
+    firstChar = phrase.at(0);
+    lastChar = phrase.at(length - 1);
+    
+    // Outputting the entered phrase, its length, first character and last character to the user
+    
+    cout << "Entered phrase: " << phrase << endl;
+    cout << "Phrase length: " << length << endl;
+    cout << "The first character of the phrase: " << firstChar << endl;
+    cout << "The last character of the phase: " << lastChar << endl;
+
+    return 0;
+}
