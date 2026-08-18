@@ -1,0 +1,69 @@
+/*
+Pseudocode:
+1. Define a function `rotateString` that takes a string `s` and an integer `k` as input.
+2. Find the length `n` of the string.
+3. Compute `k % n` to handle cases where `k` is greater than `n`.
+4. Create a new rotated string by taking the substring from index `k` to the end and appending the first `k` characters.
+5. Return the rotated string.
+6. In the `main` function:
+   - Declare a string `s` and an integer `k`.
+   - Prompt the user to enter a string.
+   - Read the string from the user.
+   - Prompt the user to enter the number of characters to rotate.
+   - Read the integer `k` from the user.
+   - Call `rotateString` with `s` and `k`, then print the result.
+7. End the program.
+*/
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Function to rotate the given string `s` by `k` positions to the left
+
+string rotateString(string s, int k) 
+{
+    // Getting the length of the string
+    
+    int n = s.length();
+    
+    // Reducing k to within the range of the string length
+    
+    k %= n; 
+    
+    // Creating a new string by taking substring from index `k` to end and appending the first `k` characters
+    
+    string rotated = s.substr(k) + s.substr(0, k);
+    
+    // Returning rotated variable
+    
+    return rotated;
+}
+
+int main() 
+{
+    // Creating a string variable called s
+    
+    string s;
+    
+    // Creating a integer variable called k
+    
+    int k;
+    
+    // Asking the user to enter the string and storing it in the s variable
+    
+    cout << "Enter the string: ";
+    cin >> s;
+    
+    // Asking the user to enter the number of characters to rotate and storing it in the k variable
+    
+    cout << "Enter the number of characters to rotate: ";
+    cin >> k;
+    
+    // Calling rotateString function and printing the rotated string
+    
+    cout << rotateString(s, k) << endl;
+    
+    return 0;
+}
