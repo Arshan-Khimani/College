@@ -1,0 +1,151 @@
+/* This program reads the text file specified by the user and displays: the number of lines read, the number of characters 
+read, the number of letters read, and the number of each individual letter read. 
+*/
+
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main() 
+{
+    // Creating a string variable called fileName
+    
+    string fileName;
+    
+    // Creating a char variable called ch
+    
+    char ch;
+    
+    // Creating an integer variable called linesRead and setting it equal to 0
+    
+    int linesRead = 0;
+    
+    // Creating an integer variable called charactersRead and setting it equal to 0
+    
+    int charactersRead = 0;
+    
+    // Creating an integer variable called lettersRead and setting it equal to 0
+    
+    int lettersRead = 0;
+    
+    // Creating an integer array called letterCounts and initalizing the values to zero and the size to 26
+    
+    int letterCounts[26] = {0}; 
+    
+    // Creating a boolean variable called fileEmpty and setting it equal to true
+    
+    bool fileEmpty = true;
+    
+    // Asking the user to enter the name of the input file and storing the input in fileName
+    
+    cout << "Enter the name of the input file." << endl;
+    cin >> fileName;
+
+    // Opening the file using the ifstream
+    
+    ifstream inputFile(fileName);
+
+    // Checking to see if the file opened
+    
+    if (!inputFile) 
+    {
+        // Creating a blank line
+        
+        cout << endl;
+        
+        // Displaying an error message
+        
+        cout << "Error, unable to open \"" << fileName << "\"." << endl;
+        
+        // Ending the program
+        
+        return 0;
+    }
+    
+    // Looping through each character in the file
+    
+    while (inputFile.get(ch)) 
+    {   
+        // Setting the fileEmpty variable to false
+        
+        fileEmpty = false;
+        
+        // Incramenting charactersRead by 1
+       
+        charactersRead++;
+        
+        // If there is a new line at the end of the statement, this if statement will run 
+        
+        if (ch == '\n') 
+        {  
+            // Incramenting linesRead by 1
+            
+            linesRead++;
+        }
+        
+        // Checking if the character is a letter
+        
+        if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) 
+        {
+            // Incramenting lettersRead by 1
+            
+            lettersRead++;
+            
+            // If the character is an upper case letter, this will run
+            
+            if (ch >= 'A' && ch <= 'Z') 
+            {
+                letterCounts[ch - 'A']++;
+            } 
+            
+            // If the character is a lower case letter, this will run
+            
+            else 
+            {
+                letterCounts[ch - 'a']++;
+            }
+        }
+    }
+    
+    // Closing the file
+    
+    inputFile.close();
+
+    // Adding a blank line
+    
+    cout << endl;
+    
+    /* If there is more than 1 or equal to 1 letters or if there isnt a blank line at the end of the statement, 
+    linesRead will be incramented by 1 */
+    
+    if (lettersRead > 0 && ch != '\n')
+    {
+        linesRead++;
+    }
+    
+    // If fileEmpty is true, this will run and an error message will be displayed
+    
+    if (fileEmpty) 
+    {
+        cout << "\"" << fileName << "\" was empty." << endl;
+        
+        return 0;
+    }
+    
+    // Printing out the lines read, characters read, letters read, and the individual letter totals to the user
+    
+    cout << "Lines read = " << linesRead << endl;
+    cout << "Characters read = " << charactersRead << endl;
+    cout << "Letters read = " << lettersRead << endl << endl;
+    cout << "The individual letter totals were:" << endl;
+    
+    // Looping through every letter in the alphabet and displaying to the user as an upper case letter
+    
+    for (int i = 0; i < 26; i++) 
+    {
+        cout << char('A' + i) << "'s = " << letterCounts[i] << endl;
+    }
+
+    return 0;
+}
