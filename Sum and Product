@@ -1,0 +1,137 @@
+/*This program gets a number of whole numbers from the user and displays the number of positive values entered, the sum of the 
+positive values entered, the number of negative values entered, the product of the negative values entered, and the number of 
+zeroes entered.*/
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Creating integer variables called num, countNum, sumPositive, productNegative, countPositive, countNegative, countZeroes
+    
+    int num, countNum = 0, sumPositive = 0, productNegative = 1, countPositive = 0, countNegative = 0, countZeroes = 0;
+    
+    // Creating a char variable called anotherNumber
+    
+    char anotherNumber;
+
+    // As long as the variable anotherNumber is equal to Y or y, this loop will run
+    
+    do {
+        // Adding 1 to countNum and asking the user to enter a whole number and storing it in the num variable
+        
+        countNum++;
+        cout << "Enter whole number " << countNum << ": ";
+        cin >> num;
+        
+        // If num is greater than 0, this statement will run
+        
+        if (num > 0)
+        {
+            sumPositive += num;
+            countPositive++;
+        }
+        
+        // If num is less than 0, this statement will run
+        
+        else if (num < 0)
+        {
+            productNegative *= num;
+            countNegative++;
+        }
+        
+        // If none of the above 2 conditional statements are true, this statement will run
+        
+        else
+        {
+            countZeroes++;
+        }
+
+        // Asking the user if they would like to enter another number and storing the user input in the anotherNumber variable
+        
+        cout << "Would you like to enter another number?" << endl;
+        cout << "Enter Y for Yes or N for No: ";
+        cin >> anotherNumber;
+
+        // If the user does not enter Y, y, N, n in the anotherNumber variable, this error message will be displayed
+        
+        if (anotherNumber != 'Y' && anotherNumber != 'y' && anotherNumber != 'N' && anotherNumber != 'n')
+        {
+            cout << "Error, " << anotherNumber << " is not a valid response." << endl;
+            cout << "Would you like to enter another number?" << endl;
+            cout << "Enter Y for Yes or N for No: ";
+            cin >> anotherNumber;
+        }
+
+    } while (anotherNumber == 'Y' || anotherNumber == 'y');
+
+    // Adding a blank line
+    
+    cout << endl;
+    
+    // If countPositive is greater than 1, this statement will execute
+    
+    if (countPositive > 1)
+    {
+        cout << countPositive << " positive values were entered. Their sum was " << sumPositive << "." << endl;
+    }
+    
+    // If countPositive is equal to 1, this statement will execute
+    
+    else if (countPositive == 1)
+    {
+        cout << "One positive value was entered. It was a " << sumPositive << "." << endl;
+    }
+    
+    // If none of the above statements are true, this statement will run
+    
+    else
+    {
+        cout << "No positive values were entered." << endl;
+    }
+
+    // If countNegative is greater than 1, this statement will execute
+    
+    if (countNegative > 1)
+    {
+        cout << countNegative << " negative values were entered. Their product was " << productNegative << "." << endl;
+    }
+    
+    // If countNegative is equal to 1, this statement will execute
+    
+    else if (countNegative == 1)
+    {
+        cout << "One negative value was entered. It was a " << productNegative << "." << endl;
+    }
+    
+    // If none of the above statements are true, this statement will run
+    
+    else
+    {
+        cout << "No negative values were entered." << endl;
+    }
+
+    // If countNegative is greater than 1, this statement will execute
+    
+    if (countZeroes > 1)
+    {
+        cout << countZeroes << " zeroes were entered." << endl;
+    }
+    
+    // If countZeroes is equal to 1, this statement will execute
+    
+    else if (countZeroes == 1)
+    {
+        cout << "One zero was entered." << endl;
+    }
+    
+    // If none of the above statements are true, this statement will run
+    
+    else
+    {
+        cout << "No zeroes were entered." << endl;
+    }
+
+    return 0;
+}
