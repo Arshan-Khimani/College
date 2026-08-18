@@ -1,0 +1,158 @@
+/*
+Pseudocode:
+
+1. Include necessary libraries for input/output, file handling, and string manipulation.
+
+2. Define a constant integer INFONUM for the maximum number of patient records (255).
+
+3. Define a structure named Patient to store patient information:
+   - An integer ID for the patient ID.
+   - A string FName to store the patient's first name.
+   - A string LName to store the patient's last name.
+   - An integer array Vitals of size 3 to store three vital signs.
+
+4. In the main() function:
+   - Declare a string variable filename to store the filename.
+   - Prompt the user to enter the filename and read it from user input.
+
+5. Open the file using an ifstream object:
+   - Check if the file failed to open.
+   - If the file cannot be opened, display an error message and terminate the program.
+
+6. Declare a string variable header to store the first line of the file.
+   - Read and discard the first line (header) from the file.
+
+7. Dynamically allocate an array of Patient structures to hold patient records.
+
+8. Initialize an integer variable count to track the number of patients read from the file.
+
+9. Read patient records from the file until the end of the file is reached:
+   - Store values in the respective fields of the Patient structure.
+   - Increment the count after successfully reading a record.
+
+10. Print table headers with column width formatting.
+
+11. Loop through the stored patient records and print them in a formatted table:
+    - Display each patient’s ID, first name, last name, and vital signs.
+
+12. Free the dynamically allocated memory to prevent memory leaks.
+
+13. Close the file after reading to free resources.
+
+14. End the program.
+*/
+
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+// Define a constant integer for the maximum number of patient records.
+
+#define INFONUM 255
+
+// Define the structure for storing patient information.
+
+struct Patient 
+{
+    // Store the patient ID.
+    
+    int ID;
+    
+    // Store the patient's first name.
+    
+    string FName;
+    
+    // Store the patient's last name.
+    
+    string LName;
+    
+    // Array to store three vital signs 
+    
+    int Vitals[3]; 
+};
+
+int main() 
+{
+    // Declare a string variable to store the filename.
+    
+    string filename;
+    
+    // Prompt the user to enter the filename.
+    
+    cout << "Enter filename: " << endl;
+    
+    // Read the filename from user input.
+    
+    cin >> filename;
+
+    // Open the file using an ifstream object.
+    
+    ifstream file(filename);
+    
+    // Check if the file failed to open.
+    
+    if (!file) 
+    {
+        // Display an error message.
+        
+        cout << "Could not open file" << endl;
+        
+        // Indicate program termination.
+        
+        cout << "Exiting";
+        
+        return 1;
+    }
+
+    // Declare a string variable to store the header line from the file.
+    
+    string header;
+    
+    // Read and discard the first line of the file 
+    
+    getline(file, header);
+
+    // Dynamically allocate an array of Patient structures to hold the patient records.
+    
+    Patient* patients = new Patient[INFONUM];
+    
+    // Initialize a counter to track the number of patients read from the file.
+    
+    int count = 0;
+
+    // Read patient records from the file until the end of the file is reached.
+    
+    while (file >> patients[count].ID >> patients[count].FName >> patients[count].LName >> patients[count].Vitals[0] >> patients[count].Vitals[1] >> patients[count].Vitals[2]) 
+    {
+        // Increment the patient count after successfully reading a record.
+        
+        count++;
+    }
+
+    // Print table headers with column width formatting.
+    
+    cout << left << setw(4) << "ID" << setw(10) << "FN" << setw(10) << "LN" << setw(4) << "BPU" << setw(4) << "BPL" << setw(4) << "Pulse" << endl;
+    
+    // Loop through the stored patient records and print them in a formatted table.
+    
+    for (int i = 0; i < count; i++) 
+    {
+        // Print each patient's details in a formatted manner.
+        
+        cout << left << setw(4) << patients[i].ID << setw(10) << patients[i].FName << setw(10) << patients[i].LName << setw(4) << patients[i].Vitals[0] << setw(4) << patients[i].Vitals[1] << setw(4) << patients[i].Vitals[2] << endl;
+    }
+
+    // Free the dynamically allocated memory to prevent memory leaks.
+    
+    delete[] patients;
+    
+    // Close the file after reading to free resources.
+    
+    file.close();
+
+    return 0;
+}
