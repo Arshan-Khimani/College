@@ -1,0 +1,56 @@
+/* This program asks the user a subtraction problem and determines whether the inputted answer is correct or wrong.
+If the answer is wrong the program will display the answer is wrong and if the answer entered is correct the program 
+will display the answer is correct. */
+
+#include <iostream>
+#include <cstdlib> 
+#include <ctime>   
+
+using namespace std;
+
+int main() 
+{
+    // Using the unsigned int seed variable to use the random number generator
+    
+    unsigned int seed;
+    cin >> seed;
+    srand(seed);
+    
+    // Creating an integer variable
+    
+    int answer;
+
+    // Generating two random one-digit integers
+    
+    int num1 = rand() % 10;
+    int num2 = rand() % 10;
+
+    // Ensuring num1 is larger than num2
+    
+    if (num2 > num1) 
+    {
+        swap(num1, num2);
+    }
+
+    // Displaying the subtraction problem and storing the students input in the answer variable
+    
+    cout << "What is " << num1 << " - " << num2 << "?" << endl;
+    cin >> answer;
+
+    // Checking whether the answer inputted is correct or incorrect
+    
+    if (answer == num1 - num2) 
+    {
+        cout << "That's correct! " << endl;
+    }   
+    else 
+    {
+        cout << "That's incorrect. " << endl;
+    }
+
+    // Displaying the problem and the correct answer
+    
+    cout << num1 << " - " << num2 << " = " << num1 - num2 << endl;
+
+    return 0;
+}
