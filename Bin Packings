@@ -1,0 +1,95 @@
+import java.util.*;
+
+class BinPacking {
+  static int items[], binAssignments[];
+  final static int BINCAPACITY = 100;
+
+  static void validate() 
+  {
+    int n = items.length;
+
+    for (int i = 0; i < n; i++) 
+    {
+      if (items[i] > BINCAPACITY) 
+      {
+        System.out.println("Input item " + items[i] + " out of range");
+       
+        return;
+      }
+    }
+
+    int maxBin = -1;
+    
+    for (int i = 0; i < n; i++) 
+    {
+      if (binAssignments[i] < 0)
+      {
+        System.out.println("Negative bin index not allowed");
+       
+        return;
+      }
+      
+      if (binAssignments[i] > n) 
+      {
+        System.out.println("Bin " + binAssignments[i] + " out of range");
+       
+        return;
+      }
+      
+      maxBin = Math.max(maxBin, binAssignments[i]);
+    }
+
+    boolean[] used = new boolean[maxBin + 1];
+    
+    for (int i = 0; i < n; i++) 
+    {
+      used[binAssignments[i]] = true;
+    }
+    
+    for (int b = 0; b <= maxBin; b++) 
+    {
+      if (!used[b]) 
+      {
+        System.out.println("Bin " + b + " not used");
+      
+        return;
+      }
+    }
+
+    int[] totals = new int[maxBin + 1];
+    
+    for (int i = 0; i < n; i++) 
+    {
+      totals[binAssignments[i]] += items[i];
+      
+      if (totals[binAssignments[i]] > BINCAPACITY) 
+      {
+        System.out.println("Bin " + binAssignments[i] + " total goes above " + BINCAPACITY);
+        
+        return;
+      }
+    }
+
+    System.out.println("Valid");
+  }
+
+  public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+
+    String parts[] = input.nextLine().split(" ");
+    items = new int [parts.length];
+    for(int i=0; i<parts.length; i++)
+      items[i] = Integer.parseInt(parts[i]);
+
+    binAssignments = new int [parts.length];
+    parts = input.nextLine().split(" ");
+    for(int i=0; i<parts.length; i++)
+      binAssignments[i] = Integer.parseInt(parts[i]);
+
+    if (items.length != binAssignments.length) {
+      System.err.println("# of items and # of bin assignments mismatch.");
+      System.exit(1);
+    }
+    validate();
+  }
+}
