@@ -1,0 +1,38 @@
+import java.util.Scanner;
+
+public class Jeopardy {
+
+  public static void main(String[] args) {
+
+    Scanner input = new Scanner(System.in);
+    int scores[] = new int[4]; 
+
+    while (true) 
+    {
+      int player = input.nextInt();
+     
+      if (player == 0) break;
+      int points = input.nextInt();
+      scores[player] += points;
+    }
+
+    System.out.println("Final scores:");
+    
+    for (int i = 1; i <= 3; i++)
+    {
+      System.out.println("Player " + i + ": " + scores[i]);
+    }
+
+    int winner = 1;
+    
+    for (int i = 2; i <= 3; i++) 
+    {
+      if (scores[i] > scores[winner]) 
+      {
+        winner = i;
+      }
+    }
+
+    System.out.println("Player " + winner + " is the winner!");
+  }
+}
