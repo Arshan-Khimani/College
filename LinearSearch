@@ -1,0 +1,134 @@
+/*
+Psuedocode:
+
+1. Define constant SIZE as 10.
+2. Declare a function eliminateDuplicates that takes an array of numbers and an empty result array:
+    - Inside the function, iterate through each element in the input array.
+    - For each element, use linearSearch to check if the element is already in the result array.
+    - If the element is not found, add it to the result array and increment the count of distinct numbers.
+    - Return the count of distinct numbers.
+3. Declare a function linearSearch that takes an array and a key to search for:
+    - Iterate through the array and return the index of the key if found.
+    - If the key is not found, return -1.
+4. In main():
+    - Declare an array to store numbers of size SIZE.
+    - Read SIZE numbers from user input into the array.
+    - Call eliminateDuplicates to get the distinct numbers and their count.
+    - Output the count of distinct numbers and the distinct numbers themselves.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+// Declaring a constant integer called SIZE and setting it equal to 10
+
+const int SIZE = 10;
+
+// Defination for the method of eliminating dupliates from the list
+
+int eliminateDuplicates(int [], int []);
+
+// Defination for the method for finding a key in the list
+
+int linearSearch(int [], int );
+
+int main()
+{
+    // Declare an array called numbers to store the input integers with size 10
+    
+    int numbers[SIZE];
+
+    // Read and store numbers in an array if it is new
+    
+    for (int i = 0; i < SIZE; i++)
+    {
+        // Take user input and store it in the numbers array
+        
+        cin >> numbers[i];
+    }
+
+    // Declare an array called result
+    
+    int result[SIZE];
+    
+    // Declare a variable called length
+    
+    int length;
+
+    // Call the eliminateDuplicates function to remove duplicates
+    
+    length = eliminateDuplicates(numbers, result);
+
+    // Print the number of distinct integers
+    
+    cout << "The number of distinct integers is " << length << endl;
+    cout << "The distinct integers are ";
+
+    // Loop through the result array and print each distinct integer
+    
+    for (int i = 0; i < length; i++)
+    {
+        // Print the current distinct integer
+        
+        cout << result[i] << " ";
+    }
+    
+    // Adding a blank line
+	
+	cout << endl;
+}
+
+// Creating an integer function called eliminateDuplicates
+
+int eliminateDuplicates(int numbers[SIZE], int result[SIZE])
+{
+    // Creating an integer variable called count and setting it equal to 0
+    
+    int count = 0;
+
+    // Check each number
+    
+    for (int i = 0; i < SIZE; i++) 
+    {
+        // If number is not already in result array, add it
+        
+        if (linearSearch(result, numbers[i]) == -1) 
+        {
+            // Add the current number to the result array
+            
+            result[count] = numbers[i];
+            
+            // Increment count by 1
+            
+            count++;
+        }
+    }
+
+    // Returning count
+    
+    return count;
+}
+
+// Creating an integer function called linearSearch
+
+int linearSearch(int list[], int key)
+{
+    // Search through the length of current distinct numbers
+    
+    for (int i = 0; i < SIZE; i++) 
+    {
+        // Check if the current element equals the key
+         
+        if (list[i] == key) 
+        {
+            // Return the index of the key if found
+            
+            return i;
+        }
+    }
+    
+    // Return -1 if the key is not found
+    
+    return -1;
+}
