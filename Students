@@ -1,0 +1,298 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+struct Student
+{
+   int netID;
+   string major;
+   double GPA;
+};
+
+int linearSearchID(Student arr[], int numElems, int value, int &nIter);
+int binarySearchID(Student arr[], int numElems, int value, int &nIter);
+void modifiedSortGPA(Student array1[], int size);
+void modifiedSortID(Student array2[], int size);
+
+int main()
+{
+   const int NUM_ELMTS = 18;
+   
+   Student studArray[NUM_ELMTS];
+   Student studArraysortedbyGPA[NUM_ELMTS];
+   Student studArraysortedbyID[NUM_ELMTS];
+   
+   int numStudents = 0;
+
+   string fileName;
+   
+   cout << "Enter file name:";
+   cin >> fileName;
+
+   ifstream inFile(fileName);
+   
+   if (!inFile.is_open())
+   {
+      cout << "Could not open file" << endl;
+      cout << "Exiting" << endl;
+      
+      return 0;
+   }
+
+   while (numStudents < NUM_ELMTS && inFile >> studArray[numStudents].netID >> studArray[numStudents].major >> studArray[numStudents].GPA)
+   {
+      numStudents++;
+   }
+   
+   inFile.close();
+
+   for (int i = 0; i < numStudents; i++)
+   {
+      studArraysortedbyGPA[i] = studArray[i];
+      studArraysortedbyID[i] = studArray[i];
+   }
+
+   modifiedSortGPA(studArraysortedbyGPA, numStudents);
+   modifiedSortID(studArraysortedbyID, numStudents);
+
+   cout << "Original array:" << endl;
+   cout << "---------------" << endl;
+   cout << "index  netID  major   GPA   index  netID  major   GPA" << endl;
+   
+   for (int i = 0; i < numStudents; i += 2)
+   {
+      if (i + 1 < numStudents)
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArray[i].netID << "     " << left << setw(4) << studArray[i].major << right << "  " << fixed << setprecision(2) << studArray[i].GPA << "       " << setw(4) << right << (i + 1) << "   " << setw(4) << studArray[i + 1].netID << "     " << left << setw(4) << studArray[i + 1].major << right << "  " << fixed << setprecision(2) << studArray[i + 1].GPA << endl;
+      }
+      else
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArray[i].netID << "     " << left << setw(4) << studArray[i].major << right << "  " << fixed << setprecision(2) << studArray[i].GPA << endl;
+      }
+   }
+   
+   cout << endl;
+
+   cout << "Array sorted by GPA:" << endl;
+   cout << "--------------------" << endl;
+   cout << "index  netID  major   GPA   index  netID  major   GPA" << endl;
+  
+   for (int i = 0; i < numStudents; i += 2)
+   {
+      if (i + 1 < numStudents)
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyGPA[i].netID << "     " << left << setw(4) << studArraysortedbyGPA[i].major << right << "  " << fixed << setprecision(2) << studArraysortedbyGPA[i].GPA << "       " << setw(4) << right << (i + 1) << "   " << setw(4) << studArraysortedbyGPA[i + 1].netID << "     " << left << setw(4) << studArraysortedbyGPA[i + 1].major << right << "  " << fixed << setprecision(2) << studArraysortedbyGPA[i + 1].GPA << endl;
+      }
+      else
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyGPA[i].netID << "     " << left << setw(4) << studArraysortedbyGPA[i].major << right << "  " << fixed << setprecision(2) << studArraysortedbyGPA[i].GPA << endl;
+      }
+   }
+   
+   cout << endl;
+
+   cout << "Array sorted by netID:" << endl;
+   cout << "----------------------" << endl;
+   cout << "index  netID  major   GPA   index  netID  major   GPA" << endl;
+   
+   for (int i = 0; i < numStudents; i += 2)
+   {
+      if (i + 1 < numStudents)
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyID[i].netID << "     " << left << setw(4) << studArraysortedbyID[i].major << right << "  " << fixed << setprecision(2) << studArraysortedbyID[i].GPA << "       " << setw(4) << right << (i + 1) << "   " << setw(4) << studArraysortedbyID[i + 1].netID << "     " << left << setw(4) << studArraysortedbyID[i + 1].major << right << "  " << fixed << setprecision(2) << studArraysortedbyID[i + 1].GPA << endl;
+      }
+      else
+      {
+         cout << setw(4) << right << i << "   " << setw(4) << studArraysortedbyID[i].netID << "     " << left << setw(4) << studArraysortedbyID[i].major << right << "  " << fixed << setprecision(2) << studArraysortedbyID[i].GPA << endl;
+      }
+   }
+   
+   cout << endl;
+
+   int choice;
+   
+   do
+   {
+      cout << "***************" << endl;
+      cout << "Menu of choices" << endl;
+      cout << "***************" << endl;
+      cout << "1 - List top n students" << endl;
+      cout << "2 - Search on a netID" << endl;
+      cout << "3 - Quit" << endl;
+      cin >> choice;
+
+      if (choice == 1)
+      {
+         int n;
+         
+         cout << "Enter n:";
+         cin >> n;
+
+         int count = (n > numStudents) ? numStudents : n;
+         
+         if (count <= 0)
+         {
+            cout << "No students to display." << endl;
+           
+            continue;
+         }
+
+         cout << "\nTop " << count << " students are:\n" << endl;
+         
+         for (int i = 0; i < count; i++)
+         {
+            int index = numStudents - 1 - i;
+            Student s = studArraysortedbyGPA[index];
+            
+            cout << "netID: " << s.netID << ", major: " << s.major << ", GPA: " << fixed << setprecision(2) << s.GPA << endl;
+         }
+         
+         cout << endl;
+      }
+      else if (choice == 2)
+      {
+         int searchID;
+         
+         cout << "Enter netID:";
+         cin >> searchID;
+
+         int linearIter = 0;
+        
+         int linearIndex = linearSearchID(studArray, numStudents, searchID, linearIter);
+
+         cout << "\nResult of linear search:\n------------------------" << endl;
+         
+         if (linearIndex == -1)
+         {
+            cout << "Student not found" << endl;
+         }
+         else
+         {
+            cout << "Student found at index " << linearIndex << ", major is " << studArray[linearIndex].major << ", GPA is " << fixed << setprecision(2) << studArray[linearIndex].GPA << endl;
+         }
+         
+         cout << "It took " << linearIter << " iterations" << endl;
+
+         int binaryIter = 0;
+         
+         int binaryIndex = binarySearchID(studArraysortedbyID, numStudents, searchID, binaryIter);
+
+         cout << "\nResult of binary search:\n------------------------" << endl;
+         
+         if (binaryIndex == -1)
+         {
+            cout << "Student not found" << endl;
+         }
+         else
+         {
+            cout << "Student found at index " << binaryIndex << ", major is " << studArraysortedbyID[binaryIndex].major << ", GPA is " << fixed << setprecision(2) << studArraysortedbyID[binaryIndex].GPA << endl;
+         }
+         
+         cout << "It took " << binaryIter << " iterations" << endl;
+        
+         cout << endl;
+      }
+      else if (choice == 3)
+      {
+         cout << "Exiting\n";
+         
+         break;
+      }
+      else
+      {
+         cout << "Invalid choice. Please try again." << endl;
+      }
+   } while (true);
+
+   return 0;
+}
+
+int linearSearchID(Student arr[], int numElems, int value, int &nIter)
+{
+   nIter = 0;
+   
+   for (int i = 0; i < numElems; i++)
+   {
+      nIter++;
+      
+      if (arr[i].netID == value)
+      {
+         return i;
+      }
+   }
+   
+   return -1;
+}
+
+int binarySearchID(Student arr[], int numElems, int value, int &nIter)
+{
+   int first = 0;
+   int last = numElems - 1;
+   int middle;
+   nIter = 0;
+
+   while (first <= last)
+   {
+      nIter++;
+      
+      middle = (first + last) / 2;
+      
+      if (arr[middle].netID == value)
+      {
+         return middle;
+      }
+      else if (arr[middle].netID < value)
+      {
+         first = middle + 1;
+      }
+      else
+      {
+         last = middle - 1;
+      }
+   }
+   
+   return -1;
+}
+
+void modifiedSortGPA(Student array1[], int size)
+{
+   for (int i = 0; i < size - 1; i++)
+   {
+      int minIndex = i;
+      
+      for (int j = i + 1; j < size; j++)
+      {
+         if (array1[j].GPA < array1[minIndex].GPA)
+         {
+            minIndex = j;
+         }
+      }
+      
+      Student temp = array1[i];
+      array1[i] = array1[minIndex];
+      array1[minIndex] = temp;
+   }
+}
+
+void modifiedSortID(Student array2[], int size)
+{
+   for (int i = 0; i < size - 1; i++)
+   {
+      int minIndex = i;
+      
+      for (int j = i + 1; j < size; j++)
+      {
+         if (array2[j].netID < array2[minIndex].netID)
+         {
+            minIndex = j;
+         }
+      }
+      
+      Student temp = array2[i];
+      array2[i] = array2[minIndex];
+      array2[minIndex] = temp;
+   }
+}
