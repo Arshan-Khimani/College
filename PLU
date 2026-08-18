@@ -1,0 +1,323 @@
+/*
+Pseudocode:
+
+1. **Include necessary libraries** for input/output, file handling, and string manipulation.
+2. **Declare function prototypes**:
+   - `printProducts`: Prints product details.
+   - `findProductIndex`: Finds the index of a product by its PLU.
+
+3. **Define a struct `Transaction`** to store:
+   - Transaction number.
+   - Product's PLU.
+   - Type of transaction (add/subtract).
+   - Amount to modify inventory.
+
+4. **Start `main` function**:
+   - Prompt user for a filename and attempt to open it.
+   - If file opening fails, display error and terminate.
+
+5. **Count the number of records in the file**:
+   - Read file line by line to determine total product count.
+   - Close the file.
+
+6. **Dynamically allocate an array of `Product` objects**:
+   - Reopen file and parse product details.
+   - Store each product’s attributes.
+
+7. **Display the loaded products** using `printProducts`.
+
+8. **Initialize transaction storage**:
+   - Declare an array for storing up to 5 transactions.
+   - Initialize counters for transaction tracking.
+
+9. **Display menu and process user choices in a loop**:
+   - **Option 1: Add to inventory**
+     - Ask user for PLU.
+     - Locate product; if not found, display error.
+     - Ask for amount to add; validate input.
+     - Update inventory and record transaction.
+     - Maintain last 5 transactions by shifting older ones if necessary.
+   
+   - **Option 2: Subtract from inventory**
+     - Ask user for PLU.
+     - Locate product; if not found, display error.
+     - Ask for amount to subtract; validate input.
+     - Ensure subtraction does not exceed available stock.
+     - Update inventory and record transaction.
+     - Maintain last 5 transactions by shifting older ones if necessary.
+
+   - **Option 3: Print all product details**.
+   - **Option 4: Display transaction history and exit**.
+
+10. **Deallocate dynamically allocated memory** for products before terminating.
+
+11. **Implement helper functions**:
+   - `printProducts`: Prints details of each product.
+   - `findProductIndex`: Returns index of product by PLU or `-1` if not found.
+*/
+
+#include <iostream>  
+#include <fstream>   
+#include <sstream>  
+#include <iomanip>   
+#include <string>    
+#include "Product.h" 
+
+using namespace std;  
+
+// Declare the function to print product details
+
+void printProducts(Product* products, int size);
+
+// Declare the function to find a product index based on its PLU
+
+int findProductIndex(Product* products, int size, string PLU);
+
+// Define a structure to store transaction details
+
+struct Transaction 
+{
+    int number;          // Transaction number
+    string PLU;          // Product's PLU (Product Lookup Unit)
+    string type;         // Type of transaction (add or subtract)
+    int amount;          // Amount to add or subtract from inventory
+};
+
+int main()
+{
+    string filename;  // Declare a string variable to store the filename input by the user
+    
+    cout << "Enter the file name: ";  // Output a prompt asking for the file name
+    cin >> filename;  // Read the filename entered by the user
+
+    ifstream file(filename);  // Open the file for reading using an ifstream object
+    
+    if (!file)  // Check if the file was opened successfully
+    {
+        cout << "Error opening file." << endl;  // Output error message if the file fails to open
+      
+        return 1;  // Return 1 to indicate an error occurred
+    }
+
+    int count = 0;  // Initialize the counter to 0, will count the number of records in the file
+    
+    string line;  // Declare a string variable to hold each line read from the file
+    
+    while (getline(file, line))  // Loop to read the file line by line
+    {
+        count++;  // Increment the counter for each line read
+    }
+    
+    file.close();  // Close the file after reading
+
+    cout << "There are " << count << " records in the file" << endl;  // Output the total count of records in the file
+
+    Product* products = new Product[count];  // Dynamically allocate an array of Product objects
+
+    file.open(filename);  // Reopen the file for reading product data
+    
+    for (int i = 0; i < count; i++)  // Loop through each record in the file
+    {
+        getline(file, line);  // Read each line from the file
+        
+        istringstream iss(line);  // Create a stringstream object to parse the line
+        
+        string plu, name;  // Declare variables to store the product's PLU and name
+        int type, inventory;  // Declare variables to store the product's type and inventory count
+        double price;  // Declare a variable to store the product's price
+        
+        iss >> plu >> name >> type >> price >> inventory;  // Parse the line into the respective variables
+        
+        products[i].setProductAttributes(plu, name, type, price, inventory);  // Set the product's attributes using the setter function
+    }
+    
+    file.close();  // Close the file after reading product data
+
+    cout << "\nContent of object array\n-----------------------" << endl;  // Output header for product display
+    
+    printProducts(products, count);  // Call the function to print the product details
+
+    Transaction transactions[5];  // Declare an array to store up to 5 transactions
+    int numStoredTransactions = 0;  // Initialize the counter for stored transactions to 0
+    int transactionCount = 0;  // Initialize the transaction count to 0
+    
+    int choice;  // Declare a variable to store the user's menu choice
+
+    do 
+    {
+        cout << "\nMenu\n----" << endl;  // Output the menu header
+        cout << "1->Add to inventory           , 2->Subtract from inventory" << endl;  // Output option 1 and 2
+        cout << "3->Print info for all products, 4->Exit" << endl;  // Output option 3 and 4
+        cin >> choice;  // Read the user's choice
+
+        if (choice == 1 || choice == 2)  // If the user chose to add or subtract inventory
+        {
+            string plu;  // Declare a variable to store the product's PLU
+            int amount;  // Declare a variable to store the amount to add or subtract
+            
+            cout << "Enter the PLU: ";  // Output prompt for the PLU
+            cin >> plu;  // Read the PLU entered by the user
+            
+            int index = findProductIndex(products, count, plu);  // Find the product index using the PLU
+            
+            if (index == -1)  // If the product was not found
+            {
+                cout << "PLU not found" << endl;  // Output error message
+                continue;  // Skip to the next iteration of the loop
+            }
+
+            if (choice == 1)  // If the user chose to add to inventory
+            {
+                cout << "Enter amount to add: ";  // Output prompt to enter the amount to add
+                cin >> amount;  // Read the amount entered by the user
+                
+                if (amount <= 0)  // If the amount is not positive
+                {
+                    cout << "Amount must be > 0" << endl;  // Output error message
+                    continue;  // Skip to the next iteration of the loop
+                }
+               
+                products[index].setInventory(products[index].getInventory() + amount);  // Update the inventory count of the product
+                
+                transactionCount++;  // Increment the transaction count
+                
+                Transaction newTrans = {transactionCount, plu, "Add to inventory", amount};  // Create a new transaction object
+                
+                if (numStoredTransactions < 5)  // If there is space to store a new transaction
+                {
+                    transactions[numStoredTransactions] = newTrans;  // Store the new transaction
+                    numStoredTransactions++;  // Increment the counter for stored transactions
+                } 
+                else  // If there is no space to store a new transaction
+                {
+                    for (int i = 0; i < 4; i++)  // Shift the transactions to make room for the new one
+                    {
+                        transactions[i] = transactions[i + 1];
+                    }
+                    
+                    transactions[4] = newTrans;  // Store the new transaction at the last position
+                }
+            } 
+            else  // If the user chose to subtract from inventory
+            {
+                cout << "Enter amount to subtract: ";  // Output prompt to enter the amount to subtract
+                cin >> amount;  // Read the amount entered by the user
+                
+                if (amount <= 0)  // If the amount is not positive
+                {
+                    cout << "Amount must be > 0" << endl;  // Output error message
+                    continue;  // Skip to the next iteration of the loop
+                }
+                
+                int current = products[index].getInventory();  // Get the current inventory count
+                
+                int actualAmount = (amount > current) ? current : amount;  // Determine the actual amount to subtract (cannot exceed current inventory)
+               
+                products[index].setInventory(current - actualAmount);  // Update the inventory count of the product
+
+                transactionCount++;  // Increment the transaction count
+                
+                Transaction newTrans = {transactionCount, plu, "Subtract from inventory", actualAmount};  // Create a new transaction object
+                
+                if (numStoredTransactions < 5)  // If there is space to store a new transaction
+                {
+                    transactions[numStoredTransactions] = newTrans;  // Store the new transaction
+                    numStoredTransactions++;  // Increment the counter for stored transactions
+                } 
+                else  // If there is no space to store a new transaction
+                {
+                    for (int i = 0; i < 4; i++)  // Shift the transactions to make room for the new one
+                    {
+                        transactions[i] = transactions[i + 1];
+                    }
+                    
+                    transactions[4] = newTrans;  // Store the new transaction at the last position
+                }
+            }
+        } 
+        else if (choice == 3)  // If the user chose to print product information
+        {
+            cout << "Current inventory\n-----------------" << endl;  // Output header for inventory display
+            printProducts(products, count);  // Call the function to print the product details
+        } 
+        else if (choice == 4)  // If the user chose to exit
+        {
+            cout << "\nHistory of transactions\n-----------------------" << endl;  // Output header for transaction history display
+           
+            if (numStoredTransactions == 0)  // If there are no transactions stored
+            {
+                cout << "No transactions." << endl;  // Output message indicating no transactions
+            } 
+            else  // If there are transactions stored
+            {
+                for (int i = numStoredTransactions - 1; i >= 0; i--)  // Loop through stored transactions in reverse order
+                {
+                    cout << "Transaction #: " << transactions[i].number << ", PLU: " << transactions[i].PLU << ", type: " << transactions[i].type << ", amount: " << transactions[i].amount << endl;  // Output each transaction's details
+                }
+            }
+            
+            break;  // Exit the loop (end the program)
+        } 
+        else  // If the user entered an invalid choice
+        {
+            cout << "Invalid choice. Please enter 1-4." << endl;  // Output error message
+            cin.clear();  // Clear any input errors
+            cin.ignore(1000, '\n');  // Ignore any leftover input in the buffer
+        }
+    } while (true);  // Continue the loop until the user exits
+
+    delete[] products;  // Deallocate the memory used for the product array
+    
+    return 0;  // Return 0 to indicate the program executed successfully
+}
+
+// Define the function to print product details
+
+void printProducts(Product* products, int size)
+{
+    for (int i = 0; i < size; i++)  // Loop through all products
+    {
+        cout << "PLU: " << products[i].getPLU() << ", ";  // Output the product's PLU
+        cout << left << setw(17) << products[i].getName() << ", ";  // Output the product's name with left alignment and fixed width
+        cout << "type: " << products[i].getType() << ", ";  // Output the product's type
+        cout << "unit price: " << right << fixed;  // Output the product's unit price with right alignment and fixed decimal
+
+        double price = products[i].getPrice();  // Get the product's price
+       
+        ostringstream oss;  // Create a string stream object to format the price
+        
+        oss << fixed << setprecision(2) << price;  // Format the price with 2 decimal places
+        
+        string priceStr = oss.str();  // Convert the formatted price to a string
+        
+        int precision = 2;  // Set the default precision to 2
+        
+        size_t dotPos = priceStr.find('.');  // Find the position of the decimal point in the price string
+       
+        if (dotPos != string::npos && priceStr.size() > dotPos + 2)  // If the price has more than 2 decimal places
+        {
+            if (priceStr[dotPos + 2] == '0')  // If the third decimal place is '0'
+            {
+                precision = 1;  // Set the precision to 1
+            }
+        }
+
+        cout << setw(5) << setprecision(precision) << price << ", ";  // Output the price with appropriate precision
+        cout << "inventory: " << products[i].getInventory() << endl;  // Output the product's inventory count
+    }
+}
+
+// Define the function to find the index of a product based on its PLU
+
+int findProductIndex(Product* products, int size, string PLU)
+{
+    for (int i = 0; i < size; i++)  // Loop through all products
+    {
+        if (products[i].getPLU() == PLU)  // If the product's PLU matches the given PLU
+        {
+            return i;  // Return the index of the product
+        }
+    }
+    
+    return -1;  // Return -1 if no product with the given PLU is found
+}
