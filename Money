@@ -1,0 +1,64 @@
+/* Creating a program that asks the user for a change amount and displaying the change to the user using the smallest number of 
+bills and coins possible.
+*/
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    // Creating the double variable change
+    // Creating integer variables named dollars, quarters, dimes, nickels, and pennies
+    
+	double change;
+	int dollars;
+	int quarters;
+	int dimes;
+	int nickels;
+	int pennies;
+	
+	// Asking the user for a change amount
+
+	cout << "Enter the change amount to make in dollars: ";
+	cin >> change;
+
+    // Making the amount the user entered into a whole number and rounding the amount
+    
+	pennies = round(change * 100);
+
+	// Calculating the dollar amount for the change 
+	// Updating the pennies variable which will later be used to find the amount of pennies
+
+	dollars = pennies / 100;
+	pennies %= 100;
+
+	// Use min to limit quarters to a maximum of 3 and perform calculations to find the quarter amount
+	// Updating the pennies variable which will later be used to find the amount of pennies
+
+	quarters = fmin(pennies / 25, 3);
+	pennies %= 25;
+
+	// Use min to limit dimes to a maximum of 2 and perform calculations to find the dime amount
+	// Updating the pennies variable which will later be used to find the amount of pennies
+
+	dimes = fmin(pennies / 10, 2);
+	pennies %= 10;
+
+	// Use min to limit nickels to a maximum of 1 and perform calculations to find the nickels amount
+	// The remaining amount in the variable pennies will be the change in pennies
+
+	nickels = fmin(pennies / 5, 1);
+	pennies %= 5;
+
+	// Print the results of the calculations to the user
+
+	cout << "Change Due:" << "\n\n";
+	cout << "   " << dollars << " dollars" << "\n";
+	cout << "   " << quarters << " quarters" << "\n";
+	cout << "   " << dimes << " dimes" << "\n";
+	cout << "   " << nickels << " nickels" << "\n";
+	cout << "   " << pennies << " pennies" << "\n";
+
+	return 0;
+}
