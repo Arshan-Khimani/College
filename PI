@@ -1,0 +1,170 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Function prototypes
+
+void circumference(double* radius, double* circum);
+void area(double* radius, double* a);
+void volume(double* radius, double* vol);
+double const pi = 3.14;
+
+int main()
+{
+    // Variable to store user choice
+    
+    int choice;
+    
+    // Variable to store the radius input by the user
+    
+    double radius;
+    
+    // Boolean flag to track if it is the first time displaying the menu
+    
+    bool firstMenu = true;
+
+    // Infinite loop to keep asking the user for input
+    
+    while(true)
+    {
+        // Check if this is the first time displaying the menu
+        
+        if (firstMenu) 
+        {
+            cout << "Enter: \n0 to calculate the circumference of a circle.\n1 to calculate the area of a circle.\n2 to calculate the volume of a sphere.\n";
+            
+            firstMenu = false;
+        } 
+        
+        // If it's not the first time, display a slightly different menu
+        
+        else 
+        {
+            cout << "Enter 0 to calculate the circumference of a circle.\n1 for the area of a circle.\n2 for the volume of a sphere.\n";
+        }
+        
+        // Get the user's choice
+        
+        cin >> choice;
+        
+        // If the user enters an invalid choice, exit the program
+        
+        if(choice < 0 || choice > 2)
+        {
+            cout << "Program ended." << endl;
+            
+            break;
+        }
+
+        // Ask for the radius input
+        
+        cout << "Enter the length of a radius: ";
+        cin >> radius;
+        
+        // Check if the radius is valid (positive, non-zero value)
+        
+        if(radius <= 0)
+        {
+            cout << "Invalid radius entered. Please enter a positive, non-zero value." << endl;
+            
+            continue;
+        }
+
+        // Perform calculations based on user's choice
+        
+        switch(choice)
+        {
+            case 0:
+                {
+                    // Variable to store the calculated circumference
+                    
+                    double circum;
+                    
+                    // Call the function to compute circumference
+                    
+                    circumference(&radius, &circum);
+                }
+                
+                break;
+            case 1:
+                {
+                    // Variable to store the calculated area
+                    
+                    double a;
+                    
+                    // Call the function to compute area
+                    
+                    area(&radius, &a);
+                }
+                
+                break;
+            case 2:
+                {
+                    // Variable to store the calculated volume
+                    
+                    double vol;
+                    
+                    // Call the function to compute volume
+                    
+                    volume(&radius, &vol);
+                }
+                
+                break;
+        }
+        
+        // Add a blank line
+        
+        cout << endl;
+    }
+
+    return 0;
+}
+
+// Function to calculate circumference
+
+void circumference(double* radius, double* circum)
+{
+    // Calculate the circumference 
+    
+    *circum = 2 * pi * (*radius);
+    cout << "The circumference of a circle with radius " << *radius << " is " << *circum << endl;
+    
+    // Double the radius and recalculate
+    
+    *radius *= 2;
+    *circum = 2 * pi * (*radius);
+    cout << "The circumference of a circle with new radius " << *radius << " is " << *circum << endl;
+}
+
+// Function to calculate area
+
+void area(double* radius, double* a)
+{
+    // Calculate the area
+    
+    *a = pi * (*radius) * (*radius);
+    cout << "The area of a circle with radius " << *radius << " is " << *a << endl;
+    
+    // Double the radius and recalculate
+    
+    *radius *= 2;
+    *a = pi * (*radius) * (*radius);
+    cout << "The area of a circle with new radius " << *radius << " is " << *a << endl;
+}
+
+// Function to calculate volume
+
+void volume(double* radius, double* vol)
+{
+    // Calculate the volume
+    
+    *vol = (4.0 / 3.0) * pi * pow(*radius, 3);
+    cout << "The volume of a sphere with radius " << *radius << " is " << *vol << endl;
+    
+    // Double the radius and recalculate
+    
+    *radius *= 2;
+    *vol = (4.0 / 3.0) * pi * pow(*radius, 3);
+    cout << "The volume of a sphere with new radius " << *radius << " is " << *vol << endl;
+}
