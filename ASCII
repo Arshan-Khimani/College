@@ -1,0 +1,59 @@
+/*This program is intended to ask the user for their first and last initial and then displays the
+initals along with their corresponding ASCII code values. The program will also add 1 to both 
+ASCII code values and will display the new values along with their equivalent characters.
+*/
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    // Creating all of my variables
+    
+    char firstInitial;
+    char lastInitial;
+    int resultF;
+    int resultL;
+    int modifiedIntF;
+    int modifiedIntL;
+    char modifiedCharF;
+    char modifiedCharL;
+    
+    // Getting user input for the first inital
+    
+    cout << "Enter your first initial: ";
+    cin >> firstInitial;
+    
+    // Getting user input for the last inital
+    
+    cout << "Enter your last initial: ";
+    cin >> lastInitial;
+    
+    /* Converting the first inital to its corresponding ASCII value, adding 1 to the ASCII value
+    and converting the modified ASCII value to a char.
+    */
+    
+    resultF = static_cast <int> (firstInitial);
+    modifiedIntF = resultF + 1;
+    modifiedCharF = static_cast <char> (modifiedIntF);
+    
+    // Displaying the results of the above conversions to the user for the first inital.
+    
+    cout << "\n" << firstInitial << " has code " << resultF << "\n";
+    cout << resultF << " plus one is " << modifiedIntF << " which is the character " << modifiedCharF;
+    
+    /* Converting the last inital to its corresponding ASCII value, adding 1 to the ASCII value
+    and converting the modified ASCII value to a char.
+    */
+    
+    resultL = static_cast <int> (lastInitial);
+    modifiedIntL = resultL + 1;
+    modifiedCharL = static_cast <char> (modifiedIntL);
+    
+    // Displaying the results of the above conversions to the user for the last inital.
+    
+    cout << "\n\n" << lastInitial << " has code " << resultL << "\n";
+    cout << resultL << " plus one is " << modifiedIntL << " which is the character " << modifiedCharL << "\n";
+
+
+    return 0;
+}
