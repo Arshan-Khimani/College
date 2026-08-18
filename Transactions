@@ -1,0 +1,291 @@
+/*
+Pseudocode:
+
+1. **Helper Functions to Parse Date and Time**
+   - **getMonthFromString()**
+     - Extracts and returns the month from a date string (e.g., "MM/DD/YYYY HH").
+   - **getDayFromString()**
+     - Extracts and returns the day from a date string.
+   - **getYearFromString()**
+     - Extracts and returns the year from a date string.
+   - **getHourFromString()**
+     - Extracts and returns the hour from a date string.
+
+2. **readAccounts() Function**
+   - Opens the account file for reading.
+   - Reads the file line by line and extracts account and owner information.
+   - For each account:
+     - Reads the account number and number of owners.
+     - For each owner, reads the name, date of birth, and address, then sets the corresponding owner information in the account.
+     - Reads the number of transactions, then processes each transaction (including date, type, and amount).
+   - Returns `true` if the accounts were read successfully, `false` if there was an error opening the file.
+
+3. **Main Function**
+   - Prompts the user to input the file name containing account data.
+   - Opens the file and counts the number of accounts by checking for lines containing `"#"`.
+   - Dynamically allocates an array of `Account` objects based on the number of accounts in the file.
+   - Calls `readAccounts()` to load account data into the array.
+   - For each account:
+     - Displays account details (account number, owners' information).
+     - Prints transaction history, updating the balance as each transaction is processed (account creation, deposits, withdrawals).
+     - Displays transaction details (date, type, amount, new balance).
+   - Frees the allocated memory for accounts before exiting.
+
+4. **Transaction Processing**
+   - For each transaction:
+     - If the transaction type is `1`, it's an account creation (add to balance).
+     - If the transaction type is `2`, it's a deposit (add to balance).
+     - If the transaction type is `3`, it's a withdrawal (subtract from balance).
+   - The program outputs each transaction's date, type, amount, and the resulting balance.
+
+5. **File Management**
+   - Ensures the file is opened properly, and if not, prints an error message.
+   - Closes the file after processing, and deallocates dynamically allocated memory for accounts.
+
+6. **Error Handling**
+   - If there's any issue with file reading or account parsing, the program exits with an error message and returns a non-zero value.
+*/
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "Account.h"
+#include "Date.h"
+
+int getMonthFromString(std::string d)  // Function to extract month from date string
+{
+    size_t pos = d.find('/');  // Find the position of the first '/' character
+
+    return std::stoi(d.substr(0, pos));  // Convert the substring before '/' to an integer and return it as the month
+}
+
+int getDayFromString(std::string d)  // Function to extract day from date string
+{
+    size_t pos1 = d.find('/');  // Find the position of the first '/' character
+
+    size_t pos2 = d.find('/', pos1 + 1);  // Find the position of the second '/' character
+
+    return std::stoi(d.substr(pos1 + 1, pos2 - pos1 - 1));  // Extract and return the substring between the first and second '/' as the day
+}
+
+int getYearFromString(std::string d)  // Function to extract year from date string
+{
+    size_t pos1 = d.find('/');  // Find the position of the first '/' character
+
+    size_t pos2 = d.find('/', pos1 + 1);  // Find the position of the second '/' character
+
+    size_t pos3 = d.find('/', pos2 + 1);  // Find the position of the third '/' character
+
+    return std::stoi(d.substr(pos2 + 1, pos3 - pos2 - 1));  // Extract and return the substring between the second and third '/' as the year
+}
+
+int getHourFromString(std::string d)  // Function to extract hour from date string
+{
+    size_t pos = d.rfind('/');  // Find the position of the last '/' character
+
+    return std::stoi(d.substr(pos + 1));  // Convert the substring after the last '/' to an integer and return it as the hour
+}
+
+bool readAccounts(std::string fname, Account accntPtr[], int numAccnts)  // Function to read account data from a file
+{
+    std::ifstream inFile(fname);  // Open the file with the given file name
+
+    if (!inFile)  // Check if the file could not be opened
+    {
+        return false;  // Return false if file could not be opened
+    }
+
+    for (int i = 0; i < numAccnts; i++)  // Loop over each account
+    {
+        std::string delimiter;  // Temporary string to read the delimiter
+        
+        inFile >> delimiter;  // Read the delimiter (typically '#')
+
+        int accNum, numOwners;  // Declare variables for account number and number of owners
+        
+        inFile >> accNum >> numOwners;  // Read account number and number of owners
+        
+        accntPtr[i].setAccount(accNum, numOwners);  // Set account details for the current account
+
+        for (int j = 0; j < numOwners; j++)  // Loop over each owner
+        {
+            std::string name, dobStr, address;  // Declare strings for name, DOB, and address
+            
+            inFile >> name >> dobStr >> address;  // Read owner details from file
+
+            Date dob;  // Create a Date object for the owner's date of birth
+            
+            dob.set(getMonthFromString(dobStr), getDayFromString(dobStr), getYearFromString(dobStr), getHourFromString(dobStr));  // Set the DOB values using the helper functions
+
+            Person p;  // Create a Person object
+            
+            p.name = name;  // Set the name of the person
+            p.DOB = dob;    // Set the date of birth
+            p.address = address;  // Set the address
+            
+            accntPtr[i].setOwner(j, p);  // Set the owner at the specified index
+        }
+
+        int numTrans;  // Declare a variable for the number of transactions
+        
+        inFile >> numTrans;  // Read the number of transactions
+        
+        Transaction* transArray = new Transaction[numTrans];  // Dynamically allocate an array of transactions
+        
+        for (int j = 0; j < numTrans; j++)  // Loop over each transaction
+        {
+            std::string dateStr;  // Declare a string for the transaction date
+            
+            int type;  // Declare a variable for the transaction type
+            
+            double amount;  // Declare a variable for the transaction amount
+            
+            inFile >> dateStr >> type >> amount;  // Read transaction details from file
+
+            Date transDate;  // Create a Date object for the transaction date
+            
+            transDate.set(getMonthFromString(dateStr), getDayFromString(dateStr), getYearFromString(dateStr), getHourFromString(dateStr));  // Set the transaction date
+
+            transArray[j].transactionDate = transDate;  // Set the transaction date
+            transArray[j].type = type;  // Set the transaction type
+            transArray[j].amount = amount;  // Set the transaction amount
+        }
+
+        accntPtr[i].setTransacPtr(transArray);  // Set the pointer to the transactions array for the account
+        accntPtr[i].setNumTransactions(numTrans);  // Set the number of transactions for the account
+    }
+
+    inFile.close();  // Close the input file
+    
+    return true;  // Return true indicating successful reading of accounts
+}
+
+int main()  
+{
+    std::string fname;  // Declare a string to store the file name
+
+    std::cout << "Enter the account file name: ";  // Prompt user for the account file name
+    std::cin >> fname;  // Read the file name from user input
+
+    std::ifstream inFile(fname);  // Open the file for reading
+    
+    if (!inFile)  // Check if the file was not opened successfully
+    {
+        std::cout << "Error opening file." << std::endl;  // Display error message if file can't be opened
+    
+        return 1;  // Return 1 to indicate an error
+    }
+
+    int numAccounts = 0;  // Initialize the number of accounts to 0
+    
+    std::string line;  // Declare a string to store each line from the file
+    
+    while (std::getline(inFile, line))  // Read the file line by line
+    {
+        if (line == "#")  // Check if the line contains the '#' symbol, indicating an account
+        {
+            numAccounts++;  // Increment the number of accounts
+        }
+    }
+    
+    inFile.close();  // Close the file after reading
+
+    std::cout << "There are " << numAccounts << " accounts in the file" << std::endl;  // Output the number of accounts
+
+    Account* accounts = new Account[numAccounts];  // Dynamically allocate an array of accounts based on the number of accounts
+    
+    if (!readAccounts(fname, accounts, numAccounts))  // Call the readAccounts function to read account data
+    {
+        std::cout << "Error reading accounts." << std::endl;  // Display error message if reading accounts fails
+      
+        delete[] accounts;  // Deallocate memory for accounts array
+      
+        return 1;  // Return 1 to indicate an error
+    }
+
+    for (int i = 0; i < numAccounts; i++)  // Loop over each account
+    {
+        Account acc = accounts[i];  // Get the account from the array
+        
+        std::cout << "\nAccount Number: " << acc.getAccountNumber() << std::endl;  // Output account number
+        std::cout << "===============" << std::endl;  // Output a separator
+
+        for (int j = 0; j < acc.getNumOwners(); j++)  // Loop over each owner of the account
+        {
+            Person p = acc.getOwner(j);  // Get the owner details for the current index
+        
+            std::cout << "Name: " << p.name << ", DOB: ";  // Output the owner's name and date of birth
+        
+            p.DOB.print();  // Print the owner's date of birth
+        
+            std::cout << ", Address: " << p.address << std::endl << std::endl;  // Output the owner's address and add a line break
+        }
+
+        std::cout << "Transaction history:" << std::endl;  // Output transaction history header
+        std::cout << "--------------------" << std::endl;  // Output a separator
+        
+        double balance = 0.0;  // Initialize balance to 0
+        
+        for (int j = 0; j < acc.getNumTransactions(); j++)  // Loop over each transaction for the account
+        {
+            Transaction t = acc.getTransaction(j);  // Get the transaction details for the current index
+        
+            switch (t.type)  // Check the transaction type
+            {
+                case 1:  // Case for account creation
+                {
+                    balance += t.amount;  // Increase the balance by the transaction amount
+                    
+                    break;
+                }
+                case 2:  // Case for deposit
+                {
+                     balance += t.amount;  // Increase the balance by the deposit amount
+                     
+                     break;
+                }
+                case 3:  // Case for withdrawal
+                {
+                    balance -= t.amount;  // Decrease the balance by the withdrawal amount
+                    
+                    break;
+                }
+            }
+            
+            std::cout << "Transaction #" << j+1 << std::endl;  // Output the transaction number
+            std::cout << "Date: ";  // Output "Date: "
+          
+            t.transactionDate.print();  // Print the transaction date
+          
+            std::cout << ", type: ";  // Output "type: "
+          
+            switch (t.type)  // Output the transaction type description
+            {
+                case 1:  // Account creation
+                {
+                    std::cout << "account creation";  // Output the description for account creation
+                   
+                    break;
+                }
+                case 2:  // Deposit
+                {
+                    std::cout << "deposit";  // Output the description for deposit
+                    
+                    break;
+                }
+                case 3:  // Withdrawal
+                {
+                    std::cout << "withdrawal";  // Output the description for withdrawal
+                    
+                    break;
+                }
+            }
+            
+            std::cout << ", amount: " << t.amount << ", new balance: " << balance << std::endl << std::endl;  // Output the transaction amount and new balance
+        }
+    }
+
+    delete[] accounts;  // Deallocate memory for accounts array
+    
+    return 0;  
+}
