@@ -1,0 +1,40 @@
+/*This program is intended to get two whole numbers (integers) from the user and divide 
+both the numbers to find the integer and double division for the numbers
+*/
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	// Creating variables
+
+	int dividend;
+	int divisor;
+
+	// Getting user input for the dividend 
+
+	cout << "Enter a whole number that is the dividend: ";
+	cin >> dividend;
+
+   // Getting user input for the divisor 
+
+	cout << "Enter a whole number that is the divisor: ";
+	cin >> divisor;
+
+   // Telling the user what the program will do
+
+	cout << "\nWe will divide " << dividend << " by " << divisor;
+
+	// Calculating the division of the two numbers through integer and double division
+
+	int calc = dividend / divisor;
+	double calcDoub = static_cast<double> (dividend) / divisor;
+
+	// Outputing the solutions of the division problem through integer and double division
+
+	cout << "\n\nThe quotient of the integer division is: " << calc;
+	cout << "\nThe quotient of the double division is: " << calcDoub << "\n";
+
+	return 0;
+}
