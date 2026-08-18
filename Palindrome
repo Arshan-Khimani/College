@@ -1,0 +1,79 @@
+/*
+Pseudocode:
+1. Define a function `isPalindrome` that checks if a given string is a palindrome.
+2. Initialize two pointers: one at the beginning (`left`) and one at the end (`right`) of the string.
+3. Use a loop to compare characters from both ends moving toward the center.
+   - If any characters do not match, return `false`.
+   - If all characters match, return `true`.
+4. In the `main` function:
+   - Declare a string variable to store user input.
+   - Prompt the user to enter a string.
+   - Call `isPalindrome` function with the input string.
+   - Print whether the string is a palindrome or not.
+5. End the program.
+*/
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Boolean function to check if a given string is a palindrome
+
+bool isPalindrome(string str)
+{
+    // Creating 2 int variables called left and right and initializing them as pointers
+    
+    int left = 0;
+    int right = str.length() - 1;
+
+    // Loop until the two pointers meet in the middle
+    
+    while (left < right) 
+    {
+        // Compare characters at left and right positions
+        
+        if (str[left] != str[right]) 
+        {
+            return false;
+        }
+        
+        // Incrementing left and decreamenting right variables
+        
+        ++left;
+        --right;
+    }
+    
+    // Returning true
+    
+    return true;
+}
+
+
+int main()
+{
+    // Creating a string variable called str
+    
+    string str;
+
+    // Asking the user to enter the name of the string and storing that in the str variable
+    
+    cout << "Enter the name of the string: ";
+    cin >> str;
+    
+    // Checking if the entered string is a palindrome
+    
+    if (isPalindrome(str))
+    {
+        cout << "The given string is a palindrome. \n";
+    }
+    
+    // Print if it isnt a palindrome
+    
+    else 
+    {
+        cout << "The given string is not a palindrome. \n";
+    }
+    
+    return 0;
+}
