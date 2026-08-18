@@ -1,0 +1,531 @@
+/*
+Pseudocode:
+
+1. Declare necessary functions to validate various fields: PLU, product name, sales type, price, and inventory.
+2. Prompt the user to enter the filename of the input file.
+3. Open the input file for reading.
+4. If the file does not open, display an error message and exit the program.
+5. Construct and print a message indicating that the file is being checked.
+6. Initialize a boolean flag `allValid` to true to track if all records are valid.
+7. Read the input file line by line.
+8. For each line:
+    a. Initialize variables to track the token count, validity of the line, and the original line string.
+    b. Tokenize the line (split into fields) one by one.
+    c. For each token:
+        i. Validate the token based on its position.
+        ii. If valid, print a message confirming validity.
+        iii. If invalid, print an error message, set `lineValid` and `allValid` to false, and stop checking further tokens.
+    d. If fewer than 5 tokens are found, set `lineValid` to false and print a message indicating the missing fields.
+    e. If `lineValid` is false, set `allValid` to false and stop further processing.
+    f. Print a blank line to separate records.
+9. After all lines have been processed:
+    a. Close the file.
+    b. If `allValid` is true, print a message that the content is valid.
+    c. If `allValid` is false, print a message that the content is invalid.
+
+10. Function Descriptions:
+    - `isPLUValid`: Checks if the PLU has 4 characters and consists of only numbers or letters.
+    - `isProductNameValid`: Checks if the product name starts with a letter.
+    - `isSalesTypeValid`: Checks if the sales type is either '0' or '1'.
+    - `isValidPrice`: Validates the price format.
+    - `isInventoryValid`: Validates that the inventory count consists of only digits.
+    - `tokenize`: Extracts the next token from a string by skipping leading whitespace and separating based on whitespace.
+
+End of program.
+*/
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+// Function to check if the price format is valid
+
+bool isValidPrice(string s);
+
+// Function to extract the next token from a string
+
+string tokenize(string &s);
+
+// Function to validate PLU 
+
+bool isPLUValid(const string &plu);
+
+// Function to validate product name
+
+bool isProductNameValid(const string &name);
+
+// Function to validate sales type
+
+bool isSalesTypeValid(const string &s);
+
+// Function to validate inventory count
+
+bool isInventoryValid(const string &inv);
+
+int main() 
+{
+    // Variable to store the file name input by user
+    
+    string filename;
+    
+    // Prompt user for the file name and read the full filename input
+    
+    cout << "Enter input file:" << endl;
+    getline(cin, filename);
+
+    // Open the file for reading
+    
+    ifstream inFile(filename.c_str());
+    
+    // Check if file opening failed
+    
+    if (!inFile) 
+    {
+        // Display error message
+        
+        cout << "Error opening file." << endl;
+        
+        return 1;
+    }
+
+    // Construct a message for file checking
+    
+    string checkMsg = "Checking " + filename;
+    
+    // Print checking message
+    
+    cout << checkMsg << endl;
+    
+    // Print a line of dashes equal to the message length
+    
+    cout << string(checkMsg.length(), '-') << endl;
+
+    // Adding a blank line
+    
+    cout << endl;
+    
+    // Flag to track if all records are valid
+    
+    bool allValid = true;
+    
+    // Variable to store each line read from the file
+    
+    string line;
+    
+    // Read file line by line
+    
+    while (getline(inFile, line)) 
+    {
+        // Copy the line content into a new variable
+        
+        string s = line;
+        
+        // Counter to track number of tokens in the line
+        
+        int tokenCount = 0;
+        
+        // Flag to track if the current line is valid
+        
+        bool lineValid = true;
+
+        // loop runs as long true is true
+        
+        while (true) 
+        {
+            // Extract the next token from the line
+            
+            string token = tokenize(s);
+            
+            // If no more tokens are found, exit loop
+            
+            if (token.empty()) 
+            {
+                break;
+            }
+            
+            // Increment token counter
+            
+            tokenCount++;
+            
+            // If more than 5 tokens exist, the record is invalid
+            
+            if (tokenCount > 5) 
+            {
+                // Printing tokenCount
+                
+                cout << "Token #" << tokenCount << " is " << token << ", Too many items in record" << endl;
+                
+                // Mark overall validity as false
+                
+                allValid = false;
+                
+                // Mark line as invalid
+                
+                lineValid = false;
+                
+                break;
+            }
+            
+            // Variable to store field name
+            
+            string fieldName;
+            
+            // Flag to store token validity
+            
+            bool valid = false;
+            
+            // Determine which field the token represents
+            
+            switch (tokenCount) 
+            {
+                case 1:
+                    // Validate PLU
+                    
+                    fieldName = "PLU";
+                    valid = isPLUValid(token);
+                    
+                    break;
+                case 2:
+                    // Validate product name
+                    
+                    fieldName = "Product name";
+                    valid = isProductNameValid(token);
+                    
+                    break;
+                case 3:
+                    // Validate sales type
+                    
+                    fieldName = "Sales type";
+                    valid = isSalesTypeValid(token);
+                    
+                    break;
+                case 4:
+                    // Validate price format
+                    
+                    fieldName = "Price";
+                    valid = isValidPrice(token);
+                    
+                    break;
+                case 5:
+                    // Validate inventory count
+                    
+                    fieldName = "Inventory";
+                    valid = isInventoryValid(token);
+                    
+                    break;
+                default:
+                    break;
+            }
+            
+            // If token is valid, print confirmation
+            
+            if (valid) 
+            {
+                cout << "Token #" << tokenCount << " is " << token << ", " << fieldName << " is valid" << endl;
+            }
+            
+            // If token is invalid, print error message
+            
+            else 
+            {
+                cout << "Token #" << tokenCount << " is " << token << ", " << fieldName << " is invalid" << endl;
+                allValid = false;
+                lineValid = false;
+               
+                break;
+            }
+        }
+        
+        // If the record has missing tokens
+
+        if (lineValid && tokenCount != 5) 
+        {
+            // Mark line and all as false
+            
+            lineValid = false;
+            allValid = false;
+            
+            // Check how many tokens are missing
+            
+            if (tokenCount < 5) 
+            {
+                // Determine which token is missing
+                
+                int missingTokenNumber = tokenCount + 1;
+                
+                // Creating string variable called fieldName
+                
+                string fieldName;
+                
+                // Assign appropriate field name based on missing token number
+                
+                switch (missingTokenNumber) 
+                {
+                    case 1:
+                        // Missing PLU field
+                        
+                        fieldName = "PLU";
+                        
+                        break;
+                    case 2:
+                        // Missing Product Name field
+                        
+                        fieldName = "Product name";
+                        
+                        break;
+                    case 3:
+                        // Missing Sales Type field
+                        
+                        fieldName = "Sales type";
+                        
+                        break;
+                    case 4:
+                        // Missing Price field
+                        
+                        fieldName = "Price";
+                        
+                        break;
+                    case 5:
+                        // Missing Inventory field
+                        
+                        fieldName = "Inventory";
+                        
+                        break;
+                    default:
+                        break;
+                }
+                
+                // Print missing field message
+                
+                cout << fieldName << " is invalid, record has missing items" << endl;
+            }
+        }
+
+        // If not lineValid, allValid becomes false
+        
+        if (!lineValid) 
+        {
+            allValid = false;
+            
+            break;
+        }
+        
+        // Print a blank line
+        
+        cout << endl;
+    }
+
+    // Close the file
+    
+    inFile.close();
+
+    // If all records were valid
+    
+    if (allValid) 
+    {
+        cout << "######## " << filename << " has valid content ########" << endl;
+    } 
+    
+    // If all records were not valid
+    
+    else 
+    {
+        cout << "\n######## " << filename << " has invalid content ########" << endl;
+    }
+
+    return 0;
+}
+
+// Function to validate if the PLU code is valid
+
+bool isPLUValid(const string &plu) 
+{
+    // Check if the length of the PLU is not 4 characters
+    
+    if (plu.length() != 4) 
+    {
+        return false; 
+    }
+    
+    // Loop through each character in the PLU string
+    
+    for (char c : plu) 
+    {
+        // Check if the character is not a number or letter (uppercase or lowercase)
+        
+        if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) 
+        {
+            return false; 
+        }
+    }
+    
+    return true; 
+}
+
+// Function to validate if the product name is valid
+
+bool isProductNameValid(const string &name)
+{
+    // Check if the name is empty
+    
+    if (name.empty()) 
+    {
+        return false; 
+    }
+    
+    // Get the first character of the product name
+    
+    char firstChar = name[0];
+    
+    // Return true if the first character is a letter (either uppercase or lowercase)
+    
+    return (firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z');
+}
+
+// Function to validate if the sales type is valid (either '0' or '1')
+
+bool isSalesTypeValid(const string &s) 
+{
+    // Check if the sales type is a single character and is either '0' or '1'
+    
+    return s.size() == 1 && (s[0] == '0' || s[0] == '1');
+}
+
+// Function to validate if the price is valid
+
+bool isValidPrice(string s) 
+{
+    // Check if the price string is empty
+    
+    if (s.empty()) 
+    {
+        return false; 
+    }
+
+    // Variable to count the number of decimal points
+    
+    int dotCount = 0;
+    
+    // Variable to store the position of the decimal point
+    
+    int dotPos = -1; 
+
+    // Loop through each character in the string
+    
+    for (size_t i = 0; i < s.size(); ++i) 
+    {
+        // If a decimal point is found
+        
+        if (s[i] == '.') 
+        {
+            dotCount++; // Increment the decimal count
+            
+            if (dotCount == 1) 
+            {
+                // Store the position of the decimal point
+                 
+                dotPos = i;
+            }
+        } 
+        
+        // If the character is not a digit
+        
+        else if (s[i] < '0' || s[i] > '9') 
+        {
+            return false; 
+        }
+    }
+
+    // If there is more than one decimal point, the price is invalid
+    
+    if (dotCount > 1) 
+    {
+        return false; 
+    }
+
+    // If there is exactly one decimal point, check its validity
+    
+    if (dotCount == 1) 
+    {
+        // If the decimal point is at the beginning or end of the string, it's invalid
+        
+        if (dotPos == 0 || dotPos == static_cast<int>(s.size()) - 1) 
+        {
+            return false; 
+        }
+
+        // Calculate the number of decimal 
+        
+        int decimalDigits = s.size() - dotPos - 1;
+        
+        // If the decimal digits are not between 1 and 2, the price is invalid
+        
+        if (decimalDigits < 1 || decimalDigits > 2) 
+        {
+            return false; 
+        }
+    }
+
+    return true; 
+}
+
+// Function to validate if the inventory quantity is valid 
+
+bool isInventoryValid(const string &inv) 
+{
+    // Loop through each character in the inventory string
+    
+    for (char c : inv) 
+    {
+        // If the character is not a digit, the inventory is invalid
+        
+        if (c < '0' || c > '9') return false;
+    }
+    
+    return true; 
+}
+
+// Function to tokenize a string 
+
+string tokenize(string &s) 
+{
+    // Variable to track the starting position of the token (skipping whitespace)
+    
+    size_t start = 0;
+    
+    // Loop to skip leading whitespace characters 
+    
+    while (start < s.size() && (s[start] == ' ' || s[start] == '\t' || s[start] == '\n' || s[start] == '\r')) 
+    {
+        // Move the start position to the first non-whitespace character
+        
+        start++; 
+    }
+
+    // Variable to track the ending position of the token
+    
+    size_t end = start;
+    
+    // Loop to find the first whitespace character after the token 
+    
+    while (end < s.size() && !(s[end] == ' ' || s[end] == '\t' || s[end] == '\n' || s[end] == '\r')) 
+    {
+        // Move the end position to the next whitespace character
+        
+        end++; 
+    }
+
+    // Extract the token from the string 
+    
+    string token = s.substr(start, end - start);
+    
+    // Update the original string to remove the token (everything after the token)
+    
+    s = s.substr(end);
+
+    // Return the extracted token
+    
+    return token; 
+}
