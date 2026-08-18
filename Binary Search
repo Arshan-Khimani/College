@@ -1,0 +1,120 @@
+/*
+Pseudocode:
+1. Define a function `binarySearch` that takes an array, key, low index, and high index as input.
+2. In the `main` function:
+   - Declare and initialize a sorted integer array.
+   - Declare `key`, `first`, and `last` variables.
+   - Prompt the user to enter the key to search for.
+   - Call `binarySearch` with the given array and inputs.
+   - If the function returns a valid index, print the key's position.
+3. In the `binarySearch` function:
+   - Initialize a counter for iteration tracking.
+   - Perform a loop while `low` is less than or equal to `high`:
+     - Compute the middle index.
+     - If `list[mid]` is equal to `key`, print iteration count and return index.
+     - If `list[mid]` is greater than `key`, update `high = mid - 1`.
+     - Otherwise, update `low = mid + 1`.
+   - If the loop exits, print that the key was not found and return `-1`.
+4. End the program.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+// Creating a function prototype for binary search
+
+int binarySearch(int list[], int key, int low, int high);
+
+int main()
+{
+    // Declaring and initializing a sorted array
+    
+    int list[] = { 2, 4, 7, 10, 11, 28, 34, 45, 50, 59, 60, 66, 69, 70, 75, 89, 95 };
+
+    // Declaring key, first, and last variable as integers
+    
+    int key, first = 0, last = 16;
+    
+    // Asking the user to enter the element to search and storing it in key
+    
+    cout << "Enter the element to search: ";
+    cin >> key;
+    
+    // Calling the binary search function
+    
+    int result = binarySearch(list, key, first, last);
+    
+    // Checking if the key was found
+    
+    if (result != -1) 
+    {
+        // Outputting the index
+        
+        cout << key << " is at index " << result << endl;
+    }
+
+    return 0;
+}
+
+// Creating a function to perform a binary search
+
+int binarySearch(int list[], int key, int low, int high) 
+{
+    // Declaring integer variables called count and mid
+    
+    int count = 0;
+    int mid;
+    
+    // Looping until the search range is valid
+    
+    while (low <= high) 
+    {
+        // Incrementing count by 1
+        
+        count++;
+        
+        // Calculating the middle index
+        
+        mid = (low + high) / 2;
+        
+        // If the key is found
+        
+        if (list[mid] == key) 
+        {
+            // Displaying the interations it takes to find the key
+            
+            cout << "It takes " << count << " iterations to find the key " << key << endl;
+            
+            // Returning the mid variable
+            
+            return mid;
+        }
+        
+        // If key is smaller, search in the left half
+        
+        else if (list[mid] > key)
+        {
+            // Adjusting the high index
+            
+            high = mid - 1;
+        }
+        
+        // If key is larger, search in the right half
+        
+        else
+        {
+            // Adjusting the low index
+            
+            low = mid + 1;
+        }
+    }
+    
+    // Printing this message if key is not found
+    
+    cout << "After  " << count << " iterations " << key << " is not found!" << endl;
+    
+    // Return -1 to indicate key was not found
+    
+    return -1;
+}
