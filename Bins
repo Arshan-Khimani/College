@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class Group {
+
+    private static int[] bins; 
+    private static int numBins; 
+
+    public static int findLightestBin() 
+    {
+        int minIndex = 0;
+        
+        for (int i = 1; i < numBins; i++) 
+        {
+            if (bins[i] < bins[minIndex]) 
+            {
+                minIndex = i;
+            }
+        }
+        
+        return minIndex;
+    }
+
+    public static void main(String[] args) 
+    {
+        bins = new int[100]; 
+        numBins = 0; 
+
+        Scanner sc= new Scanner(System.in);
+        String line = sc.nextLine();
+
+        String[] numberStrings = line.split(" ");
+        int[] numbers = new int[numberStrings.length];
+        
+        for (int i = 0; i < numberStrings.length; i++)
+        {
+            numbers[i] = Integer.parseInt(numberStrings[i]);
+        }
+
+        numBins = Integer.parseInt(sc.nextLine());
+
+        for (int num : numbers) 
+        {
+            int binIndex = findLightestBin();
+            bins[binIndex] += num;
+        }
+
+        for (int i = 0; i < numBins; i++)
+        {
+            System.out.print(bins[i] + " ");
+        }
+        
+        System.out.println();
+    }
+}
