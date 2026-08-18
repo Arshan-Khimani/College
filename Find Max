@@ -1,0 +1,267 @@
+/*
+Pseudocode:
+
+1. Start
+2. Declare function prototypes for:
+   a. Creating and initializing an array with random values
+   b. Finding the maximum value in an array
+   c. Printing the contents of an array
+3. In the main function:
+   a. Declare integer variables for:
+      - Array size
+      - Maximum value
+      - Random seed
+   b. Loop until a valid array size is entered:
+      - Prompt user for array size
+      - If the size is invalid (<= 0), display an error message and repeat
+   c. Prompt user for the seed value and store it
+   d. Create an array using the entered size and seed
+   e. If memory allocation fails, print an error message and exit
+   f. Inform the user and print the contents of the array
+   g. Find the maximum value in the array and display it
+   h. Deallocate the dynamically allocated memory
+   i. End program
+
+4. Function `createArray(size, seed)`:
+   a. If size is invalid (<= 0), return nullptr
+   b. Seed the random number generator
+   c. Allocate memory for an array of the given size
+   d. Traverse the array using a pointer and populate it with random numbers between 0 and 19
+   e. Return the allocated array
+
+5. Function `printArray(arr, size)`:
+   a. If the array is invalid or size is <= 0, return
+   b. Iterate through the array using a pointer
+   c. Print each element separated by a space
+   d. Print a newline at the end
+
+6. Function `findMax(arr, size)`:
+   a. If the array is invalid or size is <= 0, return 0
+   b. Initialize max with the first element
+   c. Traverse the rest of the array using a pointer and compare each element with the current max
+   d. Update max if a greater value is found
+   e. Return the maximum value
+
+7. End
+*/
+
+#include <iostream> 
+#include <iomanip>   
+#include <cstdlib>   
+
+using namespace std; 
+
+// Function to create and initialize an array with random values
+
+int* createArray(int size, int seed);  
+
+// Function to find the maximum value in an array
+
+int findMax(int *arr, int size);     
+
+// Function to print the contents of an array
+
+void printArray(int* arr, int size);   
+
+int main() 
+{
+    // Declare integer variables for array size, maximum value, and random seed
+    
+    int size, max, seed; 
+    
+    // Get and validate array size
+    
+    do 
+    {
+        // Prompt user for array size and store in size
+        
+        cout << "Enter the size of the array: "; 
+        cin >> size; 
+        
+        // Check if entered size is invalid
+        
+        if (size <= 0)  
+        {
+            // Inform user of invalid input
+            
+            cout << "Array size must be greater than 0." << endl; 
+        }
+    } while (size <= 0);    // Repeat until a valid size is entered
+    
+    // Get seed value for random number generation and read user input for seed
+    
+    cout << "Enter a seed value: "; 
+    cin >> seed; 
+    
+    // Create an array dynamically using the provided size and seed value
+    
+    int* values = createArray(size, seed);
+    
+    // Check if memory allocation was successful
+    
+    if (!values) 
+    {
+        // Print error message if allocation fails
+        
+        cout << "Memory allocation failed" << endl; 
+        
+        return 1; 
+    }
+    
+    // Inform user about the array elements
+    
+    cout << "The array elements are: " << endl;
+    
+    // Print the contents of the array
+    
+    printArray(values, size);
+    
+    // Find the maximum value in the array
+    
+    max = findMax(values, size);
+    
+    // Display the maximum value found in the array
+    
+    cout << "The maximum of all the values in the array is " << max << endl;
+
+    // Free allocated memory to prevent memory leaks
+    
+    delete[] values;
+    
+    return 0; 
+}
+
+// Function to create an array filled with random numbers
+
+int* createArray(int size, int seed) 
+{
+    // Ensure size is valid before proceeding
+    
+    if (size <= 0) 
+    {
+        // Return null if size is invalid
+        
+        return nullptr; 
+    }
+    
+    // Seed the random number generator with the provided seed value
+    
+    srand(seed);
+    
+    // Allocate memory for the array dynamically
+    
+    int* arr = new int[size];
+    
+    // Create pointer to traverse and fill the array
+    
+    int* ptr = arr; 
+    
+    // Populate the array with random values in the range 0 to 19
+    
+    for (int i = 0; i < size; i++) 
+    {
+        // Assign a random value to the current position
+        
+        *ptr = rand() % 20; 
+        
+        // Move pointer to the next position
+        
+        ptr++; 
+    }
+    
+    // Return arr
+    
+    return arr; 
+}
+
+// Function to print the elements of an array
+
+void printArray(int* arr, int size) 
+{
+    // Ensure the array is valid before printing
+    
+    if (!arr || size <= 0) 
+    {
+        // Exit function if array is null 
+        
+        return; 
+    }
+
+    // Create pointer to traverse the array
+    
+    int* ptr = arr; 
+    
+    // Loop through the array elements
+    
+    for (int i = 0; i < size; i++)  
+    {
+        // Print the value pointed to by ptr
+        
+        cout << *ptr; 
+
+        // Check if this is not the last element
+         
+        if (i < size - 1) 
+        {
+            // Print a space between numbers
+            
+            cout << " "; 
+        }
+        
+        // Move to the next element
+        
+        ptr++; 
+    }
+    
+    // Print newline after printing all elements
+    
+    cout << " " << endl; 
+}
+
+// Function to find the maximum value in an array
+
+int findMax(int *arr, int size) 
+{
+    // Ensure the array is valid before proceeding
+    
+    if (!arr || size <= 0) 
+    {
+        // Return 0 if the array is null 
+        
+        return 0; 
+    }
+    
+    // Pointer to traverse the array
+    
+    int* ptr = arr; 
+    
+    // Initialize max with the first element
+    
+    int max = *ptr; 
+    
+    // Move pointer to the second element
+    
+    ptr++; 
+    
+    // Loop through the rest of the array to find the maximum value
+    
+    for (int i = 1; i < size; i++) 
+    {
+        // Compare current value with max
+        
+        if (*ptr > max) 
+        {
+            // Update max if current value is greater
+            
+            max = *ptr; 
+        }
+        
+        // Move to the next element
+        
+        ptr++; 
+    }
+    
+    // Return the maximum value
+    
+    return max; 
+}
