@@ -1,0 +1,182 @@
+/*
+Pseudocode:
+
+1. **Includes and Namespace**
+   - Includes standard libraries `<iostream>` and `<string>`, and custom `"Cat.h"` which defines the `Pet` and `Cat` classes.
+   - Uses the `std` namespace for convenience.
+
+2. **Main Function Begins**
+
+3. **Variable Declarations**
+   - `petName`, `catName`, `catBreed`: Strings to store names and breed.
+   - `petAge`, `catAge`: Integers to store ages.
+
+4. **Object Creation**
+   - `myPet`: A `Pet` object to hold generic pet data.
+   - `myCat`: A `Cat` object (inherits from `Pet`) to hold specific cat data.
+
+5. **Input for Pet**
+   - Prompts user for pet's name (with `getline()` to allow spaces).
+   - Prompts user for pet's age, then ignores any leftover newline character.
+
+6. **Input for Cat**
+   - Prompts for cat's name (again using `getline()`).
+   - Prompts for cat's age and ignores newline.
+   - Prompts for cat's breed.
+
+7. **Assign and Print Pet Info**
+   - Sets name and age on `myPet` using `SetName()` and `SetAge()`.
+   - Prints pet info using `PrintInfo()`.
+
+8. **Assign and Print Cat Info**
+   - Sets name, age, and breed on `myCat` using `SetName()`, `SetAge()`, and `SetBreed()`.
+   - Prints cat info using overridden `PrintInfo()`.
+
+9. **Breed Accessor**
+   - Uses `GetBreed()` to display the cat's breed.
+
+10. **Various Constructor Demonstrations**
+   - Creates a `Pet` object using the two-argument constructor and prints its info.
+   - Creates a `Cat` using the full constructor (name, age, breed) and prints.
+   - Creates a `Cat` using a constructor that takes only the breed and prints.
+   - Creates a `Cat` using the default constructor and prints.
+   - Creates a `Pet` using the default constructor and prints.
+
+11. **Program Ends**
+   - `return 0;` indicates successful termination.
+*/
+
+#include <iostream>     
+#include <string>     
+#include "Cat.h"       
+
+using namespace std;
+
+int main() 
+{
+    // Declare variables to store input for pet and cat
+    string petName, catName, catBreed;
+    int petAge, catAge;
+
+    // Create a generic Pet object
+    Pet myPet;
+
+    // Create a Cat object (inherits from Pet)
+    Cat myCat;
+
+    // Prompt user to enter generic pet information
+    cout << "Enter your pet name: " ;
+    getline(cin, petName);  // Read full line for name (allows spaces)
+
+    cout << "Enter your pet age: " ;
+    cin >> petAge;
+    cin.ignore();  // Ignore leftover newline character in buffer
+
+    // Prompt user to enter cat-specific information
+    cout << "Enter your cat name: " ;
+    getline(cin, catName);
+
+    cout << "Enter your cat age: " ;
+    cin >> catAge;
+    cin.ignore();
+
+    cout << "Enter your cat breed: " ;
+    getline(cin, catBreed);
+
+    // Set and display generic pet information
+    myPet.SetName(petName);
+    myPet.SetAge(petAge);
+    myPet.PrintInfo();  // Should show name and age
+
+    cout << endl;
+
+    // Set and display cat-specific information
+    myCat.SetName(catName);
+    myCat.SetAge(catAge);
+    myCat.SetBreed(catBreed);
+    myCat.PrintInfo();  // Should show name, age, and breed
+
+    cout << endl;
+
+    // Display the cat's breed using the getter method
+    cout << "Breed of my cat is: " << myCat.GetBreed() << endl;
+
+    // Create and print a Pet object using constructor with parameters
+    Pet dog(petName, petAge);
+    dog.PrintInfo();
+    cout << endl;
+
+    // Create and print a Cat object using full constructor (name, age, breed)
+    Cat cat(catName, catAge, catBreed);
+    cat.PrintInfo();
+    cout << endl;
+
+    // Create and print a Cat using constructor that takes only breed
+    Cat cat1(catBreed);
+    cat1.PrintInfo();
+    cout << endl;
+
+    // Create and print a Cat using the default constructor
+    Cat cat2;
+    cat2.PrintInfo();
+    cout << endl;
+
+    // Create and print a Pet using the default constructor
+    Pet dog1;
+    dog1.PrintInfo();
+    cout << endl;
+}
+
+/*
+Enter your pet name: Honey
+Enter your pet age: 13
+Enter your cat name: Sugar
+Enter your cat age: 14
+Enter your cat breed: Little Sugar
+Pet Information:
+   Name: Honey
+   Age: 13
+
+Cat Information:
+Pet Information:
+   Name: Sugar
+   Age: 14
+   Breed: Little Sugar
+
+Breed of my cat is: Little Sugar
+Pet Information:
+   Name: Honey
+   Age: 13
+
+Cat Information:
+Pet Information:
+   Name: Sugar
+   Age: 14
+   Breed: Little Sugar
+
+Cat Information:
+Pet Information:
+   Name: Tommy
+   Age: 10
+   Breed: Little Sugar
+
+Cat Information:
+Pet Information:
+   Name: Tommy
+   Age: 10
+   Breed: Rajapalayam
+
+Pet Information:
+   Name: Tommy
+   Age: 10
+
+
+
+*/
+/*
+Bojangles
+3
+Eclair
+1
+Siamese
+*/
