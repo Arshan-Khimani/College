@@ -1,0 +1,215 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <string>
+
+using namespace std;
+
+// Function prototypes
+
+bool readInventory(string fname, int numRecords, string* pluPtr, double* pricePtr, string* namePtr, int* typePtr, int* inventoryPtr);
+int determineNumRecords(string fname);
+double checkout(int numRecords, string* pluPtr, double* pricePtr, int* inventoryPtr);
+int getUserChoice();
+int searchProduct(string plu, string* pluPtr, int numRecords);
+void printInventory(int numRecords, string* pluPtr, string* namePtr, int* typePtr, double* pricePtr, int* inventoryPtr, string header);
+
+int main() 
+{
+    string fileName;
+    int numRecords;
+    
+    string* pluPtr = nullptr;
+    string* namePtr = nullptr;
+    double* pricePtr = nullptr;
+    int* typePtr = nullptr;
+    int* inventoryPtr = nullptr;
+    
+    cout << "Enter the file name: ";
+    cin >> fileName;
+    
+    numRecords = determineNumRecords(fileName);
+    cout << "There are " << numRecords << " records in the file\n\n";
+    
+    pluPtr = new string[numRecords];
+    namePtr = new string[numRecords];
+    pricePtr = new double[numRecords];
+    typePtr = new int[numRecords];
+    inventoryPtr = new int[numRecords];
+    
+    if (!readInventory(fileName, numRecords, pluPtr, pricePtr, namePtr, typePtr, inventoryPtr)) 
+    {
+        cout << "Error reading file\n";
+        
+        return 1;
+    }
+    
+    printInventory(numRecords, pluPtr, namePtr, typePtr, pricePtr, inventoryPtr, "Inventory read from file");
+    
+    int choice;
+    
+    do 
+    {
+        choice = getUserChoice();
+        
+        switch (choice) 
+        {
+            case 1: 
+            {
+                double total = checkout(numRecords, pluPtr, pricePtr, inventoryPtr);
+                
+                cout << "Total is: $" << fixed << setprecision(2) << total << "\n\n";
+                
+                break;
+            }
+            case 2:
+                printInventory(numRecords, pluPtr, namePtr, typePtr, pricePtr, inventoryPtr, "Current inventory");
+                
+                break;
+            case 3:
+                printInventory(numRecords, pluPtr, namePtr, typePtr, pricePtr, inventoryPtr, "Updated inventory");
+                
+                cout << "Exiting\n";
+                
+                break;
+        }
+    } while (choice != 3);
+    
+    delete[] pluPtr;
+    delete[] namePtr;
+    delete[] pricePtr;
+    delete[] typePtr;
+    delete[] inventoryPtr;
+    
+    return 0;
+}
+
+bool readInventory(string fname, int numRecords, string* pluPtr, double* pricePtr, string* namePtr, int* typePtr, int* inventoryPtr) 
+{
+    
+    ifstream inFile(fname);
+    
+    if (!inFile) 
+    {
+        return false;
+    }
+    
+    for (int i = 0; i < numRecords; i++) 
+    {
+        inFile >> pluPtr[i] >> namePtr[i] >> typePtr[i] >> pricePtr[i] >> inventoryPtr[i];
+    }
+    
+    inFile.close();
+    
+    return true;
+}
+
+int determineNumRecords(string fname) 
+{
+    ifstream inFile(fname);
+    
+    int count = 0;
+    
+    string dummy;
+    
+    while (getline(inFile, dummy)) 
+    {
+        count++;
+    }
+    
+    inFile.close();
+    
+    return count;
+}
+
+double checkout(int numRecords, string* pluPtr, double* pricePtr, int* inventoryPtr) 
+{
+    string plu;
+    
+    int quantity;
+    
+    double total = 0.0;
+    
+    while (true) 
+    {
+        cout << "Enter PLU, 0 if done: ";
+        cin >> plu;
+        
+        if (plu == "0") 
+        {
+            break;
+        }
+        
+        int index = searchProduct(plu, pluPtr, numRecords);
+        
+        if (index == -1) 
+        {
+            cout << "PLU not found\n\n";
+            
+            continue;
+        }
+        
+        do 
+        {
+            cout << "Enter quantity: ";
+            cin >> quantity;
+            
+            if (quantity <= 0) 
+            {
+                cout << "Quantity must be positive, reenter: ";
+            }
+        } while (quantity <= 0);
+        
+        if (quantity > inventoryPtr[index]) 
+        {
+            quantity = inventoryPtr[index];
+        }
+        
+        total += quantity * pricePtr[index];
+        inventoryPtr[index] -= quantity;
+        
+        cout << "\n";
+    }
+    
+    return total;
+}
+
+int getUserChoice() 
+{
+    int choice;
+    
+    cout << "1 - Checkout\n" << "2 - Print current inventory\n" << "3 - Quit\n";
+    cin >> choice;
+    
+    while (choice < 1 || choice > 3) 
+    {
+        cout << "Invalid choice, reenter: ";
+        cin >> choice;
+    }
+    
+    return choice;
+}
+
+int searchProduct(string plu, string* pluPtr, int numRecords) 
+{
+    for (int i = 0; i < numRecords; i++) 
+    {
+        if (pluPtr[i] == plu) 
+        {
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
+void printInventory(int numRecords, string* pluPtr, string* namePtr, int* typePtr, double* pricePtr, int* inventoryPtr, string header) 
+{
+    cout << header << "\n";
+    cout << string(header.length(), '-') << "\n";
+    
+    for (int i = 0; i < numRecords; i++) 
+    {
+        cout << "PLU: " << pluPtr[i] << ", " << left << setw(16) << namePtr[i] << ", type: " << typePtr[i] << ", unit price: " << pricePtr[i] << ", inventory: " << inventoryPtr[i] << "\n";
+    }
+}
