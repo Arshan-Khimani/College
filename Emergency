@@ -1,0 +1,73 @@
+import java.util.*;
+
+class Wss {
+  
+  public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+    int capacity = input.nextInt();
+    input.nextLine();
+    String line = input.nextLine();
+
+    int regular=0, emergency=0, regularAccepted=0, emergencyAccepted=0;
+    int regularDenied=0, emergencyDenied=0, regularForcedOut=0;
+    
+    String[] events = line.split(" ");
+    
+    for (String event : events) 
+    {
+      switch (event) 
+      {
+        case "N":
+          if (regular + emergency < capacity) 
+          {
+            regular++;
+            regularAccepted++;
+          } 
+          else 
+          {
+            regularDenied++;
+          }
+          
+          break;
+
+        case "E":
+          if (regular > 0) 
+          {
+            regular--;
+          }
+          
+          break;
+
+        case "NE":
+          if (regular + emergency < capacity)
+          {
+            emergency++;
+            emergencyAccepted++;
+          } 
+          else if (regular > 0)
+          {
+            regular--;
+            regularForcedOut++;
+            emergency++;
+            emergencyAccepted++;
+          } 
+          else 
+          {
+            emergencyDenied++;
+          }
+          
+          break;
+
+        case "EE":
+          if (emergency > 0) 
+          {
+            emergency--;
+          }
+          
+          break;
+      }
+    }
+    
+    System.out.println("" + regularAccepted + " " + regularDenied + " " + emergencyAccepted + " " + emergencyDenied + " " + regularForcedOut);
+  }
+}
