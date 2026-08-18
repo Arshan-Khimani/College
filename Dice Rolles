@@ -1,0 +1,73 @@
+/* This program simulates rolling two six-sided dice and displays a report showing the number of times each possible combination 
+of the two dice was rolled.
+*/
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int main() 
+{
+    // Creating an integer variable called numRolls
+    
+    int numRolls;
+    
+    // Creating an unsigned int variable called seed
+    
+    unsigned int seed; 
+    
+    // Taking the seed value as an input
+    
+    cin >> seed;
+    
+    // Seeding the random number generator
+    
+    srand(seed);
+
+    // Asking the user to enter how many times they want to roll the two dices and storing the input in numRolls
+    
+    cout << "How many times do you want the two dice rolled? ";
+    cin >> numRolls;
+    
+    // Declaring a 2d array called diceCombinations to keep track of each dice combination as a 6x6
+    
+    unsigned int diceCombinations[6][6] = {0}; 
+
+    // If the user enteres a number greater than 0, this will run
+    
+    if (numRolls > 0)
+    {
+        // This loop rolls the dice the amount of times the user enters
+        
+        for (int i = 0; i < numRolls; i++) 
+        {
+            // Generating a random number between 1-6 for die1 and die2
+            
+            int die1 = rand() % 6 + 1;
+            int die2 = rand() % 6 + 1;
+            
+            /* Incrementing the amount of diceCombinations for a specific dice combination and making sure the index starts 1 
+            below to represent an arrays row and column */
+            
+            diceCombinations[die1 - 1][die2 - 1]++; 
+        }   
+        
+        // Printing the header of the program to the user
+        
+        cout << "The combinations:" << endl;
+    
+        // Nested loop that iterates through all possible dice combinations and displays the programs results to the user
+        
+        for (int i = 0; i < 6; i++) 
+        {
+            for (int j = 0; j < 6; j++) 
+            {
+                cout << "Die 1 = " << i + 1 << " Die 2 = " << j + 1 << " occurred " << diceCombinations[i][j] << " times." << endl;
+            }
+        }
+    }
+    
+    return 0;
+}
