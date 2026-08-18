@@ -1,0 +1,85 @@
+/*
+Pseudocode:
+
+1. **Function Declaration**
+   - Declare a function `itself(int)` that takes an integer and returns an integer.
+
+2. **Main Function Begins**
+   - Declare an integer variable `x`.
+   - Prompt the user to enter a value.
+   - Read the user input into variable `x`.
+   - Call the function `itself(x)` and store the result in `recValue`.
+   - Print the result.
+
+3. **Function itself(i)**
+   - Declare a static variable `count` initialized to 0. (This variable retains its value across recursive calls.)
+   - Increment `count` by 1.
+   - If `i` is greater than 20:
+       - Print the current `count`.
+       - Store the current value of `i` in `result`.
+       - Reset `count` to 0.
+       - Return `result`.
+   - Otherwise:
+       - Call the function recursively with `i + 5`.
+       - Add the current value `i` to the result of the recursive call.
+       - Return the result.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+// Function prototype declaration for a function that takes an int and returns an int
+int itself(int i);
+
+// Beginning of the main function
+int main()
+{
+    // Declare an integer variable x to store user input
+    int x;
+ 
+    // Prompt the user to enter a value for recursion
+    cout << "Enter a value to find recursion: ";
+
+    // Read the user input and store it in variable x
+    cin >> x;
+
+    // Call the function itself with x and store the returned value in recValue
+    int recValue = itself(x);
+   
+    // Output the result of the recursive function call
+    cout << "The value is " << recValue << endl;
+  
+    return 0;
+}
+
+// Define the function itself which takes an integer i as input
+int itself(int i)
+{
+    // Declare a static integer count initialized to 0, retains value between calls
+    static int count = 0;
+
+    // Increment the count variable by 1
+    count++;
+    
+    // Check if the input value i is greater than 20
+    if (i > 20)
+    {
+        // Print the current value of count
+        cout << "count is " << count << endl;
+       
+        // Store the current value of i in result
+        int result = i;
+       
+        // Reset the count to 0 before returning
+        count = 0; 
+       
+        // Return the result value
+        return result;
+    }
+    else
+    {
+        // Recursively call itself with (i + 5) and add i to the result
+        return itself(i + 5) + i;
+    }
+}
