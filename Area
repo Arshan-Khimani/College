@@ -1,0 +1,117 @@
+/*
+1. Define a macro for PI with a value of 3.14.
+2. Declare a Circle class with a private member variable to store the radius.
+3. The class contains the following public functions:
+   - setRadius(double r): Set the radius of the circle. If the radius is negative, print an error message and set the radius to 0.
+   - getRadius(): Return the radius of the circle.
+   - getDiameter(): Return the diameter of the circle, calculated as 2 * radius.
+   - getArea(): Return the area of the circle, calculated as PI * radius^2.
+4. In the main function:
+   - Define a Circle object (c1) and two variables to hold user input for radius.
+   - Prompt the user to enter a radius for the first circle (c1).
+     - If the radius is negative, display an error message.
+   - Prompt the user to enter a radius for a second circle (c2).
+     - If the radius is negative, display an error message.
+   - Set the radius of c1 using the setRadius method.
+   - Display the radius, diameter, and area of c1.
+   - Dynamically allocate memory for a second Circle object (c2) using a pointer.
+   - Set the radius of c2 using the setRadius method.
+   - Display the radius, diameter, and area of c2 through the pointer.
+   - Free the dynamically allocated memory for c2.
+   - Return 0 to indicate successful execution.
+*/
+
+#include <iostream> 
+
+using namespace std; 
+
+// Define a macro for the value of PI
+
+#define PI 3.14 
+
+// Circle class declaration
+
+class Circle
+{
+    // Private member variable to store the radius of the circle
+    
+    private:
+        double radius; 
+   
+    public:
+        // Function to set the radius of the circle
+        
+        void setRadius(double r)  
+        {
+            if (r < 0) // Check if the radius is negative
+            {
+                cout << "Radius must be a positive value" << endl; // Display error message
+                radius = 0; // Default to 0 if negative input
+            } 
+            else
+            {
+                radius = r; // Assign valid radius value
+            }
+        }
+      
+        double getRadius() const { return radius; } // Function to return the radius
+        double getDiameter() const { return 2 * radius; } // Function to return the diameter
+        double getArea() const { return PI * radius * radius; } // Function to return the area
+};
+
+int main()
+{
+   Circle c1;     // Define an instance of the Circle class
+   double rad, rad1;  // Local variables for radius input
+
+   // Get the radius from the user.
+   
+   cout << "This program will calculate the area of a circle.\n"; // Display program purpose
+   cout << "What is the radius of c1? "; // Prompt user for radius input
+   cin >> rad; // Read user input for radius
+   
+   if (rad < 0)  // Check if user entered a negative radius
+   {
+       cout << "Radius must be a positive value" << endl; // Display error message
+   }
+   
+   cout << "What is the radius of the object pointed by c2? "; // Prompt user for another radius
+   cin >> rad1; // Read user input for second radius
+
+   if (rad1 < 0)  // Check if user entered a negative radius for c2
+   {
+       cout << "Radius must be a positive value" << endl; // Display error message
+   }
+
+   // Store the radius of the circle in the c1 object.
+   
+   c1.setRadius(rad); // Call setRadius function to store user input
+
+   // Display the circle's data.
+   
+   cout << "\nHere is the circle's data:\n"; // Print header for circle data
+   cout << "Radius: " << c1.getRadius() << endl; // Display radius
+   cout << "Diameter: " << c1.getDiameter() << endl; // Display diameter
+   cout << "Area: " << c1.getArea() << endl; // Display area
+
+   // Define a pointer to a Circle object
+   
+   Circle *c2 = new Circle; // Dynamically allocate memory for a Circle object
+   
+   // Store the radius of the circle in the c2 object.
+   
+   c2->setRadius(rad1); // Call setRadius using pointer syntax
+
+   // Display the circle's data through the pointer.
+   
+   cout << "\nHere is the circle's data through the pointer:\n"; // Print header for pointer data
+   cout << "Radius: " << c2->getRadius() << endl; // Display radius using pointer
+   cout << "Diameter: " << c2->getDiameter() << endl; // Display diameter using pointer
+   cout << "Area: " << c2->getArea() << endl; // Display area using pointer
+
+   // Free dynamically allocated memory
+   
+   delete c2; 
+
+   return 0; 
+}
