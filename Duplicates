@@ -1,0 +1,339 @@
+/*
+Pseudocode:
+
+1. Start
+2. Declare function prototypes for:
+   a. Creating and initializing an array with random values
+   b. Sorting the values in an array using Bubble Sort
+   c. Removing duplicate values from a sorted array
+   d. Printing the contents of an array
+3. In the main function:
+   a. Declare an integer variable for array size
+   b. Loop until a valid array size is entered:
+      - Prompt user for array size
+      - If the size is invalid (<= 0), display an error message and repeat
+   c. Prompt user for the seed value and store it
+   d. Seed the random number generator with the provided seed value
+   e. Create an array using the entered size
+   f. If memory allocation fails, print an error message and exit
+   g. Print the original unsorted array
+   h. Sort the array using Bubble Sort and print the sorted result
+   i. Remove duplicate elements from the sorted array and get the new size
+   j. Print the array after removing duplicates
+   k. Deallocate the dynamically allocated memory
+   l. End program
+
+4. Function `createArray(size)`:
+   a. If size is invalid (<= 0), return nullptr
+   b. Allocate memory for an array of the given size
+   c. Create pointer to traverse and fill the array
+   d. Populate the array with random values in the range 1 to 10
+   e. Return the allocated array
+
+5. Function `printArray(arr, size)`:
+   a. If the array is invalid or size is <= 0, return
+   b. Iterate through the array using a pointer
+   c. Print each element followed by a space
+   d. Print a newline at the end
+
+6. Function `sortValues(arr, size)`:
+   a. If the array is invalid or size is <= 0, return the array as is
+   b. Define a pointer to the end of the array
+   c. Use Bubble Sort algorithm to sort the array
+   d. Swap adjacent elements if needed
+   e. Return the sorted array
+
+7. Function `removeDuplicates(arr, size)`:
+   a. If the array is invalid or size is <= 0, return 0
+   b. If the array contains only one element, return 1
+   c. Create pointers to track positions for reading and writing unique elements
+   d. Loop through the array to remove duplicates
+   e. If the current element is different from the previous, copy it to the write position
+   f. Return the new size of the array
+
+8. End
+*/
+
+#include <iostream>  
+#include <iomanip>   
+#include <cstdlib>   
+
+using namespace std; 
+
+// Function to create and initialize an array with random values
+
+int* createArray(int size);
+
+// Function to sort the values in an array using the Bubble Sort algorithm
+
+int* sortValues(int *arr, int size);
+
+// Function to remove duplicate values from a sorted array
+
+int removeDuplicates(int *arr, int size);
+
+// Function to print the contents of an array
+
+void printArray(int* arr, int size);
+
+int main() 
+{
+    // Declare an integer variable for array size
+    
+    int size;
+    
+    // Get and validate array size
+    
+    do 
+    {
+        // Prompt user for array size and read user input for size
+         
+        cout << "Enter the size of the array: ";
+        cin >> size; 
+        
+        // Check if entered size is invalid
+        
+        if (size <= 0) 
+        {
+            // Inform user of invalid input
+            
+            cout << "Array size must be greater than 0." << endl; 
+        }
+    } while (size <= 0);  // Repeat until a valid size is entered
+
+    // Get seed value for random number generation
+    
+    cout << "Enter the seed value: "; 
+    int seed;
+    cin >> seed; 
+
+    // Seed the random number generator with the provided seed value
+    
+    srand(seed);
+
+    // Create an array dynamically using the provided size
+    
+    int* values = createArray(size);
+    
+    // Check if memory allocation was successful
+    
+    if (!values) 
+    {
+        // Print error message if allocation fails
+        
+        cout << "Memory allocation failed" << endl; 
+        
+        return 1; 
+    }
+
+    // Print the original unsorted array
+    
+    cout << "The original array is : ";
+    printArray(values, size);
+
+    // Sort the array and print the sorted result
+    
+    cout << "The sorted array is : ";
+    values = sortValues(values, size);
+    printArray(values, size);
+
+    // Remove duplicate elements from the sorted array and get the new size
+    
+    int newSize = removeDuplicates(values, size);
+    
+    // Print the array after removing duplicates
+    
+    cout << "The array after removing non duplicates is : ";
+    printArray(values, newSize);
+
+    // Free allocated memory to prevent memory leaks
+    
+    delete[] values;
+    
+    return 0; 
+}
+
+// Function to create an array filled with random numbers
+
+int* createArray(int size) 
+{
+    // Ensure size is valid before proceeding
+    
+    if (size <= 0) 
+    {
+        // Return null if size is invalid
+        
+        return nullptr; 
+    }
+    
+    // Allocate memory for the array dynamically
+    
+    int* arr = new int[size];
+    
+    // Pointer to traverse and fill the array
+    
+    int* ptr = arr;
+    
+    // Populate the array with random values in the range 1 to 10
+    for (int i = 0; i < size; i++) 
+    {
+        // Assign a random value to the current position
+        
+        *ptr = (rand() % 10) + 1; 
+        
+        // Move pointer to the next position
+        
+        ptr++; 
+    }
+    
+    // Return arr
+    
+    return arr; 
+}
+
+// Function to print the elements of an array
+
+void printArray(int* arr, int size) 
+{
+    // Ensure the array is valid before printing
+    
+    if (!arr || size <= 0) 
+    {
+        // Exit function if array is null
+        
+        return; 
+    }
+    
+    // Pointer to traverse the array
+    
+    int* ptr = arr;
+    
+    // Loop through the array elements
+    
+    for (int i = 0; i < size; i++) 
+    {
+        // Print the value pointed to by ptr
+        
+        cout << *ptr << " "; 
+        
+        // Move to the next element
+        
+        ptr++; 
+    }
+    
+    // Print a newline 
+    
+    cout << endl; 
+}
+
+// Function to sort the array using Bubble Sort
+
+int* sortValues(int *arr, int size) 
+{
+    // Ensure the array is valid before sorting
+    
+    if (!arr || size <= 0) 
+    {
+        // Return the array as is if invalid
+        
+        return arr; 
+    }
+    
+    // Define a pointer to the end of the array
+    
+    int* end = arr + size;
+    
+    // Outer loop to control the number of passes
+    
+    for (int* i = arr; i < end - 1; i++) 
+    {
+        // Inner loop to compare and swap adjacent elements if needed
+        
+        for (int* j = arr; j < end - 1 - (i - arr); j++) 
+        {
+            // Swap if the left element is greater than the right
+            
+            if (*j > *(j + 1)) 
+            {
+                // Store the current element in a temporary variable
+                
+                int temp = *j;
+                
+                // Swap the current element with the next element
+                 
+                *j = *(j + 1);
+                
+                // Assign the stored temporary value to the next element
+                
+                *(j + 1) = temp;
+            }
+        }
+    }
+    
+    // Return the sorted array
+    
+    return arr; 
+}
+
+// Function to remove duplicate elements from a sorted array
+
+int removeDuplicates(int *arr, int size) 
+{
+    // Ensure the array is valid before proceeding
+    
+    if (!arr || size <= 0) 
+    {
+        // Return 0 if the array is null 
+        
+        return 0; 
+    }
+
+    // If the array contains only one element, return the same size
+    
+    if (size == 1) 
+    {
+        return 1;
+    }
+    
+    // Pointer to track the position for writing unique elements
+    
+    int* write = arr + 1;
+    
+    // Pointer to read through the array
+    
+    int* read = arr + 1;
+    
+    // Initialize the new size counter with 1 
+    
+    int newSize = 1;
+    
+    // Loop through the array to remove duplicates
+    
+    while (read < arr + size) 
+    {
+        // If the current element is different from the previous, copy it
+        
+        if (*read != *(read - 1)) 
+        {
+            // Write the unique element
+            
+            *write = *read; 
+            
+            // Move write pointer
+            
+            write++; 
+            
+            // Increase new size count
+            
+            newSize++; 
+        }
+        
+        // Move read pointer to the next element
+        
+        read++; 
+    }
+    
+    // Return the new size of the array 
+    
+    return newSize; 
+}
