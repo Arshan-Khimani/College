@@ -1,0 +1,281 @@
+/*
+Pseudocode:
+
+1. Include necessary libraries for input/output, formatting, and random number generation.
+
+2. Define a constant SIZE for the array (40).
+
+3. Declare function prototypes for:
+   - printArray(randArray): to print elements of an array.
+   - bubbleSort(list): to perform bubble sort on an array of integer pointers.
+   - printPointerArray(ptrArray): to print elements of an array of pointers along with their pointed values.
+   - swapIntPtr(xptr, yptr): to swap two integer pointers.
+
+4. In the main() function:
+   - Declare an integer variable to hold the seed value.
+   - Prompt user for seed input and read the seed value from user input.
+   - Set the seed for the random number generator.
+   - Declare an integer array of size SIZE and initialize it with zeros.
+   - Declare an array of integer pointers.
+
+5. Loop to fill the dataArray with random values between 0 and 2999:
+   - Assign a random number to each index of dataArray.
+
+6. Print a message before displaying the data array and call printArray() to show dataArray.
+
+7. Loop to initialize pointerArray with addresses of dataArray elements:
+   - Assign the address of dataArray[index] to pointerArray[index].
+
+8. Print a message before displaying pointer array and call printPointerArray() to show pointerArray.
+
+9. Call bubbleSort() to sort the pointer array.
+
+10. Print a message after sorting pointer array and call printPointerArray() to show the sorted pointer array.
+
+11. Print a message after sorting data array and call printArray() to show dataArray.
+
+12. Define the printArray(randArray) function:
+    - Loop through the array and print each element with formatting.
+    - Print a new line after every 10 elements for better readability.
+    - Print a new line at the end.
+
+13. Define the printPointerArray(ptrArray) function:
+    - Loop through the pointer array and print each pointer's address and the value it points to.
+    - Print a new line after every 10 elements for better readability.
+    - Print a new line at the end.
+
+14. Define the swapIntPtr(xptr, yptr) function:
+    - Declare a temporary pointer to store one of the values during swap.
+    - Swap the values of the two pointers.
+
+15. Define the bubbleSort(list) function:
+    - Outer loop controls the number of passes.
+    - Inner loop performs comparisons and swaps adjacent elements if needed.
+    - Compare values pointed to by the pointers and swap if necessary using swapIntPtr().
+*/
+
+#include <iostream>
+#include <iomanip>  
+#include <cstdlib>  
+#include <ctime>    
+
+using namespace std;
+
+// Define a constant SIZE for the array
+
+#define SIZE 40
+
+// Function to print elements of an array
+
+void printArray(int randArray[]);
+
+// Function to perform bubble sort on an array of integer pointers
+
+void bubbleSort(int* list[]);
+
+// Function to print elements of an array of pointers along with their pointed values
+
+void printPointerArray(int* ptrArray[]);
+
+// Function to swap two integer pointers
+
+void swapIntPtr(int** xptr, int** yptr);
+
+int main()
+{
+    // Declare a variable to hold the seed value
+    
+    int seed;
+    
+    // Prompt user for seed input
+    
+    cout << "Enter seed: ";
+    
+    // Read the seed value from user input
+    
+    cin >> seed;
+    
+    // Set the seed for the random number generator
+    
+    srand(seed);
+
+    // Declare an integer array of size SIZE and initialize it with zeros
+    
+    int dataArray[SIZE] = { 0 };
+    
+    // Declare an array of integer pointers
+    
+    int* pointerArray[SIZE];
+    
+    // Loop to fill the dataArray with random values between 0 and 2999
+    
+    for (int index = 0; index < SIZE; index++)
+    {
+        // Assign a random number to each index of dataArray
+        
+        dataArray[index] = rand() % 3000;
+    }
+
+    // Print message before displaying the data array
+    
+    printf("Before Sorting, values in Data Array:\n");
+    
+    // Call function to print dataArray
+    
+    printArray(dataArray);
+    
+    // Print a new line for spacing
+    
+    printf("\n");
+
+    // Loop to initialize pointerArray with addresses of dataArray elements
+    
+    for (int index = 0; index < SIZE; index++)
+    {
+        // Assign address of dataArray[index] to pointerArray[index]
+        
+        pointerArray[index] = &dataArray[index];
+    }
+    
+    // Print message before displaying pointer array
+    
+    printf("Before Sorting, values in Pointer Array and the value it is pointing at:\n");
+    
+    // Call function to print pointerArray
+    
+    printPointerArray(pointerArray);
+    
+    // Print a new line for spacing
+    
+    printf("\n");
+
+    // Call function to sort the pointer array using bubble sort
+    
+    bubbleSort(pointerArray);
+
+    // Print a new line for spacing
+    
+    printf("\n");
+    
+    // Print message after sorting pointer array
+    
+    printf("After Sorting, values in Pointer Array and the value it is pointing at:\n");
+    
+    // Call function to print sorted pointer array
+    
+    printPointerArray(pointerArray);
+    
+    // Print a new line for spacing
+    
+    printf("\n");
+
+    // Print a new line for spacing
+    
+    printf("\n");
+    
+    // Print message after sorting data array 
+    
+    printf("After Sorting, values in Data Array:\n");
+    
+    // Call function to print dataArray
+    
+    printArray(dataArray);
+    
+    // Print a new line for spacing
+    
+    printf("\n");
+
+    return 0;
+}
+
+// Function to print the elements of an array
+
+void printArray(int randArray[])
+{
+    // Loop through the array and print each element with formatting
+    
+    for (int index = 0; index < SIZE; index++)
+    {
+        // Print each value with a width of 6
+        
+        cout << setw(6) << randArray[index];
+        
+        // Print a new line after every 10 elements for better readability
+        
+        if ((index + 1) % 10 == 0)
+        {
+            // Adding a blank line
+            
+            cout << endl;
+        }
+    }
+    
+    // Print a new line at the end
+    
+    cout << endl;
+}
+
+// Function to print the elements of the pointer array along with the values they point to
+
+void printPointerArray(int* ptrArray[])
+{
+    // Loop through the pointer array and print each pointer's address and the value it points to
+    
+    for (int index = 0; index < SIZE; index++)
+    {
+        // Print the address stored in the pointer and the value it points to
+        
+        cout << setw(8) << ptrArray[index] << " " << setw(6) << *ptrArray[index];
+        
+        // Print a new line after every 10 elements for better readability
+        
+        if ((index + 1) % 10 == 0)
+        {
+            // Adding a blank line
+            
+            cout << endl;
+        }
+    }
+    
+    // Print a new line at the end
+    
+    cout << endl;
+}
+
+// Function to swap two integer pointers
+
+void swapIntPtr(int** xptr, int** yptr)
+{
+    // Declare a temporary pointer to store one of the values during swap
+    
+    int* temp = *xptr;
+    
+    // Swap the values of the two pointers
+    
+    *xptr = *yptr;
+    *yptr = temp;
+}
+
+// Function to perform bubble sort on an array of integer pointers
+
+void bubbleSort(int* list[])
+{
+    // Outer loop controls the number of passes
+    
+    for (int i = SIZE - 1; i > 0; i--)
+    {
+        // Inner loop performs comparisons and swaps adjacent elements if needed
+        
+        for (int j = 0; j < i; j++)
+        {
+            // Compare values pointed to by the pointers and swap if necessary
+            
+            if (*list[j] > *list[j + 1])
+            {
+                // Call function to swap the two pointers
+                
+                swapIntPtr(&list[j], &list[j + 1]);
+            }
+        }
+    }
+}
