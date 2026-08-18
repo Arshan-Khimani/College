@@ -1,0 +1,72 @@
+/* This program gets ten whole numbers from the user and displays a count of: the number of zeroes, the number of negative values, 
+and the number of positive values entered, followed by the product of the negative numbers entered, and the sum of the positive 
+values entered.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    /* Creating integer variables called: num, sumPositive which is equal to 0, productNegative which is equal to 1, countPositive
+    which is equal to 0, countNegative which is equal to 0, countZeroes which is equal to 0 */
+    
+    int num, sumPositive = 0, productNegative = 1, countPositive = 0, countNegative = 0, countZeroes = 0;
+    
+    /* Creating a countNum variable as an integer and setting it equal to 1, and as long as countNum is less than or equal to 10, 
+    this for loop will continue to run and will increament by 1 each time */
+    
+    for (int countNum = 1; countNum <= 10; countNum ++)
+    {
+        // Asking the user to enter a whole number and storing the user input in the num variable
+        
+        cout << "Enter whole number " << countNum << ": ";
+        cin >> num;
+        
+        // If num is greater than 0, this if statement will run
+        
+        if (num > 0)
+        {
+            sumPositive += num;
+            countPositive++;
+        }
+        
+        // If num is less than 0, this statement will run
+        
+        else if (num < 0)
+        {
+            productNegative *= num;
+            countNegative++;
+        }
+        
+        // If num is not less than 0 and it is not greater than 0, this statement will run
+        
+        else
+        {
+            countZeroes++;
+        }
+    }
+    
+    // Adding a blank line
+    
+    cout << endl;
+    
+    // Displaying the count (number) of zeroes, negative, and positive numbers to the user
+    
+    cout << "Of the 10 numbers entered:" << endl;
+    cout << "\t" << countZeroes << " were 0's." << endl;
+    cout << "\t" << countNegative << " were negative." << endl;
+    cout << "\t" << countPositive << " were positive." << endl;
+    
+    // Adding a blank line
+    
+    cout << endl;
+    
+    // Displaying the product of the negative numbers and the sum of the positive numbers to the user
+    
+    cout << "The product of the negative numbers was " << productNegative << "." << endl;
+    cout << "The sum of the positive numbers was " << sumPositive << "." << endl;
+
+    return 0;
+}
