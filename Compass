@@ -1,0 +1,147 @@
+// This program converts the compass heading inputted by the user to a conventional bearing and displayes the results to the user
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+// Creating a getCompassHeading function as a double with no parameters
+
+double getCompassHeading() 
+{
+    // Creating a double variable named compassHeading
+    
+    double compassHeading;
+    
+    // Asking the user to enter a compass heading from 0-360 degrees and storing the user input in the compassHeading variable
+    
+    cout << "Enter a compass heading [0-360 degrees]: ";
+    cin >> compassHeading;
+
+    // This while loop will run as long as the compassHeading is not from 0-360 degrees
+    
+    while (compassHeading < 0 || compassHeading > 360) 
+    {
+        // This error message will be displayed if the compassHeading is not from 0-360 degrees
+        
+        cout << endl << "Error invalid heading entered." << endl;
+        cout << "Enter a compass heading [0-360 degrees]: ";
+        cin >> compassHeading;
+    }
+    
+    // Returning the compassHeading variable
+    
+    return compassHeading;
+}
+
+// Creating a getBearing function with no return with compassHeading, directionToFace, angle, and directionToWalk as parameters
+
+void getBearing(double compassHeading, string &directionToFace, double &angle, string &directionToWalk) 
+{
+    // If the compassHeading is equal to 0, this if statement will execute
+    
+    if (compassHeading == 0) 
+    {
+        directionToFace = "North";
+        angle = 0;
+        directionToWalk = "East";
+    } 
+    
+    // If the compassHeading is equal to 90, this statement will execute
+    
+    else if (compassHeading == 90)
+    {
+        directionToFace = "North";
+        angle = 90;
+        directionToWalk = "East";
+    }
+    
+    // If the compassHeading is equal to 180, this statement will execute
+    
+    else if (compassHeading == 180) 
+    { 
+        directionToFace = "South";
+        angle = 0;
+        directionToWalk = "East";
+    } 
+    
+    // If the compassHeading is equal to 270, this statement will execute
+    
+    else if (compassHeading == 270) 
+    { 
+        directionToFace = "North";
+        angle = 360-270;
+        directionToWalk = "West";
+    }
+    
+    // If the compassHeading is equal to 360, this statement will execute
+    
+    else if (compassHeading == 360) 
+    { 
+        directionToFace = "North";
+        angle = 0;
+        directionToWalk = "West";
+    } 
+    
+    // If the compassHeading is greater than 0 and less than 90, this statement will execute
+    
+    else if (compassHeading > 0 && compassHeading < 90)
+    {
+        directionToFace = "North";
+        angle = compassHeading;
+        directionToWalk = "East";
+    }
+    
+    // If the compassHeading is greater than 90 and less than 180, this statement will execute
+    
+    else if (compassHeading > 90 && compassHeading < 180)
+    {
+        directionToFace = "South";
+        angle = 180 - compassHeading;
+        directionToWalk = "East";
+    }
+    
+    // If the compassHeading is greater than 180 and less than 270, this statement will execute
+    
+    else if (compassHeading > 180 && compassHeading < 270)
+    {
+        directionToFace = "South";
+        angle = compassHeading - 180;
+        directionToWalk = "West";
+    }
+    
+    // If none of the above statements are true, this will run
+    
+    else
+    {
+        directionToFace = "North";
+        angle = 360 - compassHeading;
+        directionToWalk = "West";
+    }
+}
+
+int main() 
+{
+    // Creating compassHeading, angle variables as a double
+    
+    double compassHeading, angle;
+    
+    // Creating directionToFace, directionToWalk variables as a string
+    
+    string directionToFace, directionToWalk;
+
+    // Setting the compassHeading variable equal to the getCompassHeading function
+    
+    compassHeading = getCompassHeading();
+    
+    // Calling the getBearing function along with its arguments
+    
+    getBearing(compassHeading, directionToFace, angle, directionToWalk);
+
+    // Displaying the final results of the conventional bearing to the user with proper formatting
+    
+    cout << fixed << setprecision(1);
+    cout << directionToFace << " " << angle << " degrees " << directionToWalk << endl;
+
+    return 0;
+}
