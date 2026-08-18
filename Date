@@ -1,0 +1,200 @@
+/*
+Pseudocode:
+
+1. **Includes and Using Directive**
+   - Includes standard libraries (`<iostream>`, `<string>`) and `"Date.h"` for `Date` class.
+   - Uses `std` namespace for easier access to standard library functions.
+
+2. **Function Prototypes**
+   - Declares prototypes for functions `getMonth()`, `getDay()`, `getYear()`, and `getHour()` which will parse different components of the date string.
+
+3. **Main Function**
+   - Declares integer variables (`month`, `day`, `year`, `hour`) for storing parts of a date.
+   - Defines constants for the number of dates in arrays used for subtraction and relational comparisons (`NUM_DATES_SUBTRACT` and `NUM_DATES_RELATIONAL`).
+   - Initializes two arrays (`dateArraySubtract` and `dateArrayRelational`) containing date strings in "MM/DD/YYYY/HH" format.
+
+4. **Title and Underline for Relational Operators Output**
+   - Prints a title (`"Overloaded relational operators"`) and an underline for the output section.
+   - Declares two `Date` objects (`d1` and `d2`) for comparisons.
+   - Uses nested loops to compare all combinations of dates from `dateArrayRelational` using overloaded relational operators (`<`, `==`, `<=`), and displays the results.
+
+5. **Title and Underline for Subtraction Operator Output**
+   - Prints a new title (`"Overloaded - operator"`) and an underline for the output section of the subtraction operation.
+   - Uses nested loops to calculate the difference in hours between date pairs from `dateArraySubtract` using the overloaded `-` operator, and displays the difference.
+
+6. **Functions to Extract Date Components**
+   - `getMonth()`: Extracts the month part from the date string by locating the first slash and converting the substring to an integer.
+   - `getDay()`: Extracts the day part by locating the slashes and using substring manipulation to convert the day to an integer.
+   - `getYear()`: Extracts the year part from the date string by identifying the second and third slashes.
+   - `getHour()`: Extracts the hour part by finding the last slash in the string and converting the substring following it to an integer.
+
+7. **Return Statement**
+   - `return 0;` signifies the successful completion of the program.
+
+*/
+
+#include <iostream>
+#include <string>
+#include "Date.h"
+
+using namespace std;
+
+// Function prototypes for extracting parts of the date string
+int getMonth(string d);
+int getDay(string d);
+int getYear(string d);
+int getHour(string d);
+
+int main()
+{
+    // Declare variables to hold the individual components of the date (month, day, year, hour)
+    int month, day, year, hour;
+
+    // Define constants for the number of date arrays for subtraction and relational comparisons
+    const int NUM_DATES_SUBTRACT = 4, NUM_DATES_RELATIONAL = 5;
+
+    // Define sample date arrays (strings in "MM/DD/YYYY/HH" format)
+    string dateArraySubtract[NUM_DATES_SUBTRACT] = {"01/01/2097/20", "02/12/2098/00", "02/13/2100/13","12/31/2103/23"};
+    string dateArrayRelational[NUM_DATES_RELATIONAL] = {"01/01/2097/20", "01/01/2097/21", "01/02/2097/20","02/01/2097/20", "01/01/2098/20"};
+
+    // Create a title for displaying relational operator output
+    string title = "Overloaded relational operators";
+    string underline;
+    underline.assign(title.length(), '-'); // Create an underline string of same length as title
+
+    // Display the title and the underline
+    cout << title << endl << underline << endl;
+
+    // Declare Date objects for relational comparisons
+    Date d1, d2;
+
+    // Nested loop to compare all combinations of dates in the relational array
+    for (int i = 0; i < NUM_DATES_RELATIONAL; i++)
+        for (int j = 0; j < NUM_DATES_RELATIONAL; j++)
+        {
+            // Parse the month, day, year, and hour from the first date string
+            month = getMonth(dateArrayRelational[i]);
+            day = getDay(dateArrayRelational[i]);
+            year = getYear(dateArrayRelational[i]);
+            hour = getHour(dateArrayRelational[i]);
+            d1.set(month, day, year, hour);
+
+            // Print d1 information
+            cout << endl << "============================================\n";
+            cout << "d1: ";
+            d1.print();
+
+            // Parse the month, day, year, and hour from the second date string
+            month = getMonth(dateArrayRelational[j]);
+            day = getDay(dateArrayRelational[j]);
+            year = getYear(dateArrayRelational[j]);
+            hour = getHour(dateArrayRelational[j]);
+            d2.set(month, day, year, hour);
+
+            // Print d2 information
+            cout << ", d2: ";
+            d2.print();
+            cout << endl;
+
+            // Compare and display results for relational operators
+            if (d1 < d2) 
+            {
+                cout << "(d1 < d2) ";
+            }
+            
+            if (d2 < d1)
+            {
+                cout << "(d2 < d1) ";
+            }
+            
+            if (d1 == d2) 
+            {
+                cout << "(d2 == d1) ";
+            }
+            
+            if (d1 <= d2) 
+            {
+                cout << "(d1 <= d2) ";
+            }
+            
+            if (d2 <= d1) 
+            {
+                cout << "(d2 <= d1) ";
+            }
+        }
+
+    // Create a new title for displaying subtraction operator output
+    title = "Overloaded - operator";
+    underline.assign(title.length(), '-'); // Create an underline string of same length as title
+
+    // Display the title and the underline for subtraction operator output
+    cout << endl << endl << title << endl << underline << endl;
+
+    // Nested loop to calculate differences between date pairs in the subtraction array
+    for (int i = 0; i < NUM_DATES_SUBTRACT; i++)
+        for (int j = 0; j < NUM_DATES_SUBTRACT; j++)
+        {
+            // Parse the month, day, year, and hour from the first date string
+            month = getMonth(dateArraySubtract[i]);
+            day = getDay(dateArraySubtract[i]);
+            year = getYear(dateArraySubtract[i]);
+            hour = getHour(dateArraySubtract[i]);
+            d1.set(month, day, year, hour);
+
+            // Print d1 information
+            cout << endl << "============================================\n";
+            cout << "d1: ";
+            d1.print();
+
+            // Parse the month, day, year, and hour from the second date string
+            month = getMonth(dateArraySubtract[j]);
+            day = getDay(dateArraySubtract[j]);
+            year = getYear(dateArraySubtract[j]);
+            hour = getHour(dateArraySubtract[j]);
+            d2.set(month, day, year, hour);
+
+            // Print d2 information
+            cout << ", d2: ";
+            d2.print();
+            cout << endl;
+
+            // Calculate the difference in hours between d2 and d1
+            cout << "d2 - d1 = " << d2 - d1 << " hours"<< endl;
+        }
+        
+    return 0; // Return 0 
+}
+
+// Function to extract the month (MM) from the date string (e.g., "MM/DD/YYYY/HH")
+int getMonth(string d)
+{
+    size_t slashPos = d.find('/'); // Find the first slash 
+   
+    return stoi(d.substr(0, slashPos)); // Extract the month substring and convert to integer
+}
+
+// Function to extract the day (DD) from the date string
+int getDay(string d) 
+{
+    size_t firstSlash = d.find('/'); // Find the first slash
+    size_t secondSlash = d.find('/', firstSlash + 1); // Find the second slash
+   
+    return stoi(d.substr(firstSlash + 1, secondSlash - firstSlash - 1)); // Extract the day substring
+}
+
+// Function to extract the year (YYYY) from the date string
+int getYear(string d) 
+{
+    size_t secondSlash = d.find('/', d.find('/') + 1); // Find the second slash
+    size_t thirdSlash = d.find('/', secondSlash + 1); // Find the third slash
+  
+    return stoi(d.substr(secondSlash + 1, thirdSlash - secondSlash - 1)); // Extract the year substring
+}
+
+// Function to extract the hour (HH) from the date string
+int getHour(string d) 
+{
+    size_t lastSlash = d.rfind('/'); // Find the last slash (delimiter)
+  
+    return stoi(d.substr(lastSlash + 1)); // Extract the hour substring
+}
