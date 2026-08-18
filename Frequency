@@ -1,0 +1,93 @@
+/*
+Pseudocode:
+1. Read an integer seed from user input.
+2. Use the seed to initialize the random number generator.
+3. Define constants:
+   - MAX_SIZE (100) for the number of random values.
+   - MAX_NUM (30) for the range of random values (0 to MAX_NUM-1).
+4. Declare an array 'data' to store MAX_SIZE random numbers.
+5. Declare an array 'cnt' initialized to 0 to store frequency counts of numbers from 0 to MAX_NUM-1.
+6. Populate 'data' with random numbers in the range [0, MAX_NUM-1].
+7. Call function 'freq' to count occurrences of each number in 'data'.
+8. Print numbers and their occurrence counts if they appear at least once.
+9. Define 'freq' function:
+   - Iterate over 'data' array and update the 'cnt' array based on occurrences.
+*/
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+// Function prototype for freq function
+
+void freq(int[], int, int[]);
+
+int main()
+{
+    // Creating an integer variable called seed
+    
+    int seed;
+    
+    // Read seeding from user input and initializing random number generator with seed
+    
+    cin >> seed;
+    srand(seed);
+    
+    // Creating two integer constants called MAX_SIZE and MAX_NUM
+    
+    const int MAX_SIZE = 100;
+    const int MAX_NUM = 30;
+    
+    // Array to store random numbers
+    
+    int data[MAX_SIZE];
+    
+    // Array to store frequency counts, initialized to 0
+    
+    int cnt[MAX_NUM] = {0};
+    
+    // Creating the variable for the loop
+    
+    int i;
+    
+    // Generate MAX_SIZE random numbers in the range [0, MAX_NUM-1]
+    
+    for (i = 0; i < MAX_SIZE; ++i) 
+    {
+        // Assign a random number between 0 and MAX_NUM-1
+        
+        data[i] = rand() % MAX_NUM; 
+    }
+    
+    // Call function to count occurrences of each number
+    
+    freq(data, MAX_SIZE, cnt);
+    
+    // Iterate through cnt array to print numbers that occurred at least once
+    
+    for (i = 0; i < MAX_NUM; ++i) 
+    {
+        // If the number occurred at least once, this will display 
+        
+        if(cnt[i] > 0)
+        {
+            cout << i << " occurs " << cnt[i] << " times" << endl;
+        }
+    }
+}
+
+// Function to count occurrences of each number in the data array
+
+void freq(int data[], int sz, int cnt[])
+{
+    // Iterating through the data array
+    
+    for (int i = 0; i < sz; ++i) 
+    {
+        // Incramenting the count
+        
+        ++cnt[data[i]];
+    }
+}
