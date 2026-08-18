@@ -1,0 +1,139 @@
+/*  
+Pseudocode:
+1. Include necessary libraries for input-output operations, random number generation, and string handling.
+2. Define the main function.
+3. Declare arrays containing different parts of a sentence:
+   - Articles
+   - Nouns
+   - Verbs
+   - Prepositions
+4. Declare a string variable to store the generated sentence.
+5. Declare an integer variable to store the seed value for random number generation.
+6. Prompt the user to enter a seed value.
+7. Read the seed value from user input.
+8. Initialize the random number generator using the provided seed.
+9. Loop 8 times to generate 8 random sentences:
+   a. Reset the sentence variable to an empty string.
+   b. Append a randomly selected article, followed by a space.
+   c. Append a randomly selected noun, followed by a space.
+   d. Append a randomly selected verb, followed by a space.
+   e. Append a randomly selected preposition, followed by a space.
+   f. Append another randomly selected article, followed by a space.
+   g. Append another randomly selected noun, followed by a period.
+   h. Capitalize the first letter of the sentence.
+   i. Print the generated sentence.
+10. End the program 
+*/
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    // Array of articles
+    
+    string article[] = { "the", "a", "one", "some", "any" };  
+    
+    // Array of nouns
+    
+    string noun[] = { "boy", "girl", "dog", "town", "car" };  
+    
+    // Array of verbs
+    
+    string verb[] = { "drove", "jumped", "ran", "walked", "skipped" };  
+    
+    // Array of prepositions
+    
+    string preposition[] = { "to", "from", "over", "under", "on" };  
+    
+    // String variable to store the generated sentence
+    
+    string sentence = ""; 
+
+    // Variable to store the seed value for random number generation
+    
+    int seed; 
+
+    // Prompts the user to enter a seed value
+    
+    cout << "Enter a seed Value: "; 
+    
+    // Takes input from the user and stores it in the seed variable
+    
+    cin >> seed; 
+
+    // Seeds the random number generator with the provided seed value
+    
+    srand(seed); 
+
+    // Loop to generate 8 random sentences
+    
+    for (int i = 0; i < 8; i++) 
+    {
+        // Resets the sentence for each iteration
+        
+        sentence = ""; 
+        
+        // Appends a random article
+        
+        sentence += article[rand() % 5]; 
+        
+        // Adds a space between words
+        
+        sentence += " "; 
+        
+        // Appends a random noun
+        
+        sentence += noun[rand() % 5]; 
+        
+        // Adds a space
+        
+        sentence += " "; 
+        
+        // Appends a random verb
+        
+        sentence += verb[rand() % 5]; 
+        
+        // Adds a space
+        
+        sentence += " "; 
+        
+        // Appends a random preposition
+        
+        sentence += preposition[rand() % 5]; 
+        
+        // Adds a space
+        
+        sentence += " "; 
+        
+        // Appends another random article
+        
+        sentence += article[rand() % 5]; 
+        
+        // Adds a space
+        
+        sentence += " "; 
+        
+        // Appends another random noun
+        
+        sentence += noun[rand() % 5]; 
+        
+        // Adds a period to end the sentence
+        
+        sentence += "."; 
+
+        // Converts the first letter to uppercase
+        
+        sentence[0] = 'A' + (sentence[0] - 'a'); 
+        
+        // Prints the generated sentence to the console
+        
+        cout << sentence << endl; 
+    }
+
+    return 0; 
+}
