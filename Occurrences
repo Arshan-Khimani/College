@@ -1,0 +1,269 @@
+/*
+Pseudocode:
+
+1. Start
+2. Declare function prototypes for:
+   a. Creating and initializing an array with random values
+   b. Counting occurrences of a specific element in an array
+   c. Printing the contents of an array
+3. In the main function:
+   a. Declare integer variables for:
+      - Array size
+      - Search element
+      - Random seed
+   b. Loop until a valid array size is entered:
+      - Prompt user for array size
+      - If the size is invalid (<= 0), display an error message and repeat
+   c. Prompt user for the seed value and store it
+   d. Create an array using the entered size and seed
+   e. If memory allocation fails, print an error message and exit
+   f. Inform the user and print the contents of the array
+   g. Prompt user to enter an element to search for in the array
+   h. Count the occurrences of the given element in the array and display the count
+   i. Deallocate the dynamically allocated memory
+   j. End program
+
+4. Function `createArray(size, seed)`:
+   a. If size is invalid (<= 0), return nullptr
+   b. Seed the random number generator with the provided seed value
+   c. Allocate memory for an array of the given size
+   d. Create pointer to traverse and fill the array
+   e. Populate the array with random values in the range 0 to 49
+   f. Return the allocated array
+
+5. Function `printArray(arr, size)`:
+   a. If the array is invalid or size is <= 0, return
+   b. Iterate through the array using a pointer
+   c. Print each element separated by a space
+   d. Print a newline at the end
+
+6. Function `countOccurrences(arr, size, element)`:
+   a. If the array is invalid or size is <= 0, return 0
+   b. Initialize count variable to 0
+   c. Iterate through the array using a pointer
+   d. Compare each element with the search element
+   e. If a match is found, increment the count
+   f. Return the count
+
+7. End
+*/
+
+#include <iostream>  
+#include <iomanip>   
+#include <cstdlib>   
+
+using namespace std; 
+
+// Function to create and initialize an array with random values
+
+int* createArray(int size, int seed);
+
+// Function to count occurrences of a specific element in an array
+
+int countOccurrences(int *arr, int size, int element);
+
+// Function to print the contents of an array
+
+void printArray(int* arr, int size);
+
+int main() 
+{
+    // Declare integer variables for array size, search element, and random seed
+    
+    int size, element, seed;
+    
+    // Get and validate array size
+    
+    do 
+    {
+        // Prompt user for array size and read user input for size
+        
+        cout << "Enter the size of the array: "; 
+        cin >> size; 
+        
+        // Check if entered size is invalid
+        
+        if (size <= 0) 
+        {
+            // Inform user of invalid input
+            
+            cout << "Array size must be greater than 0." << endl; 
+        }
+    } while (size <= 0);    // Repeat until a valid size is entered
+
+    // Get seed value for random number generation and read user input for seed
+    
+    cout << "Enter the seed value: "; 
+    cin >> seed; 
+
+    // Create an array dynamically using the provided size and seed value
+    
+    int* values = createArray(size, seed);
+    
+    // Check if memory allocation was successful
+    
+    if (!values) 
+    {
+        // Print error message if allocation fails
+        
+        cout << "Memory allocation failed" << endl; 
+        
+        return 1; 
+    }
+    
+    // Inform user about the array elements
+    
+    cout << "The array elements are: " << endl;
+    
+    // Print the contents of the array
+    
+    printArray(values, size);
+    
+    // Prompt user to enter an element to search for in the array and store in element
+    
+    cout << "Enter the element for which you want to find the count: ";
+    cin >> element; 
+
+    // Count occurrences of the given element in the array
+    
+    int count = countOccurrences(values, size, element);
+    
+    // Display the count of occurrences
+    
+    cout << "The occurrence of " << element << " in the array is " << count << endl;
+    
+    // Free allocated memory to prevent memory leaks
+    
+    delete[] values;
+    
+    return 0; 
+}
+
+// Function to create an array filled with random numbers
+
+int* createArray(int size, int seed) 
+{
+    // Ensure size is valid before proceeding
+    
+    if (size <= 0) 
+    {
+        // Return null if size is invalid
+        
+        return nullptr; 
+    }
+    
+    // Seed the random number generator with the provided seed value
+    
+    srand(seed);
+    
+    // Allocate memory for the array dynamically
+    
+    int* arr = new int[size];
+    
+    // Pointer to traverse and fill the array
+    
+    int* ptr = arr;
+    
+    // Populate the array with random values in the range 0 to 49
+    
+    for (int i = 0; i < size; i++) 
+    {
+        // Assign a random value to the current position
+        
+        *ptr = rand() % 50; 
+        
+        // Move pointer to the next position
+        
+        ptr++; 
+    }
+    
+    // Return arr
+    
+    return arr; 
+}
+
+// Function to print the elements of an array
+
+void printArray(int* arr, int size) 
+{
+    // Ensure the array is valid before printing
+    
+    if (!arr || size <= 0) 
+    {
+        // Exit function if array is null 
+        
+        return; 
+    }
+
+    // Pointer to traverse the array
+    
+    int* ptr = arr;
+    
+    // Loop through the array elements
+    
+    for (int i = 0; i < size; i++)  
+    {
+        // Print the value pointed to by ptr
+        
+        cout << *ptr; 
+
+        // Print a space between numbers if this is not the last element
+        
+        if (i < size - 1)  
+        {
+            cout << " ";
+        }
+       
+        // Move to the next element
+        
+        ptr++;
+    }
+    
+    // Print newline after printing all elements
+    
+    cout << " " << endl; 
+}
+
+// Function to count occurrences of a given element in an array
+
+int countOccurrences(int *arr, int size, int element) 
+{
+    // Ensure the array is valid before proceeding
+    
+    if (!arr || size <= 0) 
+    {
+        // Return 0 if the array is null
+        
+        return 0; 
+    }
+    
+    // Initialize count variable to store the number of times element appears
+    
+    int count = 0;
+    
+    // Pointer to traverse the array
+    
+    int* ptr = arr;
+    
+    // Loop through the array elements
+    
+    for (int i = 0; i < size; i++) 
+    {
+        // Check if the current element matches the searched element
+        
+        if (*ptr == element)  
+        {
+            // Increment count if a match is found
+            
+            count++; 
+        }
+        
+        // Move to the next element
+        
+        ptr++; 
+    }
+    
+    // Return count
+    
+    return count; 
+}
