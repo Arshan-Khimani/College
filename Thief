@@ -1,0 +1,48 @@
+import java.util.Scanner;
+
+public class ThiefV2 {
+    public static void main(String[] args) 
+    {
+        Scanner scanner = new Scanner(System.in);
+        
+        String weightsInput = scanner.nextLine();
+        
+        String[] weightStrings = weightsInput.split("\\s+");
+
+        int[] weights = new int[weightStrings.length];
+        
+        for (int i = 0; i < weightStrings.length; i++) 
+        {
+            weights[i] = Integer.parseInt(weightStrings[i]);
+        }
+        
+        int target = scanner.nextInt();
+
+        int bestSum = -1;
+        int item1 = -1, item2 = -1;
+
+        for (int i = 0; i < weights.length; i++)
+        {
+            for (int j = i + 1; j < weights.length; j++) 
+            {
+                int sum = weights[i] + weights[j];
+                
+                if (sum <= target && sum > bestSum) 
+                {
+                    bestSum = sum;
+                    item1 = weights[i];
+                    item2 = weights[j];
+                }
+            }
+        }
+
+        if (item1 != -1 && item2 != -1) 
+        {
+            System.out.println(item1 + " " + item2);
+        } 
+        else 
+        {
+            System.out.println("No valid pair");
+        }
+    }
+}
