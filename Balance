@@ -1,0 +1,254 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <cstdlib>
+#include <cmath>
+
+using namespace std;
+
+struct Person {
+    string name;
+    string address;
+};
+
+struct Account {
+    int accountNumber;
+    Person ownerInfo;
+    double balance;
+};
+
+// Function prototypes
+void populateAccount(Account* accounts, int& currentCount, int size);
+void printAccount(const Account& acc);
+void getValidPositiveInteger(int& value, const string& prompt);
+void getValidBalance(double& value, const string& prompt);
+void getValidMenuChoice(int& choice);
+bool isValidBalance(const string& s);
+
+int main() {
+    int maxAccounts;
+    getValidPositiveInteger(maxAccounts, "Enter max number of accounts: ");
+
+    Account* accounts = new Account[maxAccounts];
+    int currentCount = 0;
+
+    int choice;
+    do {
+        cout << "\nMenu:\n1->Enter data for specific account, 2->Display data for specific account\n3->Display data for all accounts  , 4->Quit:\n";
+        getValidMenuChoice(choice);
+
+        switch (choice) {
+            case 1:
+                populateAccount(accounts, currentCount, maxAccounts);
+                break;
+            case 2: {
+                int accNum;
+                getValidPositiveInteger(accNum, "Enter account number: ");
+                bool found = false;
+                for (int i = 0; i < currentCount; ++i) {
+                    if (accounts[i].accountNumber == accNum) {
+                        printAccount(accounts[i]);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    cout << "Account not found" << endl;
+                }
+                break;
+            }
+            case 3:
+                for (int i = 0; i < currentCount; ++i) {
+                    printAccount(accounts[i]);
+                }
+                break;
+            case 4:
+                break;
+        }
+    } while (choice != 4);
+
+    delete[] accounts;
+    return 0;
+}
+
+void populateAccount(Account* accounts, int& currentCount, int size) {
+    if (currentCount >= size) {
+        cout << "Cannot execute, array is full" << endl;
+        return;
+    }
+
+    int accountNumber;
+    getValidPositiveInteger(accountNumber, "Enter account number: ");
+
+    // Check for duplicate account number
+    for (int i = 0; i < currentCount; ++i) {
+        if (accounts[i].accountNumber == accountNumber) {
+            cout << "Duplicate account number";
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    double balance;
+    getValidBalance(balance, "Enter balance: ");
+
+    string name, address;
+    cout << "Enter owner's name: ";
+    getline(cin, name);
+    cout << "Enter owner's address: ";
+    getline(cin, address);
+
+    accounts[currentCount].accountNumber = accountNumber;
+    accounts[currentCount].ownerInfo.name = name;
+    accounts[currentCount].ownerInfo.address = address;
+    accounts[currentCount].balance = balance;
+    currentCount++;
+}
+
+void printAccount(const Account& acc) {
+    cout << "Account #: " << acc.accountNumber << endl;
+    cout << "Owner's name: " << acc.ownerInfo.name << endl;
+    cout << "Owner's address: " << acc.ownerInfo.address << endl;
+
+    // Determine needed precision using integer math
+    int cents = static_cast<int>(round(acc.balance * 100));
+    int precision;
+    
+    if (cents % 100 == 0) {
+        precision = 0;  // Whole number (no decimal places)
+    } else if (cents % 10 == 0) {
+        precision = 1;  // Single decimal place (e.g. .50 becomes .5)
+    } else {
+        precision = 2;  // Two decimal places
+    }
+
+    cout << fixed << setprecision(precision);
+    cout << "Balance: " << acc.balance << endl;
+}
+
+void getValidPositiveInteger(int& value, const string& prompt) {
+    int attempts = 0;
+    while (attempts < 5) {
+        cout << (attempts == 0 ? prompt : "Invalid value, please reenter: ");
+        string input;
+        getline(cin, input);
+
+        bool isValid = !input.empty();
+        for (char c : input) {
+            if (!isdigit(c)) {
+                isValid = false;
+                break;
+            }
+        }
+
+        if (isValid) {
+            int num = atoi(input.c_str());
+            if (num > 0) {
+                value = num;
+                return;
+            } else {
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            attempts++;
+        }
+    }
+
+    cout << "Too many unsuccessful attempts, exiting";
+    exit(EXIT_FAILURE);
+}
+
+bool isValidBalance(const string& s) {
+    if (s.empty()) return false;
+
+    int dotCount = 0;
+    size_t dotPos = string::npos;
+
+    for (size_t i = 0; i < s.size(); ++i) {
+        char c = s[i];
+        if (c == '.') {
+            if (dotCount >= 1) return false; // Multiple dots
+            dotCount++;
+            dotPos = i;
+        } else if (!isdigit(c)) {
+            return false; // Invalid character
+        }
+    }
+
+    if (dotPos != string::npos) {
+        // Check dot is not at start or end
+        if (dotPos == 0 || dotPos == s.size() - 1) {
+            return false;
+        }
+        // Check up to two digits after dot
+        size_t digitsAfterDot = s.size() - dotPos - 1;
+        if (digitsAfterDot > 2) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void getValidBalance(double& value, const string& prompt) {
+    int attempts = 0;
+    while (attempts < 5) {
+        cout << (attempts == 0 ? prompt : "Invalid value, please reenter: ");
+        string input;
+        getline(cin, input);
+
+        if (isValidBalance(input)) {
+            // Convert to double
+            
+            size_t dotPos = input.find('.');
+            string wholePart, decimalPart;
+            if (dotPos != string::npos) {
+                wholePart = input.substr(0, dotPos);
+                decimalPart = input.substr(dotPos + 1);
+            } else {
+                wholePart = input;
+            }
+
+            // Convert using atof since input is validated
+            
+            value = atof(input.c_str());
+            return;
+
+        }
+
+        attempts++;
+    }
+
+    cout << "Too many unsuccessful attempts, exiting";
+    exit(EXIT_FAILURE);
+}
+
+void getValidMenuChoice(int& choice) {
+    int attempts = 0;
+    while (attempts < 5) {
+        string input;
+        getline(cin, input);
+
+        bool valid = false;
+        if (input.size() == 1) {
+            char c = input[0];
+            if (c >= '1' && c <= '4') {
+                choice = c - '0';
+                valid = true;
+            }
+        }
+
+        if (valid) {
+            return;
+        } else {
+            attempts++;
+            if (attempts < 5) {
+                cout << "Invalid choice, please reenter: ";
+            }
+        }
+    }
+
+    cout << "Too many unsuccessful attempts, exiting";
+    exit(EXIT_FAILURE);
+}
