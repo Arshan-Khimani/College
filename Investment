@@ -1,0 +1,115 @@
+// This program tells the user the present value, future value, and annual interest rate of an investment
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+using namespace std;
+
+// Creating a readYears function with type int and with no parameters
+
+int readYears() 
+{
+    // Creating the years variable as an integer
+    
+    int years;
+    
+    // Asking the user to enter the number of years for the investment and storing the input in the years variable
+    
+    cout << "Enter the whole number of years of the investment: ";
+    cin >> years;
+
+    // If the years entered by the user is less than or equal to 0, an error message will be displayed
+    
+    if (years <= 0) 
+    {
+        cout << endl << "Error, invalid input. The number of years must be greater than zero.\n";
+    }
+    
+    return years;
+}
+
+/* Creating a presentValue function as type double to calculate the investments present value with futureValue (double), 
+annualInterestRate (double) and years (int) as parameters */
+
+double presentValue(double futureValue, double annualInterestRate, int years) 
+{
+    // Calculating the presentValue
+    
+    return futureValue / pow(1 + annualInterestRate, years);
+}
+
+/* Creating displayResults with no return type to display the results of the calculations with presentValue (double) futureValue (double), 
+annualInterestRate (double) and years (int) as parameters */
+
+void displayResults(double presentValue, double futureValue, double annualInterestRate, int years) 
+{
+    // Displaying the results of the investment calculations to the user
+    
+    cout << fixed << setprecision(2);
+    cout << endl <<"Present value: $" << presentValue << endl;
+    cout << "Future value: $" << futureValue << endl;
+    cout << "Annual interest rate: " << setprecision(3) << annualInterestRate * 100 << "%" << endl;
+    cout << "Years: " << years << endl;
+}
+
+int main() 
+{
+    // Creating futureValue and annualInterestRate variables as doubles and years as a integer variable
+    
+    double futureValue, annualInterestRate;
+    int years;
+
+    // Asking the user to enter the future value and storing it in the futureValue variable
+    
+    cout << "Enter the future value of the investment: ";
+    cin >> futureValue;
+    
+    // If the futureValue entered is less than or equal to 0, an error message will be displyaed
+    
+    if (futureValue <= 0) 
+    {
+        cout << "Error, invalid entry!" << endl;
+        cout << "The future value must be greater than zero." << endl;
+        return 0;
+    }
+
+    // Asking the user to enter the annual interest rate and storing it in the annualInterestRate variable
+    
+    cout << "Enter the annual interest rate: ";
+    cin >> annualInterestRate;
+    
+    // If the annualInterestRate entered is less than or equal to 0, an error message will be displyaed
+    
+    if (annualInterestRate <= 0) 
+    {
+        cout << "Error, invalid entry!" << endl;
+        cout << "The annual interest rate must be greater than zero." << endl;
+        return 0;
+    }
+
+    // Converting annualInterestRate to a decimal
+    
+    annualInterestRate /= 100;
+
+    // Setting the years variable equal to the readYears function
+    
+    years = readYears();
+    
+    // If the years variable is less than or equal to 0, the program will terminate
+    
+    if (years <= 0) 
+    {
+        return 0; 
+    }
+    
+    // Setting the presentValueResult variable to a double and setting it equal to the presentValue function along with its arguments
+    
+    double presentValueResult = presentValue(futureValue, annualInterestRate, years);
+    
+    // Calling the displayResults function along with its arguments
+    
+    displayResults(presentValueResult, futureValue, annualInterestRate, years);
+
+    return 0;
+}
