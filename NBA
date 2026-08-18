@@ -1,0 +1,612 @@
+/*
+Pseudocode:
+
+1. Define an enumeration `Field` to represent different fields (SCORES, AGE, STEALS, FOULS, BLOCKS, REBOUNDS, QUIT).
+2. Define a structure `Nbastats` to store data about each NBA player's statistics (points scored, age, steals, fouls, blocks, rebounds, name).
+3. Declare constants:
+   - `NUM_PLAYERS`: Maximum number of players (50).
+   - `NAME_COL_WIDTH`: Width for player names in the output.
+4. Declare function prototypes:
+   - `getAvg`: To calculate the average of a specific field.
+   - `getMax`: To find the player with the maximum value for a specific field.
+   - `getMin`: To find the player with the minimum value for a specific field.
+5. In the `main()` function:
+   a. Initialize an array `player[NUM_PLAYERS]` to store player data.
+   b. Open the file `nbastats.txt` for reading player statistics.
+      - If file can't be opened, display an error message and exit the program.
+   c. Read the header line and discard it.
+   d. Loop to read each player's data from the file:
+      - Parse the data using `istringstream`.
+      - Store the player's statistics in the array.
+   e. Print a table header with column titles.
+   f. Loop through the array and print player data in a formatted table.
+   g. Prompt the user to choose a field (SCORES, AGE, STEALS, FOULS, BLOCKS, REBOUNDS, QUIT).
+      - Display the field options in a menu.
+      - If the user enters an invalid option, prompt them again.
+      - If the user chooses to quit, break out of the loop.
+   h. Depending on the field selected by the user:
+      - Calculate and display the average value for that field using `getAvg`.
+      - Find and display the player with the minimum and maximum value for that field using `getMin` and `getMax`.
+6. Functions:
+   a. `getAvg`: 
+      - Iterates over the player array and sums the values of the selected field.
+      - Returns the average of the field values.
+   b. `getMax`: 
+      - Loops through the player array and finds the player with the highest value in the selected field.
+      - Returns the index of that player.
+   c. `getMin`: 
+      - Loops through the player array and finds the player with the lowest value in the selected field.
+      - Returns the index of that player.
+7. End Program
+*/
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+
+using namespace std;
+
+// Enum to define different statistical fields
+
+enum Field { SCORES, AGE, STEALS, FOULS, BLOCKS, REBOUNDS, QUIT }; 
+
+// Structure to store NBA player statistics
+
+struct Nbastats  
+{
+    int pscores; // Points scored
+    int age; // Player's age
+    int steals; // Number of steals
+    int fouls; // Number of fouls
+    int blocks; // Number of blocks
+    int rebounds; // Number of rebounds
+    string pname; // Player's name
+};
+
+const int NUM_PLAYERS = 50; // Maximum number of players
+const int NAME_COL_WIDTH = 16; // Column width for player names in output
+
+double getAvg(Nbastats plr[], int asize, Field f); // Function prototype for calculating average
+int getMax(Nbastats plr[], int asize, Field f); // Function prototype for getting max value
+int getMin(Nbastats plr[], int asize, Field f); // Function prototype for getting min value
+
+int main() 
+{
+    Nbastats player[NUM_PLAYERS]; // Array to store player data
+    
+    int count = 0; // Variable to track number of players read
+
+    ifstream inFile("nbastats.txt"); // Open the input file
+    
+    if (!inFile) // Check if file opened successfully
+    {
+        cout << "Error opening file." << endl; // Print error message
+        
+        return 1; // Exit program with error code
+    }
+
+    string header; // Variable to store the file header
+    
+    getline(inFile, header); // Read and discard the header line
+
+    string line; // Variable to store each line from the file
+    
+    while (count < NUM_PLAYERS && getline(inFile, line)) // Loop to read data from file
+    {
+        istringstream iss(line); // Create string stream to parse line
+        
+        Nbastats p; // Temporary variable to store player data
+        
+        if (iss >> p.pname >> p.age >> p.pscores >> p.rebounds >> p.steals >> p.blocks >> p.fouls) // Read data into structure
+        {
+            player[count] = p; // Store player data in array
+            
+            count++; // Increment player count
+        } 
+        else // If line parsing fails
+        {
+            cout << "Error parsing line: " << line << endl; // Print error message
+        }
+    }
+
+    inFile.close(); // Close the file
+
+    // Print table header
+    
+    cout << left << setw(NAME_COL_WIDTH) << "Name";
+    cout << left << setw(8) << "age";
+    cout << setw(8) << "Points";
+    cout << setw(8) << "Rebound";
+    cout << setw(8) << "Steals";
+    cout << setw(8) << "Blocks";
+    cout << setw(8) << "PF" << endl;
+
+    // Loop to print player data
+    
+    for (int i = 0; i < count; i++) 
+    {
+        cout << left << setw(NAME_COL_WIDTH) << player[i].pname;
+        cout << left << setw(8) << player[i].age;
+        cout << setw(8) << player[i].pscores;
+        cout << setw(8) << player[i].rebounds;
+        cout << setw(8) << player[i].steals;
+        cout << setw(8) << player[i].blocks;
+        cout << setw(8) << player[i].fouls << endl;
+    }
+
+    // Creating an int variable called choice
+    
+    int choice;
+    
+    do 
+    {
+        // Prompt the user to enter the field for getting average, min, and max
+        
+        cout << "\nEnter the field for getting average, min and max:\n";
+        
+        // Display the menu options to the user
+        
+        cout << "Please pick one item from the menu:\n";
+        
+        // Provide options for different fields
+        
+        cout << "Enter 0 for Scores\n";
+        cout << "Enter 1 for Age\n";
+        cout << "Enter 2 for Steals\n";
+        cout << "Enter 3 for Fouls\n";
+        cout << "Enter 4 for Blocks\n";
+        cout << "Enter 5 for Rebounds\n";
+        
+        // Option to quit the program
+        
+        cout << "Enter 6 for quit: ";
+        
+        // Get the user's input for choice
+        
+        cin >> choice;
+    
+        // Check if the user's input is within the valid range (0-6)
+        
+        if (choice < 0 || choice > 6) 
+        {
+            // Inform the user that the input is invalid and prompt to try again
+            
+            cout << "Invalid choice. Please try again.\n";
+            
+            // Skip the rest of the loop and continue asking for input
+            
+            continue;
+        }
+    
+        // If the user selects '6', break the loop and exit the program
+        
+        if (choice == 6) 
+        {
+            break;
+        }
+    
+        // Convert the integer choice into the corresponding 'Field' enum value
+        
+        Field fld = static_cast<Field>(choice);
+    
+        // Declare variables for the field's average and display names
+        
+        string avgFieldName;
+        string displayFieldName;
+    
+        // Use a switch-case to set the appropriate field names based on the user's choice
+        
+        switch (fld) 
+        {
+            case SCORES:
+                avgFieldName = "score";
+                displayFieldName = "score";
+                break;
+            case AGE:
+                avgFieldName = "age";
+                displayFieldName = "age";
+                break;
+            case STEALS:
+                avgFieldName = "steals";
+                displayFieldName = "steals";
+                break;
+            case FOULS:
+                avgFieldName = "fouls";
+                displayFieldName = "fouls";
+                break;
+            case BLOCKS:
+                avgFieldName = "blocks";
+                displayFieldName = "blocks";
+                break;
+            case REBOUNDS:
+                avgFieldName = "rebounds";
+                displayFieldName = "rebounds";
+                break;
+            default:
+                // Default case if no valid option is chosen 
+                
+                avgFieldName = "";
+                displayFieldName = "";
+        }
+    
+        // Call the getAvg function to calculate the average for the selected field
+        
+        double average = getAvg(player, count, fld);
+        
+        // Set the output format for floating-point numbers (fixed and 2 decimal places)
+        
+        cout << fixed << setprecision(2);
+        
+        // Display the average value, with special formatting if it's "age"
+        
+        if(avgFieldName == "age")
+        {
+            cout << "\nThe average " << avgFieldName << " of team is " << average << endl;
+        }
+        else
+        {
+            cout << "\nThe average " << avgFieldName << " is " << average << endl;
+        }
+    
+        // Get the index of the player with the minimum value in the selected field
+        
+        int minIndex = getMin(player, count, fld);
+    
+        // Get the index of the player with the maximum value in the selected field
+        
+        int maxIndex = getMax(player, count, fld);
+    
+        // Declare variables to store the minimum and maximum values for the field
+        
+        int minValue, maxValue;
+        
+        // Use a switch-case to assign the correct values for min and max based on the field
+        
+        switch (fld) 
+        {
+            case SCORES:
+                minValue = player[minIndex].pscores;
+                maxValue = player[maxIndex].pscores;
+                break;
+            case AGE:
+                minValue = player[minIndex].age;
+                maxValue = player[maxIndex].age;
+                break;
+            case STEALS:
+                minValue = player[minIndex].steals;
+                maxValue = player[maxIndex].steals;
+                break;
+            case FOULS:
+                minValue = player[minIndex].fouls;
+                maxValue = player[maxIndex].fouls;
+                break;
+            case BLOCKS:
+                minValue = player[minIndex].blocks;
+                maxValue = player[maxIndex].blocks;
+                break;
+            case REBOUNDS:
+                minValue = player[minIndex].rebounds;
+                maxValue = player[maxIndex].rebounds;
+                break;
+            default:
+                // Default case for unknown field 
+                
+                minValue = 0;
+                maxValue = 0;
+        }
+    
+        // If the user selected '1' for Age, display the names and values of the players
+        
+        if(choice == 1)
+        {
+            cout << "The player with minimum " << displayFieldName << " is " << player[minIndex].pname << "  = " << minValue << endl;
+            cout << "The player with maximum " << displayFieldName << " is " << player[maxIndex].pname << "  = " << maxValue << endl;
+        }
+        else
+        {
+            // For other fields, just display the minimum and maximum values
+            
+            cout << "Minimum " << displayFieldName << " by " << player[minIndex].pname << "  = " << minValue << endl;
+            cout << "Maximum " << displayFieldName << " by " << player[maxIndex].pname << "  = " << maxValue << endl;
+        }
+        
+    } while (true);  // Continue the loop indefinitely until the user chooses to quit
+
+    return 0;
+}
+
+// Function to calculate the average value for a specified field from an array of Nbastats
+
+double getAvg(Nbastats plr[], int asize, Field f) 
+{
+    // If the array size is zero, return 0.0 as the average cannot be computed
+    
+    if (asize == 0) 
+    {
+        return 0.0;
+    }
+    
+    // Initialize a variable to accumulate the sum of the field values
+    
+    double sum = 0.0;
+    
+    // Iterate over the array of players to sum up the values for the chosen field
+    
+    for (int i = 0; i < asize; i++) 
+    {
+        // Use a switch-case to select the correct field based on the input 'f'
+        
+        switch (f) 
+        {
+            case SCORES:
+                // Add the player's score to the sum
+                
+                sum += plr[i].pscores;
+                
+                break;
+            case AGE:
+                // Add the player's age to the sum
+                
+                sum += plr[i].age;
+                
+                break;
+            case STEALS:
+                // Add the player's steals to the sum
+                
+                sum += plr[i].steals;
+                
+                break;
+            case FOULS:
+                // Add the player's fouls to the sum
+                
+                sum += plr[i].fouls;
+                
+                break;
+            case BLOCKS:
+                // Add the player's blocks to the sum
+                
+                sum += plr[i].blocks;
+                
+                break;
+            case REBOUNDS:
+                // Add the player's rebounds to the sum
+                
+                sum += plr[i].rebounds;
+                
+                break;
+            default:
+                // If the field is unknown, return 0.0
+                
+                return 0.0;
+        }
+    }
+    
+    // Return the average by dividing the total sum by the number of players 
+    
+    return sum / asize;
+}
+
+// Function to get the index of the player with the maximum value for a specified field
+
+int getMax(Nbastats plr[], int asize, Field f) 
+{
+    // If the array size is less than or equal to zero, return -1 as no valid max can be found
+    
+    if (asize <= 0) 
+    {
+        return -1;
+    }
+    
+    // Initialize maxIndex to the first player's index and a variable to store the maximum value
+    
+    int maxIndex = 0;
+    int maxVal;
+
+    // Use a switch-case to select the correct field based on the input 'f' and initialize maxVal
+    
+    switch (f) 
+    {
+        case SCORES:
+            // Set the max value as the score of the first player
+            
+            maxVal = plr[0].pscores;
+            
+            break;
+        case AGE:
+            // Set the max value as the age of the first player
+            
+            maxVal = plr[0].age;
+            
+            break;
+        case STEALS:
+            // Set the max value as the steals of the first player
+            
+            maxVal = plr[0].steals;
+            
+            break;
+        case FOULS:
+            // Set the max value as the fouls of the first player
+            
+            maxVal = plr[0].fouls;
+            
+            break;
+        case BLOCKS:
+            // Set the max value as the blocks of the first player
+            
+            maxVal = plr[0].blocks;
+            
+            break;
+        case REBOUNDS:
+            // Set the max value as the rebounds of the first player
+            
+            maxVal = plr[0].rebounds;
+            
+            break;
+        default:
+            // If the field is unknown, return -1
+            
+            return -1;
+    }
+
+    // Loop through the rest of the players to find the player with the maximum value
+    
+    for (int i = 1; i < asize; i++) 
+    {
+        // Declare a variable to store the current player's value for the selected field
+        
+        int currentVal;
+        
+        // Use a switch-case to get the correct value for the current player based on the field
+        
+        switch (f)
+        {
+            case SCORES:
+                currentVal = plr[i].pscores;
+                break;
+            case AGE:
+                currentVal = plr[i].age;
+                break;
+            case STEALS:
+                currentVal = plr[i].steals;
+                break;
+            case FOULS:
+                currentVal = plr[i].fouls;
+                break;
+            case BLOCKS:
+                currentVal = plr[i].blocks;
+                break;
+            case REBOUNDS:
+                currentVal = plr[i].rebounds;
+                break;
+            default:
+                // If the field is unknown, return -1
+                
+                return -1;
+        }
+
+        // If the current player's value is greater than the current max value, update the max value and maxIndex
+       
+        if (currentVal > maxVal) 
+        {
+            maxVal = currentVal;
+            maxIndex = i;
+        }
+    }
+
+    // Return the index of the player with the maximum value for the selected field
+    
+    return maxIndex;
+}
+
+// Function to get the index of the player with the minimum value for a specified field
+
+int getMin(Nbastats plr[], int asize, Field f) 
+{
+    // If the array size is less than or equal to zero, return -1 as no valid min can be found
+    
+    if (asize <= 0)
+    {
+         return -1;
+    }
+    
+    // Initialize minIndex to the first player's index and a variable to store the minimum value
+    
+    int minIndex = 0;
+    int minVal;
+
+    // Use a switch-case to select the correct field based on the input 'f' and initialize minVal
+    
+    switch (f) 
+    {
+        case SCORES:
+            // Set the min value as the score of the first player
+            
+            minVal = plr[0].pscores;
+            
+            break;
+        case AGE:
+            // Set the min value as the age of the first player
+            
+            minVal = plr[0].age;
+            
+            break;
+        case STEALS:
+            // Set the min value as the steals of the first player
+            
+            minVal = plr[0].steals;
+            
+            break;
+        case FOULS:
+            // Set the min value as the fouls of the first player
+            
+            minVal = plr[0].fouls;
+            
+            break;
+        case BLOCKS:
+            // Set the min value as the blocks of the first player
+            
+            minVal = plr[0].blocks;
+            
+            break;
+        case REBOUNDS:
+            // Set the min value as the rebounds of the first player
+            
+            minVal = plr[0].rebounds;
+            
+            break;
+        default:
+            // If the field is unknown, return -1
+            
+            return -1;
+    }
+
+    // Loop through the rest of the players to find the player with the minimum value
+    
+    for (int i = 1; i < asize; i++)
+    {
+        // Declare a variable to store the current player's value for the selected field
+        
+        int currentVal;
+        
+        // Use a switch-case to get the correct value for the current player based on the field
+        
+        switch (f) 
+        {
+            case SCORES:
+                currentVal = plr[i].pscores;
+                break;
+            case AGE:
+                currentVal = plr[i].age;
+                break;
+            case STEALS:
+                currentVal = plr[i].steals;
+                break;
+            case FOULS:
+                currentVal = plr[i].fouls;
+                break;
+            case BLOCKS:
+                currentVal = plr[i].blocks;
+                break;
+            case REBOUNDS:
+                currentVal = plr[i].rebounds;
+                break;
+            default:
+                // If the field is unknown, return -1
+                
+                return -1;
+        }
+
+        // If the current player's value is less than the current min value, update the min value and minIndex
+       
+        if (currentVal < minVal) 
+        {
+            minVal = currentVal;
+            minIndex = i;
+        }
+    }
+
+    // Return the index of the player with the minimum value for the selected field
+    
+    return minIndex;
+}
