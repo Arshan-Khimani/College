@@ -1,0 +1,69 @@
+/* This program asks the user to enter a time in seconds and converts the seconds to 
+days, hours, minutes, and remaining seconds.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Creating long long int variables for seconds, days, hours, minutes, remainingSeconds
+    
+    long long int seconds;
+    long long int days;
+    long long int hours;
+    long long int minutes;
+    long long int remainingSeconds;
+    
+    // Asking the user to enter a time in seconds and storing the time in the seconds variable
+    
+    cout << "Enter a time in seconds: " << endl << endl;
+    cin >> seconds;
+    
+    // Calculating the number of days based on the user input and storing the remainder in remainingSeconds
+    
+    days = seconds / 86400;
+    remainingSeconds = seconds % 86400;
+    
+    // Calculating the number of hours based on the user input and storing the remainder in remainingSeconds
+    
+    hours = remainingSeconds / 3600;
+    remainingSeconds = remainingSeconds % 3600;
+    
+    // Calculating the number of minutes based on the user input and storing the remainder in remainingSeconds
+    
+    minutes = remainingSeconds / 60;
+    remainingSeconds = remainingSeconds % 60;
+    
+    /* Checking to make sure the user enters a time greater than zero and only displaying 
+    the conversions if they are greater than 0 */
+
+    if (seconds <= 0)
+    {
+        cout << "Error! The seconds must be greater than zero." << endl;
+    }
+    else
+    {
+        cout << seconds << " seconds is:" << endl;
+        
+        if (days > 0)
+        {
+            cout << "\t" << days << " days." << endl;
+        }
+        if (hours > 0)
+        {
+            cout << "\t" << hours << " hours." << endl;
+        }
+        if (minutes > 0)
+        {
+            cout << "\t" << minutes << " minutes." << endl;
+        }
+        if (remainingSeconds > 0)
+        {
+            cout << "\t" << remainingSeconds << " seconds." << endl;
+        }
+    }
+    
+    return 0;
+}
