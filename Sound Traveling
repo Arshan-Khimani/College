@@ -1,0 +1,148 @@
+// This program determines how fast sound travels a specified distance through wood, steel, water, or air as inputed by the user.
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+    // Declaring medium as a unsigned int variable and distance, woodTime, steelTime, waterTime, airTime as a double
+    
+    unsigned int medium;
+    double distance;
+    double woodTime;
+    double steelTime;
+    double waterTime;
+    double airTime;
+    
+    // Declaring WOOD_SPEED, STEEL_SPEED, WATER_SPEED, AIR_SPEED as constants
+    
+    const double WOOD_SPEED = 12631.23;
+    const double STEEL_SPEED = 10614.81;
+    const double WATER_SPEED = 4714.57;
+    const double AIR_SPEED = 1125.33;
+    
+    // Displaying the menu to the user using proper formatting
+    
+    cout << "\t" << "Time for Sound to Travel through a Medium given Distance" << endl << endl;
+    cout << "1 - Wood" << endl;
+    cout << "2 - Steel" << endl;
+    cout << "3 - Water" << endl;
+    cout << "4 - Air" << endl << endl;
+    
+    // Asking the user to enter the type of medium as a number
+    
+    cout << "Enter the number of the medium: " << endl;
+    cin >> medium;
+
+    // Using a switch statement to check what number the user entered to make sure the program is outputing the right medium
+    
+    switch (medium)
+    {
+        // If the user enters the number 1 this segmant will run
+        
+        case 1:
+            
+            // Asking the user to enter the distance traveled in feet and storing it in the distance variable
+            
+            cout << "Enter the distance to travel (in feet): " << endl;
+            cin >> distance;
+            
+            /* If the distance entered is greater than 0, the program will display the result of the calculations
+            and if the user enters a number less than or equal to 0, an error message will be displayed */
+            
+            if (distance > 0)
+            {
+                woodTime = distance / WOOD_SPEED;
+                cout << fixed << setprecision(4);
+                cout << "In wood it will take " << woodTime << " seconds to travel " << setprecision(2) << distance << " feet." << endl;
+            }
+            else
+            {
+                cout << "Error, the distance must be greater than zero." << endl;
+            }
+            break;
+        
+        // If the user enteres the number 2 this segmant will run
+        
+        case 2:
+        
+            // Asking the user to enter the distance traveled in feet and storing it in the distance variable
+            
+            cout << "Enter the distance to travel (in feet): " << endl;
+            cin >> distance;
+            
+            /* If the distance entered is greater than 0, the program will display the result of the calculations
+            and if the user enters a number less than or equal to 0, an error message will be displayed */
+            
+            if (distance > 0)
+            {
+                steelTime = distance / STEEL_SPEED;
+                cout << fixed << setprecision(4);
+                cout << "In steel it will take " << steelTime << " seconds to travel " << setprecision(2) << distance << " feet." << endl;
+            }
+            else
+            {
+                cout << "Error, the distance must be greater than zero." << endl;
+            }
+            break;
+            
+        // If the user enters the number 3 this segmant will run
+        
+        case 3:
+        
+            // Asking the user to enter the distance traveled in feet and storing it in the distance variable
+            
+            cout << "Enter the distance to travel (in feet): " << endl;
+            cin >> distance;
+            
+            /* If the distance entered is greater than 0, the program will display the result of the calculations
+            and if the user enters a number less than or equal to 0, an error message will be displayed */
+            
+            if (distance > 0)
+            {
+                waterTime = distance / WATER_SPEED;
+                cout << fixed << setprecision(4);
+                cout << "In water it will take " << waterTime << " seconds to travel " << setprecision(2) << distance << " feet." << endl;
+            }
+            else
+            {
+                cout << "Error, the distance must be greater than zero." << endl;
+            }
+            break;
+            
+        // If the user enters the number 4 this segmant will run    
+        
+        case 4:
+        
+            // Asking the user to enter the distance traveled in feet and storing it in the distance variable
+            
+            cout << "Enter the distance to travel (in feet): " << endl;
+            cin >> distance;
+            
+            /* If the distance entered is greater than 0, the program will display the result of the calculations
+            and if the user enters a number less than or equal to 0, an error message will be displayed */
+            
+            if (distance > 0)
+            {
+                airTime = distance / AIR_SPEED;
+                cout << fixed << setprecision(4);
+                cout << "In air it will take " << airTime << " seconds to travel " << setprecision(2) << distance << " feet." << endl;
+            }
+            else
+            {
+                cout << "Error, the distance must be greater than zero." << endl;
+            }
+            break;
+        
+        // If the user does not enter 1, 2, 3, or 4 this will execute and will display an error message
+        
+        default:
+            cout << "Error, invalid entry!" << endl;
+            cout << "Please run the program again." << endl;
+            break;
+    }
+
+    return 0;
+}
