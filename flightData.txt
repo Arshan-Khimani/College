@@ -1,0 +1,21 @@
+20
+Dallas|Austin|98.00|47|Southwest|05-10-2026|08:00
+Austin|Houston|95.00|39|Southwest|05-10-2026|09:30
+Dallas|Houston|101.00|51|American|05-10-2026|07:15
+Austin|Chicago|144.00|192|United|05-10-2026|10:00
+Chicago|New York|120.50|140|Delta|05-10-2026|14:00
+New York|Miami|210.00|180|American|05-11-2026|09:00
+Miami|Atlanta|85.00|110|Delta|05-11-2026|13:30
+Atlanta|Dallas|150.00|135|Southwest|05-11-2026|16:00
+Dallas|Los Angeles|299.00|195|American|05-12-2026|06:00
+Los Angeles|Seattle|130.00|170|United|05-12-2026|10:30
+Seattle|Denver|140.00|155|United|05-12-2026|14:45
+Denver|Chicago|110.00|145|Southwest|05-12-2026|18:00
+Houston|Miami|180.00|150|American|05-10-2026|11:15
+Los Angeles|Chicago|250.00|240|United|05-11-2026|23:00
+New York|Boston|65.00|60|Delta|05-11-2026|08:30
+Boston|Atlanta|175.00|160|Delta|05-11-2026|11:00
+Seattle|Chicago|220.00|240|American|05-12-2026|07:00
+Denver|Dallas|90.00|120|Southwest|05-12-2026|09:00
+Atlanta|Houston|115.00|130|Delta|05-10-2026|14:20
+Miami|Dallas|190.00|180|American|05-11-2026|15:45
