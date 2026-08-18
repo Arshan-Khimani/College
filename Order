@@ -1,0 +1,207 @@
+/* This program displays the order status for a company that sells spools of copper wire. The program will ask for the number 
+of spools ordered, the percentage of the discount the customer receives, whether the customer receives a custom charge for 
+shipping and handling of each spool or the standard charge, when custom charges are specified, the program asks the user for 
+the custom shipping and handling charge per spool, and finally the number of spools in stock. After asking all of this the program
+will display the order summary to the user.
+*/
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+/* Creating a getOrder function with return type boolean and reference variables as parameters called int numSpoolsOrdered, 
+double discountPercentage, char customShippingHandling and double customShippingHandlingCharge */
+
+bool getOrder(int &numSpoolsOrdered, double &discountPercentage, char &customShippingHandling, double &customShippingHandlingCharge) 
+{
+    // Asking the user to enter the number of spools ordered and storing it in the numSpoolsOrdered variable
+    
+    cout << "Please enter the number of spools ordered: ";
+    cin >> numSpoolsOrdered;
+    
+    // If numSpoolsOrdered is less than 1 an error message is displayed
+    
+    if (numSpoolsOrdered < 1) 
+    {
+        cout << "Spools must be at least one." << endl << endl;
+        cout << "Thank you, please shop again." << endl;
+        return false;
+    }
+
+    // Asking the user to enter the discount percentage and storing it in the discountPercentage variable
+    
+    cout << "Enter the discount percentage for the customer: ";
+    cin >> discountPercentage;
+    
+    // If discountPercentage is less than 0 an error message is displayed
+    
+    if (discountPercentage < 0) 
+    {
+        cout << "The percentage cannot be negative." << endl << endl;
+        cout << "Thank you, please shop again." << endl;
+        return false;
+    }
+
+    // Asking the user whether the order includes custom shipping and handling charges nd storing it in the customShippingHandling variable
+    
+    cout << "Does the order include custom shipping and handling charges? [Enter Y for Yes or N for No]: ";
+    cin >> customShippingHandling;
+    
+    // If the user does not type Y, y, N or n an error message is displayed
+    
+    if (customShippingHandling != 'Y' && customShippingHandling != 'y' && customShippingHandling != 'N' && customShippingHandling != 'n') 
+    {
+        cout << "The response should be Y for Yes or N for No." << endl << endl;
+        cout << "Thank you, please shop again." << endl;
+        return false;
+    }
+    
+    // If the user types Y or y this if statement runs
+    
+    if (customShippingHandling == 'Y' || customShippingHandling == 'y') 
+    {
+        // Asking the user for shipping and handling charges and storing it in customShippingHandlingCharge
+        
+        cout << "Enter the shipping and handling charge: ";
+        cin >> customShippingHandlingCharge;
+        
+        // If the customShippingHandlingCharge entered is less than 0, an error message is displayed
+        
+        if (customShippingHandlingCharge < 0) 
+        {
+            cout << "Shipping and handling cannot be negative." << endl << endl;
+            cout << "Thank you, please shop again." << endl;
+            return false;
+        }
+    }
+    
+    // If the user types N or n this if statement runs and customShippingHandlingCharge is set equal to 15
+    
+    if (customShippingHandling == 'N' || customShippingHandling == 'n')
+    {
+        customShippingHandlingCharge = 15;
+    }
+    
+    return true;
+}
+
+/* Creating a double calculateSpoolCharges function that calculates the spoolCharges with int numSpoolsOrdered and double 
+discountPercentage as parameters */
+
+double calculateSpoolCharges(int numSpoolsOrdered, double discountPercentage) 
+{
+    // Setting a double spoolPrice variable equal to numSpoolsOrdered times 134.95
+    
+    double spoolPrice = numSpoolsOrdered * 134.95;
+    
+    // Setting a double variable spoolCharges equal to a formula given and returning spoolCharges
+    
+    double spoolCharges = spoolPrice - (spoolPrice * (discountPercentage / 100));
+    return spoolCharges;
+}
+
+/* Creating a double calculateShippingHandling function that calculates the shippingHandlingCharges with int numSpoolsOrdered and double 
+customShippingHandlingCharge as parameters */
+
+double calculateShippingHandling(int numSpoolsOrdered, double customShippingHandlingCharge) 
+{
+    // Setting double shippingHandlingCharges equal to numSpoolsOrdered times customShippingHandlingCharge and returning shippingHandlingCharges
+    
+    double shippingHandlingCharges = numSpoolsOrdered * customShippingHandlingCharge;
+    return shippingHandlingCharges;
+}
+
+/* Creating a double calculateTotalCharges function that calculates the total charge with double spoolCharges and double 
+shippingHandlingCharges as parameters */
+
+double calculateTotalCharges(double spoolCharges, double shippingHandlingCharges) 
+{
+    // Returning the result of spoolCharges plus shippingHandlingCharges
+    
+    return spoolCharges + shippingHandlingCharges;
+}
+
+int main() 
+{
+    /* Creating variables numSpoolsOrdered, numSpoolsInStock as ints, variables discountPercentage, customShippingHandlingCharge
+    spoolCharges, shippingHandlingCharges, totalCharges as doubles, and variable customShippingHandling as a char */
+    
+    int numSpoolsOrdered, numSpoolsInStock;
+    double discountPercentage, customShippingHandlingCharge, spoolCharges, shippingHandlingCharges, totalCharges;
+    char customShippingHandling;
+
+    // If the getOrder function ended up executing without displaying error messages this if statement runs
+    
+    if (getOrder(numSpoolsOrdered, discountPercentage, customShippingHandling, customShippingHandlingCharge)) 
+    {
+        // Asking the user to enter the number of spooks in stock and storing it in numSpoolsInStock
+        
+        cout << "Enter the number of spools in stock: " << endl;
+        cin >> numSpoolsInStock;
+        
+        // If the numSpoolsInStock entered by the user is less than 0, an error message will be displayed
+        
+        if(numSpoolsInStock < 0)
+        {
+            cout << "The number of spools cannot be negative." << endl << endl;
+            cout << "Thank you, please shop again." << endl;
+            return 0;
+        }
+        
+        // Displaying the order summary text using proper formatting
+        
+        cout << "\t" << "\t" << "Order Summary" << endl;
+        cout << "==============================" << endl;
+        
+        // If the numSpoolsOrdered is more than the numSpoolsInStock this statement will run
+        
+        if (numSpoolsOrdered > numSpoolsInStock) 
+        {
+            // Printing the amount of spools on back order
+            
+            cout << numSpoolsOrdered - numSpoolsInStock << " spools are on back order." << endl;
+        }
+
+        /* Setting spoolsReadyToShip equal to the lesser number of numSpoolsOrdered and numSpoolsInStock in order 
+        to avoid an excess of orders when there is limited stock available (through a ternary operator). 
+        Displaying these results to the user through the spoolsReadyToShip variable */
+        
+        int spoolsReadyToShip = (numSpoolsOrdered > numSpoolsInStock) ? numSpoolsInStock : numSpoolsOrdered;
+        cout << spoolsReadyToShip << " spools are ready to ship." << endl;
+
+        /* Setting spoolCharges equal to calculateSpoolCharges and its arguments
+        Setting shippingHandlingCharges equal to calculateShippingHandling and its arguments
+        Setting totalCharges equal to calculateTotalCharges and its arguments */
+        
+        spoolCharges = calculateSpoolCharges(spoolsReadyToShip, discountPercentage);
+        shippingHandlingCharges = calculateShippingHandling(spoolsReadyToShip, customShippingHandlingCharge);
+        totalCharges = calculateTotalCharges(spoolCharges, shippingHandlingCharges);
+  
+        /* If the discountPercentage is equal to 0, the output will be printed in a slightly different way compared to if the 
+        discountPercentage entered is not 0 */
+        
+        if(discountPercentage == 0)
+        {
+            // Displaying the results calculated to the user using proper formatting
+            
+            cout << fixed << setprecision(2);
+            cout << "The charges for " << spoolsReadyToShip << " spools : $" << spoolCharges << endl;
+            cout << "Shipping and handling for " << spoolsReadyToShip << " spools: $" << shippingHandlingCharges << endl;
+            cout << "The total charges (incl. shipping & handling): $" << totalCharges << endl << endl;
+            cout << "Thank you, please shop again." << endl;
+        }
+        else
+        {
+            // Displaying the results calculated to the user using proper formatting
+            
+            cout << fixed << setprecision(2);
+            cout << "The charges for " << spoolsReadyToShip << " spools (including a " << setprecision(1) << discountPercentage << "% discount): $" << setprecision(2) <<spoolCharges << endl;
+            cout << "Shipping and handling for " << spoolsReadyToShip << " spools: $" << shippingHandlingCharges << endl;
+            cout << "The total charges (incl. shipping & handling): $" << totalCharges << endl << endl;
+            cout << "Thank you, please shop again." << endl;
+        }
+    }
+
+    return 0;
+}
