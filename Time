@@ -1,0 +1,49 @@
+/* This program asks the user for a seed and then generates the first five pseudorandom numbers using that seed. 
+Then the program will change the seed to be the current time and then will generate five more pseudorandom numbers. 
+*/
+
+#include <iostream>
+#include <cstdlib> 
+#include <ctime>   
+
+using namespace std;
+
+int main() 
+{
+    // Creating an unsigned int named seed
+    
+    unsigned int seed;
+
+    // Asking the user to enter a seed for the random number generator and storing the value in the variable seed
+    
+    cout << "Enter a seed for the random number generator: ";
+    cin >> seed;
+
+    // Use the random number generator for the users input
+    
+    srand(seed);
+
+    // Outputing the first 5 seeds for the user input
+    
+    cout << "First 5 numbers (seed = user input): ";
+    cout << rand() << ", ";
+    cout << rand() << ", ";
+    cout << rand() << ", ";
+    cout << rand() << ", ";
+    cout << rand() << endl;
+
+    // Change the seed to the current time
+    
+    srand(time(0));
+
+    // Outputing the first 5 seeds for the current time
+    
+    cout << "First 5 numbers (seed = current time): ";
+    cout << rand() << ", ";
+    cout << rand() << ", ";
+    cout << rand() << ", ";
+    cout << rand() << ", ";
+    cout << rand() << endl;
+
+    return 0;
+}
