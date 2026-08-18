@@ -1,0 +1,428 @@
+/*
+Pseudocode:
+
+1. Define a structure "Person" to store name and address.
+2. Define a structure "Account" to store account number, owner's information, and balance.
+
+3. Declare function prototypes:
+   - populateAccount(): Collects and stores account details.
+   - printAccount(): Displays account details.
+   - getValidPositiveInteger(): Ensures input is a positive integer.
+   - getValidBalance(): Ensures input is a valid monetary balance.
+   - getValidMenuChoice(): Ensures input is a valid menu selection.
+   - isValidBalance(): Checks if a given string is a valid balance format.
+
+4. In the main function:
+   - Get the maximum number of accounts from the user.
+   - Dynamically allocate memory for an array of accounts.
+   - Initialize account count to zero.
+   - Implement a loop to repeatedly display menu options and execute user choices:
+     a. If user selects 1: Prompt for account details and store them.
+     b. If user selects 2: Prompt for an account number and display details if found.
+     c. If user selects 3: Display details for all accounts.
+     d. If user selects 4: Exit the loop.
+   - Release dynamically allocated memory before program termination.
+
+5. Define function populateAccount():
+   - Ensure account storage is not full.
+   - Prompt for and validate an account number, ensuring no duplicates.
+   - Prompt for and validate a balance.
+   - Prompt for owner’s name and address.
+   - Store all collected details in the accounts array.
+
+6. Define function printAccount():
+   - Display the account number, owner's name, and address.
+   - Determine and set appropriate decimal precision for the balance.
+   - Display the balance.
+
+7. Define function getValidPositiveInteger():
+   - Prompt the user for input up to 5 times.
+   - Ensure the input consists only of numeric characters.
+   - Convert and store the valid integer value.
+   - Exit the program after 5 invalid attempts.
+
+8. Define function isValidBalance():
+   - Check if the input string represents a valid balance format.
+   - Ensure there is at most one decimal point and up to two decimal places.
+   - Return true if valid, false otherwise.
+
+9. Define function getValidBalance():
+   - Prompt the user for a balance up to 5 times.
+   - Validate the input format using isValidBalance().
+   - Convert and store the valid balance.
+   - Exit the program after 5 invalid attempts.
+
+10. Define function getValidMenuChoice():
+   - Prompt the user for menu selection up to 5 times.
+   - Ensure input is between '1' and '4'.
+   - Convert and store the valid choice.
+   - Exit the program after 5 invalid attempts.
+*/
+
+#include <iostream> 
+#include <string> 
+#include <iomanip> 
+#include <cstdlib>
+#include <cmath> 
+
+using namespace std; 
+
+// Structure to store personal details
+
+struct Person 
+{
+    string name; // Name of the person
+    string address; // Address of the person
+};
+
+// Structure to store account details
+
+struct Account 
+{
+    int accountNumber; // Unique account number
+    Person ownerInfo; // Owner's information (name and address)
+    double balance; // Account balance
+};
+
+// Function prototypes
+
+void populateAccount(Account* accounts, int& currentCount, int size); // Function to populate account details
+void printAccount(const Account& acc); // Function to print account details
+void getValidPositiveInteger(int& value, const string& prompt); // Function to validate and get a positive integer
+void getValidBalance(double& value, const string& prompt); // Function to validate and get a balance
+void getValidMenuChoice(int& choice); // Function to validate menu choice input
+bool isValidBalance(const string& s); // Function to check if a balance input is valid
+
+int main()
+{
+    int maxAccounts; // Variable to store the maximum number of accounts
+    getValidPositiveInteger(maxAccounts, "Enter max number of accounts: "); // Get the max number of accounts from the user
+
+    Account* accounts = new Account[maxAccounts]; // Dynamically allocate memory for account array
+    int currentCount = 0; // Initialize the count of current accounts
+
+    int choice; // Variable to store menu choice
+    do {
+        // Display menu options
+        
+        cout << "\nMenu:\n1->Enter data for specific account, 2->Display data for specific account\n3->Display data for all accounts  , 4->Quit:\n";
+        
+        getValidMenuChoice(choice); // Get a valid menu choice from the user
+
+        switch (choice)
+        {
+            case 1:
+                populateAccount(accounts, currentCount, maxAccounts); // Populate account details
+             
+                break;
+            case 2: 
+            {
+                int accNum;
+                
+                getValidPositiveInteger(accNum, "Enter account number: "); // Get account number from user
+                
+                bool found = false; // Flag to check if account exists
+                
+                for (int i = 0; i < currentCount; ++i) 
+                {
+                    if (accounts[i].accountNumber == accNum) // Check if account exists
+                    { 
+                        printAccount(accounts[i]); // Print account details
+                        
+                        found = true;
+                        
+                        break;
+                    }
+                }
+                if (!found) 
+                {
+                    cout << "Account not found" << endl; // Display message if account is not found
+                }
+                
+                break;
+            }
+            case 3:
+                for (int i = 0; i < currentCount; ++i)
+                {
+                    printAccount(accounts[i]); // Print details of all accounts
+                }
+                break;
+            case 4:
+                break; // Exit the loop
+        }
+    } while (choice != 4); // Continue loop until user chooses to quit
+
+    delete[] accounts; // Free dynamically allocated memory
+    
+    return 0; // Return successful execution
+}
+
+void populateAccount(Account* accounts, int& currentCount, int size)
+{
+    if (currentCount >= size) // Check if account storage is full
+    { 
+        cout << "Cannot execute, array is full" << endl;
+       
+        return;
+    }
+
+    // Creating an integer variable called accountNumber
+    
+    int accountNumber;
+    
+    getValidPositiveInteger(accountNumber, "Enter account number: "); // Get a valid account number
+
+    // Check for duplicate account number
+    
+    for (int i = 0; i < currentCount; ++i) 
+    {
+        if (accounts[i].accountNumber == accountNumber) 
+        {
+            cout << "Duplicate account number";
+            
+            exit(EXIT_FAILURE); // Exit if duplicate account number is found
+        }
+    }
+
+    // Creating a double variable called balance
+    
+    double balance;
+    
+    getValidBalance(balance, "Enter balance: "); // Get a valid balance
+
+    string name, address;
+    
+    cout << "Enter owner's name: "; // Prompt for owner's name
+    getline(cin, name); // Get name input
+    
+    cout << "Enter owner's address: "; // Prompt for owner's address
+    getline(cin, address); // Get address input
+
+    // Store collected data into the account array
+    
+    accounts[currentCount].accountNumber = accountNumber;
+    accounts[currentCount].ownerInfo.name = name;
+    accounts[currentCount].ownerInfo.address = address;
+    accounts[currentCount].balance = balance;
+    currentCount++; // Increment account count
+}
+
+void printAccount(const Account& acc)
+{
+    cout << "Account #: " << acc.accountNumber << endl; // Print account number
+    cout << "Owner's name: " << acc.ownerInfo.name << endl; // Print owner's name
+    cout << "Owner's address: " << acc.ownerInfo.address << endl; // Print owner's address
+
+    // Determine needed precision using integer math
+    
+    int cents = static_cast<int>(round(acc.balance * 100)); // Convert balance to cents
+    int precision;
+    
+    if (cents % 100 == 0) 
+    {
+        precision = 0;  // Whole number (no decimal places)
+    } 
+    else if (cents % 10 == 0)
+    {
+        precision = 1;  // Single decimal place (e.g., .50 becomes .5)
+    } 
+    else 
+    {
+        precision = 2;  // Two decimal places
+    }
+
+    cout << fixed << setprecision(precision); // Set output precision
+   
+    cout << "Balance: " << acc.balance << endl; // Print account balance
+}
+
+void getValidPositiveInteger(int& value, const string& prompt)
+{
+    // Creating an integer variable called attempts
+    
+    int attempts = 0;
+    
+    while (attempts < 5) // Allow up to 5 attempts
+    { 
+        cout << (attempts == 0 ? prompt : "Invalid value, please reenter: "); // Prompt user
+       
+        string input;
+        
+        getline(cin, input);
+
+        bool isValid = !input.empty(); // Check if input is non-empty
+        
+        for (char c : input)
+        {
+            if (!isdigit(c)) // Check if input is numeric
+            { 
+                isValid = false;
+               
+                break;
+            }
+        }
+
+        if (isValid) 
+        {
+            int num = atoi(input.c_str()); // Convert string to integer
+           
+            if (num > 0) // Ensure positive integer
+            { 
+                value = num;
+               
+                return;
+            }
+        }
+        
+        attempts++; // Increment attempt count
+    }
+    
+    cout << "Too many unsuccessful attempts, exiting";
+    
+    exit(EXIT_FAILURE); // Exit after too many failed attempts
+}
+
+bool isValidBalance(const string& s) // Function to check if a string represents a valid balance
+{
+    if (s.empty()) // Check if the string is empty
+    {
+        return false; // Return false if empty
+    }
+
+    int dotCount = 0; // Variable to count the number of decimal points
+    
+    size_t dotPos = string::npos; // Variable to store the position of the decimal point
+
+    for (size_t i = 0; i < s.size(); ++i) // Iterate through each character in the string
+    {
+        char c = s[i]; // Get the current character
+        
+        if (c == '.') // Check if the character is a decimal point
+        {
+            if (dotCount >= 1) // If there's already a decimal point, it's invalid
+            {
+                 return false; // Return false for multiple decimal points
+            }
+            
+            dotCount++; // Increment decimal point count
+            
+            dotPos = i; // Store position of decimal point
+            
+        } 
+        else if (!isdigit(c)) // Check if the character is not a digit
+        {
+            return false; // Return false for invalid characters
+        }
+    }
+
+    if (dotPos != string::npos) // If a decimal point was found
+    {
+        // Check if the decimal point is not at the start or end
+        
+        if (dotPos == 0 || dotPos == s.size() - 1) 
+        {
+            return false; // Invalid if dot is at the beginning or end
+        }
+        
+        // Check that there are at most two digits after the decimal point
+        
+        size_t digitsAfterDot = s.size() - dotPos - 1;
+        
+        if (digitsAfterDot > 2) // If more than two decimal places exist
+        {
+            return false; // Return false
+        }
+    }
+
+    return true; // Return true if valid balance format
+}
+
+void getValidBalance(double& value, const string& prompt) // Function to validate and get a valid balance
+{
+    int attempts = 0; // Counter for invalid attempts
+    
+    while (attempts < 5) // Allow up to 5 attempts
+    {
+        cout << (attempts == 0 ? prompt : "Invalid value, please reenter: "); // Prompt the user
+        
+        string input; // Variable to store user input
+        
+        getline(cin, input); // Get user input
+
+        if (isValidBalance(input)) // Validate the input balance format
+        {
+            // Convert to double
+            
+            size_t dotPos = input.find('.'); // Find decimal point position
+            
+            string wholePart, decimalPart; // Variables to store integer and decimal parts
+            
+            if (dotPos != string::npos) // If there's a decimal point
+            {
+                wholePart = input.substr(0, dotPos); // Extract whole number part
+               
+                decimalPart = input.substr(dotPos + 1); // Extract decimal part
+            } 
+            else // If there's no decimal point
+            {
+                wholePart = input; // Whole part is the entire input
+            }
+
+            // Convert using atof since input is already validated
+            
+            value = atof(input.c_str()); // Convert string to double
+            
+            return; // Exit function after successful conversion
+        }
+
+        attempts++; // Increment attempt counter
+    }
+
+    cout << "Too many unsuccessful attempts, exiting"; // Print error message
+  
+    exit(EXIT_FAILURE); // Exit program after too many failed attempts
+}
+
+void getValidMenuChoice(int& choice) // Function to get a valid menu choice from user
+{
+    int attempts = 0; // Counter for invalid attempts
+    
+    while (attempts < 5)  // Allow up to 5 attempts
+    {
+        string input; // Variable to store user input
+        
+        getline(cin, input); // Get user input
+
+        bool valid = false; // Flag to indicate if input is valid
+        
+        if (input.size() == 1) // Ensure input is a single character
+        {
+            char c = input[0]; // Extract the character
+            
+            if (c >= '1' && c <= '4') // Check if input is between '1' and '4'
+            {
+                choice = c - '0'; // Convert character to integer
+                
+                valid = true; // Mark input as valid
+            }
+        }
+
+        if (valid)  // If input is valid
+        {
+            return; // Exit function successfully
+        } 
+        else // If input is invalid
+        {
+            attempts++; // Increment attempt counter
+            
+            if (attempts < 5)  // If attempts remain
+            {
+                cout << "Invalid choice, please reenter: "; // Prompt for reentry
+            }
+        }
+    }
+
+    cout << "Too many unsuccessful attempts, exiting"; // Print error message
+    
+    exit(EXIT_FAILURE); // Exit program after too many failed attempts
+}
