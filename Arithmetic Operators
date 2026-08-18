@@ -1,0 +1,42 @@
+/*This program asks the user for an integer, and using a pre-assigned integer of 8, finds the 
+sum, product, quotient, and remainer of the two integers.
+*/
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    // Creating 2 integer variables and 1 double variable
+    
+    int num1;
+    int num2 = 8;
+    double result;
+    
+    // Asking the user for a whole number and storing the value in the variable num2
+    
+    cout << "Enter a whole number: ";
+	cin >> num1;
+	
+	// Calculating the sum of the 2 integer variables
+	
+	result = num1 + num2;
+	cout << "sum = " << result << "\n";
+	
+	// Calculating the product of the 2 integer variables
+	
+	result = num1 * num2;
+	cout << "product = " << result << "\n";
+	
+	// Calculating the quotient of the 2 integer variables
+	
+	result = num1 / num2;
+	cout << "quotient = " << result << "\n";
+	
+	// Calculating the remainder of the 2 integer variables
+	
+	result = num1 % num2;
+	cout << "remainder = " << result << "\n";
+
+    return 0;
+}
