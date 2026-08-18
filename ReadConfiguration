@@ -1,0 +1,270 @@
+/*
+Pseudocode:
+
+1. Include necessary libraries for input/output, file handling, and string manipulation.
+
+2. Define a constant for the maximum number of products (MAXPRODUCTS).
+
+3. Declare arrays to store product names, prices, and codes:
+   - names: to store product names.
+   - prices: to store product prices.
+   - codes: to store product codes.
+
+4. Declare a variable (numProducts) to keep track of the number of products loaded.
+
+5. Declare function prototypes for:
+   - findItem(inputCode): to find an item in the list based on its code.
+   - readConfiguration(): to read product data from the configuration file.
+   - display(): to display the menu of products.
+   - process(): to process user orders.
+
+6. In the main() function:
+   - Call readConfiguration() to load product data from the configuration file.
+   - Call display() to show the menu of products.
+   - Call process() to handle user orders.
+
+7. Define the readConfiguration() function:
+   - Open the menu.txt file for reading.
+   - If the file cannot be opened, print an error message and return.
+   - Read each line from the file and extract product code, name, and price while the arrays have space.
+   - Increment the product count and close the file after reading.
+   - Print the number of items loaded.
+
+8. Define the display() function:
+   - Print a header with column names for codes, item names, and prices.
+   - Loop through the product list and print each item's details, formatted appropriately.
+
+9. Define the findItem(inputCode) function:
+   - Loop through the product list to find a matching code.
+   - Return the index of the found item or -1 if not found.
+
+10. Define the process() function:
+    - Prompt the user to enter their order as a string.
+    - Parse the order string to extract item codes.
+    - For each item code:
+      - Call findItem() to get the item's index.
+      - If found, print the item name and price and add the price to the total.
+      - If not found, print an error message for the invalid item code.
+    - Print the total cost of the order.
+*/
+
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
+
+using namespace std;
+
+// Define a constant for the maximum number of products
+
+const int MAXPRODUCTS = 100;
+
+// Array to store product names
+
+string names[MAXPRODUCTS];   
+
+// Array to store product prices
+
+double prices[MAXPRODUCTS];  
+
+// Array to store product codes
+
+string codes[MAXPRODUCTS];   
+
+// Variable to keep track of the number of products
+
+int numProducts = 0;
+
+// Function to find an item in the list based on its code
+
+int findItem(string inputCode);
+
+// Function to read product data from the configuration file
+
+void readConfiguration();
+
+// Function to display the menu of products
+
+void display();
+
+// Function to process user orders
+
+void process();
+
+int main()
+{
+    // Call function to read configuration data from file
+    
+    readConfiguration();
+    
+    // Call function to display the menu
+    
+    display();
+    
+    // Call function to process user orders
+    
+    process();
+
+    return 0;
+}
+
+// Function to read product data from menu.txt file
+
+void readConfiguration()
+{
+    // Open the menu.txt file for reading
+    
+    ifstream file("menu.txt");
+    
+    // Check if the file opened successfully
+    
+    if (!file)
+    {
+        // Print error message if file could not be opened
+        
+        cout << "Error: Unable to open menu.txt" << endl;
+        
+        // Exit function
+        
+        return;
+    }
+    
+    // Declare a string to store each line from the file
+    
+    string line;
+    
+    // Read each line from the file while there is space in the arrays
+    
+    while (getline(file, line) && numProducts < MAXPRODUCTS)
+    {
+        // Create a stringstream object to parse the line
+        
+        stringstream ss(line);
+        
+        // Extract product code, name, and price from the line
+        
+        ss >> codes[numProducts] >> names[numProducts] >> prices[numProducts];
+        
+        // Increment the product count
+        
+        numProducts++;
+    }
+    
+    // Close the file after reading
+    
+    file.close();
+    
+    // Print the number of items loaded
+    
+    cout << numProducts << " items loaded.\n";
+}
+
+// Function to display the product menu
+
+void display()
+{
+    // Print a blank line for spacing
+    
+    cout << endl;
+    
+    // Print column headers with formatted output
+    
+    cout << left << setw(8) << "Codes" << setw(25) << "Item Name" << setw(8) << "Prices" << endl;
+    
+    // Print a separator line
+    
+    cout << "-----------------------------------------------------" << endl;
+    
+    // Loop through the product list and print each item's details
+    
+    for (int i = 0; i < numProducts; i++)
+    {
+        // Print product code, name, and price formatted with fixed decimal places
+        
+        cout << left << setw(8) << codes[i] << setw(25) << names[i] << "$" << fixed << setprecision(2) << prices[i] << endl;
+    }
+}
+
+// Function to find the index of an item based on its code
+
+int findItem(string inputCode)
+{
+    // Loop through the product list to find a matching code
+    
+    for (int i = 0; i < numProducts; i++)
+    {
+        // Check if the current code matches the input code
+        
+        if (codes[i] == inputCode)
+        {
+            // Return the index of the found item
+            
+            return i;
+        }
+    }
+    
+    // Return -1 if the item was not found
+    
+    return -1;
+}
+
+// Function to process user orders
+
+void process()
+{
+    // Declare a string to store the user's order input
+    
+    string order;
+    
+    // Prompt the user to enter their order
+    
+    cout << "\nEnter your order string: ";
+    
+    // Read the entire order line from user input
+    
+    getline(cin, order);
+    
+    // Create a stringstream object to parse the order
+    
+    stringstream ss(order);
+    
+    // Declare a variable to store each item code from the order
+    
+    string itemCode;
+    
+    // Declare a variable to store the total cost of the order
+    
+    double total = 0.0;
+    
+    // Read each item code from the order string
+    
+    while (ss >> itemCode)
+    {
+        // Call function to find the item index
+        
+        int index = findItem(itemCode);
+        
+        // Check if the item was found
+        
+        if (index != -1)
+        {
+            // Print the item name and price
+            
+            cout << names[index] << ": $" << fixed << setprecision(2) << prices[index] << endl;
+            
+            // Add the item's price to the total cost
+            
+            total += prices[index];
+        }
+        else
+        {
+            // Print error message if the item code is invalid
+            
+            cout << itemCode << " is invalid. Skipping it." << endl;
+        }
+    }
+    
+    // Print the total cost of the order
+    
+    cout << "Total: $" << fixed << setprecision(2) << total << endl;
+}
