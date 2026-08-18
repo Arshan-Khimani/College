@@ -1,0 +1,90 @@
+/*
+Pseudocode:
+1. Read an integer `n` representing the size of an array.
+2. Declare an array of size `n`.
+3. Read `n` elements from the user and store them in the array.
+4. Initialize a variable `sum` to 0.
+5. Calculate the total sum of the array elements.
+6. Initialize `index` to -1 (indicating no valid index found).
+7. Iterate through the array:
+   - Check if the current element is equal to `sum - arr[i]` (i.e., if removing this element leaves a sum equal to it).
+   - If the condition is true, store the index and break out of the loop.
+8. If `index` is found, print the index; otherwise, print that no index satisfies the condition.
+9. End the program.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Creating an int variable called n
+    
+    int n;
+    
+    // Reading the array size from the user
+    
+    cin >> n;
+    
+    // Declaring an array of size n
+    
+    int arr[n];
+
+    // Looping to read n elements into the array
+     
+    for (int i = 0; i < n; i++) 
+    {
+        // Reading each element from the user and store it in the array
+        
+        cin >> arr[i];
+    }
+
+    // Setting the sum variable equal to 0
+    
+    int sum = 0;
+    
+    // Looping to calculate the total sum of all elements in the array
+    
+    for (int i = 0; i < n; i++) 
+    {
+        // Adding each element to the sum
+        
+        sum += arr[i];
+    }
+    
+    // Setting the index variable equal to -1
+    
+    int index = -1;
+    
+    // Looping to find an index where the element is equal to the sum of the remaining elements
+    
+    for (int i = 0; i < n; i++) 
+    {
+        // Checking  if arr[i] equals sum of remaining elements
+        
+        if (arr[i] == sum - arr[i]) 
+        {
+            // Storing the index and exiting the loop
+            
+            index = i;
+            break;
+        }
+    }
+
+    // If index does not equal -1 this will run 
+    
+    if (index != -1) 
+    {
+        cout << "Index " << index << " has the sum" << endl;
+    }
+    
+    // If index does equal -1 this will run 
+    
+    else 
+    {
+        cout << "No index has the sum" << endl;
+    }
+
+    return 0;
+}
