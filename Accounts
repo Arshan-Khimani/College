@@ -1,0 +1,342 @@
+/*
+Pseudocode:
+
+1. Define a constant MAX_NUM_ACCOUNTS = 5 to limit the number of accounts.
+
+2. Define function parseDate(string):
+   - Parse the date string in the format mm/dd/yyyy/hh.
+   - Extract month, day, year, hour using substrings and string-to-int conversions.
+   - Create and return a Date object with those values.
+
+3. In main:
+   - Create an array of Account pointers to hold up to MAX_NUM_ACCOUNTS accounts.
+   - Loop to display a menu and process user choices until choice is 6 (Quit):
+
+   --- Menu Options ---
+   
+   1. **Create regular account:**
+      - If max accounts reached, display error.
+      - Prompt for owner's name, date (as string), and amount.
+      - Reject negative or zero amount.
+      - Find a free index in the account array.
+      - Create a RegularAccount with name, amount, and date.
+      - Display confirmation.
+
+   2. **Create premium account:**
+      - Same as regular, but also:
+        - Ensure amount >= PremiumAccount::MIN_BALANCE.
+        - Create PremiumAccount instead.
+
+   3. **Deposit to account:**
+      - Prompt for account number, date, and amount.
+      - Search for matching account.
+      - Reject if not found or if amount is negative.
+      - Call deposit method.
+      - Display success and new account state if successful.
+
+   4. **Withdraw from account:**
+      - Similar to deposit:
+        - Search by account number.
+        - Reject if not found or invalid amount.
+        - Call withdraw.
+        - Display success or failure depending on available balance.
+
+   5. **Print all account information:**
+      - Iterate through account array.
+      - Print data for each non-null entry.
+
+   6. **Quit the program.**
+
+   - Handle invalid menu entries by printing an error message.
+
+4. Exit the program.
+*/
+
+#include <iostream>
+#include <iomanip>
+#include "Account.h"
+#include "RegularAccount.h"
+#include "PremiumAccount.h"
+#include "Date.h"
+
+using namespace std;
+
+const int MAX_NUM_ACCOUNTS = 5;
+
+Date parseDate(const string& dateStr) 
+{
+    size_t pos1 = dateStr.find('/');
+    int month = stoi(dateStr.substr(0, pos1));
+    size_t pos2 = dateStr.find('/', pos1 + 1);
+    int day = stoi(dateStr.substr(pos1 + 1, pos2 - pos1 - 1));
+    size_t pos3 = dateStr.find('/', pos2 + 1);
+    int year = stoi(dateStr.substr(pos2 + 1, pos3 - pos2 - 1));
+    int hour = stoi(dateStr.substr(pos3 + 1));
+   
+    Date d;
+   
+    d.set(month, day, year, hour);
+   
+    return d;
+}
+
+int main() 
+{
+    Account* accountArray[MAX_NUM_ACCOUNTS] = {nullptr};
+ 
+    int choice;
+
+    do 
+    {
+        cout << "1->Create regular accnt, 2->Create premium accnt, 3->Deposit to accnt\n" << "4->Withdraw from accnt, 5->Print info accnts, 6->Quit\n";
+        cin >> choice;
+
+        switch (choice) 
+        {
+            case 1: 
+            {
+                if (Account::getNumberAccounts() >= MAX_NUM_ACCOUNTS) 
+                {
+                    cout << "Max number of accounts reached, cannot add a new account\n";
+                
+                    break;
+                }
+                
+                string name, dateStr;
+                
+                double amount;
+                
+                cout << "Enter owner's name: ";
+                cin >> name;
+                
+                cout << "Enter date, in the mm/dd/yyyy/hh format: ";
+                cin >> dateStr;
+                
+                Date date = parseDate(dateStr);
+                
+                cout << "Enter amount: ";
+                cin >> amount;
+
+                if (amount <= 0)
+                {
+                    cout << "Amount cannot be negative, account creation not executed\n";
+                
+                    break;
+                }
+
+                int index = -1;
+                
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i)
+                {
+                    if (!accountArray[i])
+                    {
+                        index = i;
+                    
+                        break;
+                    }
+                }
+                accountArray[index] = new RegularAccount(name, amount, date);
+               
+                cout << "\nAccount created: \n";
+               
+                accountArray[index]->print();
+               
+                break;
+            }
+
+            case 2: 
+            {
+                if (Account::getNumberAccounts() >= MAX_NUM_ACCOUNTS) 
+                {
+                    cout << "Max number of accounts reached, cannot add a new account\n";
+                
+                    break;
+                }
+               
+                string name, dateStr;
+               
+                double amount;
+               
+                cout << "Enter owner's name: ";
+                cin >> name;
+               
+                cout << "Enter date, in the mm/dd/yyyy/hh format: ";
+                cin >> dateStr;
+               
+                Date date = parseDate(dateStr);
+               
+                cout << "Enter amount: ";
+                cin >> amount;
+
+                if (amount <= 0) 
+                {
+                    cout << "Amount cannot be negative, account creation not executed\n";
+                
+                    break;
+                }
+                
+                if (amount < PremiumAccount::getMinBalance()) 
+                {
+                    cout << "Insufficient amount, you need at least " << fixed << setprecision(2) << PremiumAccount::getMinBalance() << " Galactic units to open a premium account\n";
+                  
+                    break;
+                }
+
+                int index = -1;
+               
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i) 
+                {
+                    if (!accountArray[i]) 
+                    {
+                        index = i;
+                    
+                        break;
+                    }
+                }
+                
+                accountArray[index] = new PremiumAccount(name, amount, date);
+               
+                cout << "\nAccount created: \n";
+               
+                accountArray[index]->print();
+               
+                break;
+            }
+
+            case 3: 
+            {
+                int accNum;
+             
+                double amount;
+             
+                string dateStr;
+             
+                cout << "Enter account number: ";
+                cin >> accNum;
+             
+                Account* acc = nullptr;
+             
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i) 
+                {
+                    if (accountArray[i] && accountArray[i]->getAccountNumber() == accNum) 
+                    {
+                        acc = accountArray[i];
+                    
+                        break;
+                    }
+                }
+                
+                if (!acc) 
+                {
+                    cout << "No such account\n";
+                
+                    break;
+                }
+                
+                cout << "Enter date, in the mm/dd/yyyy/hh format: ";
+                cin >> dateStr;
+                
+                Date date = parseDate(dateStr);
+                
+                cout << "Enter amount: ";
+                cin >> amount;
+
+                if (amount <= 0) 
+                {
+                    cout << "Amount cannot be negative, deposit not executed\n";
+                
+                    break;
+                }
+                
+                if (acc->deposit(amount, date)) 
+                {
+                    cout << "\nDeposit executed: \n";
+                
+                    acc->print();
+                }
+                
+                break;
+            }
+
+            case 4: 
+            {
+                int accNum;
+            
+                double amount;
+            
+                string dateStr;
+            
+                cout << "Enter account number: ";
+                cin >> accNum;
+            
+                Account* acc = nullptr;
+            
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i) 
+                {
+                    if (accountArray[i] && accountArray[i]->getAccountNumber() == accNum)
+                    {
+                        acc = accountArray[i];
+                    
+                        break;
+                    }
+                }
+                
+                if (!acc) 
+                {
+                    cout << "No such account\n";
+                  
+                    break;
+                }
+               
+                cout << "Enter date, in the mm/dd/yyyy/hh format: ";
+                cin >> dateStr;
+               
+                Date date = parseDate(dateStr);
+               
+                cout << "Enter amount: ";
+                cin >> amount;
+
+                if (amount <= 0) 
+                {
+                    cout << "Amount cannot be negative, withdraw not executed\n";
+                
+                    break;
+                }
+                
+                if (acc->withdraw(amount, date)) 
+                {
+                    cout << "\nWithdraw executed: \n";
+                
+                    acc->print();
+                } 
+                else 
+                {
+                    cout << "Insufficient balance, withdrawal not executed\n";
+                }
+                
+                break;
+            }
+
+            case 5:
+                cout << "\nAccounts\n========\n";
+                
+                for (int i = 0; i < MAX_NUM_ACCOUNTS; ++i)
+                {
+                    if (accountArray[i]) 
+                    {
+                        accountArray[i]->print();
+                    }
+                }
+                
+                break;
+
+            case 6:
+                break;
+
+            default:
+                cout << "Invalid choice\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
