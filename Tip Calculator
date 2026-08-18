@@ -1,0 +1,210 @@
+// This program is a tip calculator which calculates the tip entered by the user and adds that tip entered to the total sale amount
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+// Creating a calcTipAmt function which returns a double that calculates the tip amount with double salesAmount, and tipPercent as parameters
+
+double calcTipAmt(double salesAmount, double tipPercent) 
+{
+    // Calculating the tip amount
+    
+    return salesAmount * (tipPercent / 100);
+}
+
+/* Creating a getMenuItem function which returns a char and displays the menu options as well as asks the user to enter the tip amount
+with double salesAmount as a parameter */
+
+char getMenuItem(double salesAmount) 
+{
+    // Creating a char variable called userChoice
+    
+    char userChoice;
+    
+    // Displaying the menu options to the user and storing the user input in the userChoice variable
+    
+    cout << "\t" << "\t" << "\t" << "Tip Calculator" << endl << endl;
+    cout << "\t" << "T - 10 percent tip of $" << fixed << setprecision(2) << calcTipAmt(salesAmount, 10) << endl;
+    cout << "\t" << "F - 15 percent tip of $" << fixed << setprecision(2) << calcTipAmt(salesAmount, 15) << endl;
+    cout << "\t" << "W - 20 percent tip of $" << fixed << setprecision(2) << calcTipAmt(salesAmount, 20) << endl;
+    cout << "\t" << "P - Custom tip percentage " << endl;
+    cout << "\t" << "A - Custom tip amount " << endl; 
+    cout << "Enter your menu choice [T, F, W, P, A]: ";
+    cin >> userChoice;
+
+    // Converting the userChoice to a capital letter if they entered a lower case letter
+    
+    if (userChoice >= 'a' && userChoice <= 'z') 
+    {
+        userChoice = userChoice - 32; 
+    }
+    
+    return userChoice;
+}
+
+// Creating a calcTotalSale function which returns a double that calculates the total sales with double saleAmount, and tipAmount as parameters
+
+double calcTotalSale(double saleAmount, double tipAmount) 
+{
+    return saleAmount + tipAmount;
+}
+
+/* Creating a getTipPercentage function which returns a double that asks the user to enter the tip percentage
+with no parameters */
+
+double getTipPercentage() 
+{
+    // Creating a tipPercent variable with double type
+    
+    double tipPercent;
+    
+    // Asking the user to enter the tip percentage and storing it in the tipPercent variable
+    
+    cout << "Enter the tip percentage: ";
+    cin >> tipPercent;
+    
+    // If the tip percentage entered is less than 0, an error message will be displayed
+    
+    if (tipPercent < 0) 
+    {
+        cout << "Error, invalid percentage entered." << endl;
+        cout << "Valid percentages are non-negative." << endl;
+        return -1; 
+    }
+    
+    return tipPercent;
+}
+
+// Creating a getTipAmount function which returns a double that asks the user for the tip amount with no parameters
+
+double getTipAmount() 
+{
+    // Creating the tipAmount variable as a double
+    
+    double tipAmount;
+    
+    // Asking the user for the tip amount and storing it in tipAmount
+    
+    cout << "Enter the tip amount: ";
+    cin >> tipAmount;
+    
+    // If tipAmount entered is less than 0, an error message will be displayed
+    
+    if (tipAmount < 0) 
+    {
+        cout << "Error, invalid tip amount entered." << endl;
+        cout << "Valid amounts are non-negative." << endl;
+        return -1; 
+    }
+    
+    return tipAmount;
+}
+
+/* Creating a checkUserChoice function which returns a double that checks what the user entered for the menu choice through switch statements
+with double salesAmount as a parameter */
+
+double checkUserChoice(double salesAmount)
+{
+    // Creating a char variable called userChoice with the function getMenuItem assigned to it with the salesAmount argument
+    
+    char userChoice = getMenuItem(salesAmount);
+    
+    // Setting the double tipAmount variable equal to 0
+    
+    double tipAmount = 0;
+    
+    // Using a switch statement to check what letter the user typed 
+    
+    switch (userChoice) 
+    {
+        // If the user typed T this statement is executed
+        
+        case 'T':
+            tipAmount = calcTipAmt(salesAmount, 10);
+            break;
+        
+        // If the user typed F this statement is executed
+        
+        case 'F':
+            tipAmount = calcTipAmt(salesAmount, 15);
+            break;
+        
+        // If the user typed W this statement is executed
+        
+        case 'W':
+            tipAmount = calcTipAmt(salesAmount, 20);
+            break;
+        
+        // If the user typed P this statement is executed
+        
+        case 'P':
+            tipAmount = getTipPercentage();
+            
+            if (tipAmount < 0) 
+            {
+                return -1; 
+            }
+            tipAmount = calcTipAmt(salesAmount, tipAmount);
+            break;
+        
+        // If the user typed A this statement is executed
+        
+        case 'A':
+            tipAmount = getTipAmount();
+            
+            if (tipAmount < 0) 
+            {
+                return -1; 
+            }
+            break;
+        
+        // If the user didnt type any of the above letters an error message will be displayed
+        
+        default:
+            cout << "Error, invalid menu choice entered.\n";
+            return -1; 
+    }
+    
+    return tipAmount;
+}
+
+int main() 
+{
+    // Creating double salesAmount and totalSaleAmount variables
+    
+    double salesAmount;
+    double totalSaleAmount;
+    
+    // Asking the user to enter the amount of sale and storing the amount in salesAmount
+    
+    cout << "Enter the amount of the sale: " << endl;
+    cin >> salesAmount;
+    
+    // If the entered salesAmount is less than or equal to 0, an error message will be displayed
+    
+    if (salesAmount <= 0) 
+    {
+        cout << "Error, invalid sales amount entered." << endl;
+        return 0;
+    }
+    
+    // Creating a double variable called tipAmount with the function checkUserChoice assigned to it with the salesAmount argument
+    
+    double tipAmount = checkUserChoice(salesAmount);
+
+    /* If the tipAmount entered is greater than or equal to 0, this statement will execute and will print all of the calculations
+    that were calculated throughout this program. */
+    
+    if (tipAmount >= 0) 
+    {
+        totalSaleAmount = calcTotalSale(salesAmount, tipAmount);
+        cout << fixed << setprecision(2);
+        cout << "Sales Amount: $" << salesAmount << endl;
+        cout << "Tip Amount: $" << tipAmount << endl;
+        cout << "Total Due: $" << totalSaleAmount << endl;  
+    }
+    
+    return 0;
+}
