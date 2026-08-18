@@ -1,0 +1,84 @@
+import java.util.ArrayList;
+
+public class MyStack {
+  // ArrayList is used to implement stack
+  private ArrayList<Object> list;
+
+  MyStack() {
+    // Create a new ArrayList
+    list = new ArrayList<Object>();
+  }
+
+  MyStack(ArrayList<Object> list) {
+    // Create a new ArrayList from the given list
+    this.list = list;
+  }
+  
+  MyStack(Object[] array) {
+    // Create a new ArrayList from the given array
+    list = new ArrayList<Object>();
+    for (int i = 0; i < array.length; i++) {
+      list.add(array[i]);
+    }
+  }
+
+  MyStack(MyStack stack) {
+    // Create a new ArrayList from the given stack
+    list = new ArrayList<Object>();
+    for (int i = 0; i < stack.getSize(); i++) {
+      list.add(stack.get(i));
+    }
+  }
+
+  MyStack(int capacity) {
+    // Create a new ArrayList with the given capacity
+    list = new ArrayList<Object>(capacity);
+  }
+
+  public Object get(int index) {
+    // Return the element at the given index
+    return list.get(index);
+  }
+
+  public boolean isEmpty() {
+    // Return true if the stack is empty
+    return list.isEmpty();
+  }
+
+  public void push(Object o) {
+    // Add the given object to the top of the stack
+    list.add(o);
+  }
+
+  public Object pop() {
+    // Remove the top element from the stack and return it
+    return list.remove(list.size() - 1);
+  }
+
+  public Object peek() {
+    // Return the top element from the stack
+    return list.get(list.size() - 1);
+  }
+
+  public int getSize() {
+    // Return the size of the stack
+    return list.size();
+  }
+
+  @Override /** Override the toString in the Object class */
+  public String toString() {
+    return "stack: " + list.toString();
+  }
+
+  public static void main(String[] args) {
+    MyStack stack = new MyStack();
+    // get args from command line
+    for (int i = 0; i < args.length; i++) {
+      stack.push(args[i]);
+    }
+    System.out.println(stack);
+    while (!stack.isEmpty()) {
+      System.out.print(stack.pop() + " ");
+    }
+  }
+}
