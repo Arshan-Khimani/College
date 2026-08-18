@@ -1,0 +1,212 @@
+import java.util.*; // Import the java.util package 
+
+public class Main { 
+
+    // Generate ascending array 
+    public static int[] ascendingArray(int n) 
+    { 
+        int[] arr = new int[n]; // Declare and initialize array of size n
+    
+        for (int i = 0; i < n; i++) // Loop from 0 to n-1
+            arr[i] = i; // Set each element to its index value
+    
+        return arr; // Return the ascending array
+    } 
+
+    // Generate descending array 
+    public static int[] descendingArray(int n) 
+    {
+        int[] arr = new int[n]; // Declare and initialize array of size n
+    
+        for (int i = 0; i < n; i++) // Loop from 0 to n-1
+            arr[i] = n - i; // Set element to n - i (so first element = n, last = 1)
+    
+        return arr; // Return the descending array
+    } 
+
+    // Generate random array 
+    public static int[] randomArray(int n) 
+    { 
+        Random rand = new Random(); // Create a Random object for generating random numbers
+    
+        int[] arr = new int[n]; // Declare and initialize array of size n
+    
+        for (int i = 0; i < n; i++) // Loop from 0 to n-1
+            arr[i] = rand.nextInt(100000); // Assign random integer between 0 and 99999 to each element
+    
+        return arr; // Return the random-filled array
+    } 
+
+    // Copy array 
+    public static int[] copyArray(int[] arr) 
+    { 
+        return Arrays.copyOf(arr, arr.length); // Use Arrays.copyOf to duplicate the array
+    } 
+
+    // Insertion Sort
+    public static void insertionSort(int[] arr) 
+    { 
+        for (int i = 1; i < arr.length; i++) // Loop from second element to the end 
+        {
+            int key = arr[i]; // Store the current element to be inserted into sorted portion
+            int j = i - 1; // Start comparing with the element immediately left of key
+
+            while (j >= 0 && arr[j] > key) // Shift elements right while they are greater than key
+            { 
+                arr[j + 1] = arr[j]; // Move element one position to the right
+                j--; // Decrement j to continue comparing leftwards
+            } 
+
+            arr[j + 1] = key; // Insert the key into its correct sorted position
+        } 
+    } 
+
+    // Selection Sort
+    public static void selectionSort(int[] arr) 
+    { 
+        for (int i = 0; i < arr.length - 1; i++) // Loop for each position except last 
+        { 
+            int minIndex = i; // Assume current index holds the minimum value
+
+            for (int j = i + 1; j < arr.length; j++) // Loop through the unsorted part to find the actual minimum
+            { 
+                if (arr[j] < arr[minIndex]) // If a smaller element is found
+                    minIndex = j; // Update minIndex to the new minimum's position
+            } 
+
+            int temp = arr[minIndex]; // Temporarily store the found minimum value
+            arr[minIndex] = arr[i]; // Swap the minimum element with the element at position i
+            arr[i] = temp; // Complete the swap
+        } 
+    } 
+
+    // Quick Sort
+    public static void quickSort(int[] arr, int low, int high) // Recursive method to sort subarray from low to high
+    { 
+        if (low < high) // If there are at least two elements, proceed with partitioning
+        { 
+            int index = partition(arr, low, high); // Partition the array and get the split index
+            quickSort(arr, low, index - 1); // Recursively sort the left part 
+            quickSort(arr, index, high); // Recursively sort the right part 
+        } 
+    } 
+
+    public static int partition(int[] arr, int low, int high) // Method to partition array around a pivot
+    { 
+        int pivot = arr[(low + high) / 2]; // choose middle element as pivot to avoid worst-case behavior
+
+        while (low <= high) // Continue until low and high cross
+        { 
+            while (arr[low] < pivot) // Increment low while element is less than pivot
+                low++; // Move low pointer right
+
+            while (arr[high] > pivot) // Decrement high while element is greater than pivot
+                high--; // Move high pointer left
+
+            if (low <= high) // If pointers haven't crossed, swap elements
+            { 
+                int temp = arr[low]; // Temporarily store the left element
+                arr[low] = arr[high]; // Swap left element with right element
+                arr[high] = temp; // Complete the swap
+                low++; // Move low pointer right after swap
+                high--; // Move high pointer left after swap
+            } 
+        } 
+        return low; // Return the split index for recursive calls
+    } 
+
+    // Merge Sort
+    public static void mergeSort(int[] arr, int left, int right) // Recursive method to sort subarray from left to right
+    { 
+        if (left < right) // If more than one element, split and sort
+        { 
+            int mid = (left + right) / 2; // Find the middle index to split the array
+
+            mergeSort(arr, left, mid); // Recursively sort the left half
+            mergeSort(arr, mid + 1, right); // Recursively sort the right half
+
+            merge(arr, left, mid, right); // Merge the two sorted halves
+        } 
+    } 
+
+    public static void merge(int[] arr, int left, int mid, int right) // Method to merge two sorted subarrays
+    { 
+        int n1 = mid - left + 1; // Size of left temporary array
+        int n2 = right - mid; // Size of right temporary array
+
+        int[] L = new int[n1]; // Create temporary array for left half
+        int[] R = new int[n2]; // Create temporary array for right half
+
+        for (int i = 0; i < n1; i++) // Copy elements from original array to left temp array
+            L[i] = arr[left + i]; // Copy each element
+
+        for (int j = 0; j < n2; j++) // Copy elements from original array to right temp array
+            R[j] = arr[mid + 1 + j]; // Copy each element
+
+        int i = 0, j = 0, k = left; // Initialize indices for left temp, right temp, and original array
+
+        while (i < n1 && j < n2) // Merge while both temp arrays have elements
+        { 
+            if (L[i] <= R[j]) // If left element is smaller or equal
+                arr[k++] = L[i++]; // Place left element into original and advance pointers
+            else // Otherwise right element is smaller
+                arr[k++] = R[j++]; // Place right element into original and advance pointers
+        } 
+
+        while (i < n1) // Copy any remaining elements from left temp array
+            arr[k++] = L[i++]; // Copy remaining left elements
+
+        while (j < n2) // Copy any remaining elements from right temp array
+            arr[k++] = R[j++]; // Copy remaining right elements
+    } 
+
+    // Time Test Function
+    public static void testSort(String name, int[] arr) // Method to test and time a sorting algorithm
+    { 
+        long start = System.nanoTime(); // Record start time in nanoseconds
+
+        if (name.equals("Insertion")) // If sorting algorithm is Insertion Sort
+            insertionSort(arr); // Call insertionSort on the array
+
+        else if (name.equals("Selection")) // Else if sorting algorithm is Selection Sort
+            selectionSort(arr); // Call selectionSort on the array
+
+        else if (name.equals("Quick")) // Else if sorting algorithm is Quick Sort
+            quickSort(arr, 0, arr.length - 1); // Call quickSort on the entire array
+
+        else if (name.equals("Merge")) // Else if sorting algorithm is Merge Sort
+            mergeSort(arr, 0, arr.length - 1); // Call mergeSort on the entire array
+
+        long end = System.nanoTime(); // Record end time in nanoseconds
+
+        System.out.println(name + " Sort Time: " + (end - start)); // Print the algorithm name and elapsed time
+    } 
+
+    public static void main(String[] args) 
+    { 
+
+        int size = 50000; // Set the size of arrays to be sorted 
+
+        int[] ascending = ascendingArray(size); // Generate an ascending array of given size
+        int[] descending = descendingArray(size); // Generate a descending array of given size
+        int[] random = randomArray(size); // Generate a random array of given size
+
+        System.out.println("===== ASCENDING INPUT ====="); // Print header for ascending input tests
+        testSort("Insertion", copyArray(ascending)); // Test insertion sort on a copy of ascending array
+        testSort("Selection", copyArray(ascending)); // Test selection sort on a copy of ascending array
+        testSort("Quick", copyArray(ascending)); // Test quick sort on a copy of ascending array
+        testSort("Merge", copyArray(ascending)); // Test merge sort on a copy of ascending array
+
+        System.out.println("\n===== DESCENDING INPUT ====="); // Print header for descending input tests (with newline)
+        testSort("Insertion", copyArray(descending)); // Test insertion sort on a copy of descending array
+        testSort("Selection", copyArray(descending)); // Test selection sort on a copy of descending array
+        testSort("Quick", copyArray(descending)); // Test quick sort on a copy of descending array
+        testSort("Merge", copyArray(descending)); // Test merge sort on a copy of descending array
+
+        System.out.println("\n===== RANDOM INPUT ====="); // Print header for random input tests (with newline)
+        testSort("Insertion", copyArray(random)); // Test insertion sort on a copy of random array
+        testSort("Selection", copyArray(random)); // Test selection sort on a copy of random array
+        testSort("Quick", copyArray(random)); // Test quick sort on a copy of random array
+        testSort("Merge", copyArray(random)); // Test merge sort on a copy of random array
+    } 
+} 
