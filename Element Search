@@ -1,0 +1,89 @@
+/*
+Pseudocode:
+1. Define the main function.
+2. Initialize an array of size 8 with predefined values.
+3. Prompt the user to enter an element to delete.
+4. Search for the element in the array:
+    - If found, store its index and set a flag.
+    - If not found, display a message and exit.
+5. If the element is found:
+    - Shift elements to the left to overwrite the deleted element.
+    - Print the updated array.
+6. If the element is not found, display a message.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Defining a constant integer called SIZE and setting it equal to 8
+    
+    const int SIZE = 8;
+    
+    // Creating an array that stores 2, 3, 4, 5, 6, 7, 8, 9
+    
+    int numbers[SIZE] = { 2, 3, 4, 5, 6, 7, 8, 9};
+    
+    // Creating variables key, index which is equal to 0
+    
+    int index = 0, key;
+
+    // Asking the user which element they want to delete and storing that in the key variable
+    
+    cout << "Which element do you want to delete? ";
+    cin >> key;
+    cout << endl;
+    
+    // Setting the keyFound boolean to false
+    
+    bool keyFound = false;
+    
+    // Loop to find the element in the array
+    
+    for(index = 0; index < SIZE; index++)
+    {
+        // If element matches this will run
+        
+        if(numbers[index] == key)
+        {
+            // Setting keyFound to true and exiting the loop
+            keyFound = true;
+            break;
+        }
+    }
+    
+    // If the element is found it will be deleted
+    
+    if(keyFound)
+    {
+        // Displaying when the key was found and at what index
+        
+        cout << key << " was found at index " << index << endl;
+        
+        // Shift elements to the left to remove the key
+        
+        for(int i = index; i < SIZE - 1; i++)
+        {
+            numbers[i] = numbers[i + 1];
+        }
+        
+        cout << "The new array is : ";
+        
+        // Print the updated array (excluding last element)
+        
+        for(int i = 0; i < SIZE - 1; i++)
+        {
+            cout << numbers[i] << " ";
+        }
+    } 
+    else 
+    {
+        // Printing this message if element is not found
+        
+        cout << key << " was not found" << endl;
+    }
+    
+    return 0;
+}
