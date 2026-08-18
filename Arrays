@@ -1,0 +1,144 @@
+/*
+Pseudocode:
+1. Define a function `findId` to search for a given value in an array.
+    - Loop through the array.
+    - If the value is found, return its index.
+    - Otherwise, return -1.
+
+2. Define a function `insertId` to insert a value into a sorted array.
+    - Check if the value exists using `findId`.
+    - If found, print its position.
+    - If not found:
+        - Print a message.
+        - Insert the value while maintaining sorted order.
+        - Shift elements if necessary.
+        - Increase the size of the array.
+
+3. In the `main` function:
+    - Declare an array with a maximum size of 100 and initialize it with some values.
+    - Read how many numbers the user wants to insert.
+    - Loop through the number of values to insert.
+        - Read each value and insert it into the array.
+    - Print the updated array.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+// Function to find the index of a given value in the array
+
+int findId(int val, int arrId[], int sz)
+{
+    // Iterate over the array elements
+    
+    for (int i = 0; i < sz; i++) 
+    {
+        // If the value matches the current element, return its index
+        
+        if (arrId[i] == val) 
+        {
+            return i; 
+        }
+    }
+    
+    // Return -1 if the value is not found
+    
+    return -1; 
+}
+
+// Function to insert a value into a sorted array
+
+void insertId(int val, int arrId[], int &sz)
+{
+    // Find the index of the value in the array
+    
+    int index = findId(val, arrId, sz); 
+    
+    // If the value is already present, print its position
+    
+    if (index != -1) 
+    { 
+        cout << val << " found at position " << index << endl;
+    } 
+    else 
+    { 
+        // If the value is not found, print this message
+        
+        cout << val << " not found " << endl;
+        cout << val << " inserted into the array" << endl;
+        
+        // Start from the last element of the current array
+        
+        int i = sz - 1; 
+        
+        // Shift elements to the right to maintain sorted order
+        
+        while (i >= 0 && arrId[i] > val) 
+        {
+            arrId[i + 1] = arrId[i]; 
+            i--;
+        }
+        
+        // Insert the new value at the correct position
+        
+        arrId[i + 1] = val; 
+        
+        // Increasing the size of the array
+        
+        sz++; 
+   }
+}
+
+int main()
+{
+    // Defining a constant integer called MAX_SIZE and setting it equal to 100
+    
+    const int MAX_SIZE = 100;
+    
+    // Defining a integer array and putting the values 1,3,6,8,10 in it
+    
+    int sid[MAX_SIZE] = { 1, 3, 6, 8, 10};
+    
+    // Defining integer variables called id, num and size which is equal to 5
+    
+    int id, num, size = 5;
+    
+    // Asking for how many numbers the user wants to enter and storing the result in the num variable
+    
+    cout << "How many numbers do you want to insert? ";
+    cin >> num;
+    
+    // Asking for the user to enter the student ids
+    
+    cout << "Enter the student ids: " << endl;
+
+    // Loop to insert each entered value
+    
+    for (int i = 0; i < num; ++i) 
+    {
+        // Read the value from the user and inserting it into the array
+        
+        cin >> id;
+        insertId(id, sid, size);
+    }
+
+    // Displaying the array with all the elements
+    
+    cout << "The array with all the elements inserted are: ";
+    
+    // Loop to print the updated array
+    
+    for (int i = 0; i < size; ++i) 
+    {
+        // Printing each element
+        
+        cout << sid[i] << " ";
+    }
+    
+    // Printing a new line
+    
+    cout << endl;
+    
+    return 0;
+}
